@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ASTASSIA — NASA APOD</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b1220;
+      --surface: #121b2d;
+      --surface-alt: #17243a;
+      --accent: #6c63ff;
+      --accent-soft: rgba(108, 99, 255, 0.2);
+      --text: #e6edf7;
+      --text-muted: #8ea2c6;
+      --error: #ff6b81;
+      --error-bg: rgba(255, 107, 129, 0.12);
+      --success: #7df29b;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at 20% 20%, rgba(108, 99, 255, 0.25), transparent 55%),
+        radial-gradient(circle at 80% 0%, rgba(124, 58, 237, 0.35), transparent 50%),
+        var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      padding: 2.5rem clamp(1rem, 4vw, 3rem) 3rem;
+    }
+
+    header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: clamp(2rem, 5vw, 3rem);
+      letter-spacing: 0.12em;
+      font-weight: 700;
+    }
+
+    .brand p {
+      margin: 0;
+      font-size: 1rem;
+      color: var(--text-muted);
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    button,
+    input,
+    a.button-link {
+      font: inherit;
+      border: none;
+      border-radius: 12px;
+      padding: 0.65rem 1.1rem;
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    button:hover,
+    input:focus,
+    a.button-link:hover {
+      background: var(--surface-alt);
+      outline: none;
+    }
+
+    .accent {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    main {
+      display: grid;
+      gap: 1.75rem;
+    }
+
+    #about {
+      background: var(--surface);
+      border-radius: 16px;
+      padding: 1.5rem;
+      line-height: 1.6;
+      color: var(--text-muted);
+      display: none;
+    }
+
+    .panel {
+      background: var(--surface);
+      border-radius: 20px;
+      padding: clamp(1rem, 2.5vw, 1.75rem);
+      box-shadow: 0 24px 48px rgba(11, 18, 32, 0.35);
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .controls-left,
+    .controls-right {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .controls input[type='date'] {
+      background: var(--surface-alt);
+      color: var(--text);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 0.6rem 0.9rem;
+    }
+
+    #count {
+      font-weight: 600;
+      color: var(--success);
+    }
+
+    #result {
+      min-height: 320px;
+      display: grid;
+      gap: 1.2rem;
+    }
+
+    .skeleton {
+      border-radius: 16px;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.12) 37%, rgba(255, 255, 255, 0.05) 63%);
+      background-size: 400% 100%;
+      animation: shimmer 1.6s infinite;
+      height: 220px;
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: 100% 0;
+      }
+      100% {
+        background-position: -100% 0;
+      }
+    }
+
+    .apod-media {
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      max-height: 540px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--surface-alt);
+    }
+
+    .apod-media img,
+    .apod-media iframe {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .apod-text h2 {
+      margin: 0;
+      font-size: clamp(1.5rem, 4vw, 2.2rem);
+    }
+
+    .apod-text p {
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-top: 0.75rem;
+    }
+
+    .error {
+      padding: 1.25rem;
+      border-radius: 16px;
+      background: var(--error-bg);
+      border: 1px solid rgba(255, 107, 129, 0.35);
+      color: var(--error);
+      display: grid;
+      gap: 0.5rem;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 1.75rem 1.1rem 2.5rem;
+      }
+
+      .controls {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .controls-left,
+      .controls-right {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .header-actions {
+        width: 100%;
+        justify-content: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <h1>ASTASSIA</h1>
+      <p>NASA APOD — EcmaScript6</p>
+    </div>
+    <div class="header-actions">
+      <button id="aboutBtn">About</button>
+      <a id="toMarsBtn" class="button-link accent" href="../jq-mars/index.html">Photo of Mars (jQuery)</a>
+    </div>
+  </header>
+
+  <main>
+    <section id="about" class="panel">
+      <strong>APOD</strong> (Astronomy Picture of the Day) — ежедневная астрономическая публикация NASA, в которой
+      отображается уникальное изображение или видео с кратким пояснением. Эта мини-страница демонстрирует работу с API
+      NASA с использованием современного JavaScript (ES6), включая модули-замыкания, асинхронные запросы и рекурсивное
+      автообновление.
+    </section>
+
+    <section class="panel controls">
+      <div class="controls-left">
+        <input type="date" id="date" aria-label="APOD date" />
+        <button id="loadBtn" class="accent">Download</button>
+        <button id="randomBtn">Random date</button>
+      </div>
+      <div class="controls-right">
+        <span>Queries for session: <span id="count">0</span></span>
+      </div>
+    </section>
+
+    <section id="result" class="panel">
+      <div class="skeleton"></div>
+      <div class="skeleton" style="height: 100px;"></div>
+    </section>
+  </main>
+
+  <script>
+    // Модуль NASA APOD: приватно храним ключ и счётчик запросов
+    const apodModule = (() => {
+      const API_KEY = 'DEMO_KEY'; // Замените DEMO_KEY на собственный ключ NASA для большего лимита
+      let counter = 0;
+
+      const baseUrl = 'https://api.nasa.gov/planetary/apod';
+
+      return {
+        url: (date) => {
+          const params = new URLSearchParams({ api_key: API_KEY });
+          if (date) {
+            params.set('date', date);
+          }
+          return `${baseUrl}?${params.toString()}`;
+        },
+        inc: () => {
+          counter += 1;
+        },
+        getCount: () => counter,
+      };
+    })();
+
+    const dateInput = document.getElementById('date');
+    const loadBtn = document.getElementById('loadBtn');
+    const randomBtn = document.getElementById('randomBtn');
+    const countEl = document.getElementById('count');
+    const resultEl = document.getElementById('result');
+    const aboutBtn = document.getElementById('aboutBtn');
+    const aboutSection = document.getElementById('about');
+
+    const formatDate = (date) => date.toISOString().split('T')[0];
+
+    const today = new Date();
+    const todayStr = formatDate(today);
+    dateInput.max = todayStr;
+
+    const renderSkeleton = () => {
+      resultEl.innerHTML = `
+        <div class="skeleton"></div>
+        <div class="skeleton" style="height: 100px;"></div>
+      `;
+    };
+
+    const renderError = (message) => {
+      resultEl.innerHTML = `
+        <div class="error">
+          <strong>Oops! Something went wrong.</strong>
+          <span>${message}</span>
+          <small>Try selecting another date or check your connection.</small>
+        </div>
+      `;
+    };
+
+    const renderApod = (data) => {
+      const { title, date, explanation, url, hdurl, media_type, copyright } = data;
+
+      const media = media_type === 'image'
+        ? `<img src="${hdurl || url}" alt="${title}" loading="lazy" />`
+        : `<iframe src="${url}" title="${title}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+
+      const mediaNote = media_type === 'video'
+        ? '<small>Note: The APOD for this date is a video. Embedded player provided above.</small>'
+        : '';
+
+      resultEl.innerHTML = `
+        <div class="apod-media">
+          ${media}
+        </div>
+        <div class="apod-text">
+          <h2>${title}</h2>
+          <div class="meta">
+            <span>${date}</span>
+            ${copyright ? `<span>© ${copyright}</span>` : ''}
+          </div>
+          <p>${explanation}</p>
+          ${mediaNote}
+        </div>
+      `;
+    };
+
+    const updateCounter = () => {
+      countEl.textContent = apodModule.getCount();
+    };
+
+    async function loadApod(date) {
+      renderSkeleton();
+
+      try {
+        apodModule.inc();
+        updateCounter();
+
+        const endpoint = apodModule.url(date);
+        const response = await fetch(endpoint);
+
+        if (!response.ok) {
+          throw new Error(`Request failed with status ${response.status}`);
+        }
+
+        const data = await response.json();
+        if (!dateInput.value) {
+          dateInput.value = data.date;
+        }
+        renderApod(data);
+      } catch (error) {
+        renderError(error.message || 'Unknown network error');
+      }
+    }
+
+    function autoRefresh(fn, ms = 90000) {
+      setTimeout(async () => {
+        try {
+          await fn();
+        } finally {
+          autoRefresh(fn, ms);
+        }
+      }, ms);
+    }
+
+    const randomDate = () => {
+      const start = new Date('2000-01-01T00:00:00Z');
+      const randomTime = start.getTime() + Math.random() * (today.getTime() - start.getTime());
+      return formatDate(new Date(randomTime));
+    };
+
+    const handleRandom = () => {
+      const random = randomDate();
+      dateInput.value = random;
+      loadApod(random);
+    };
+
+    aboutBtn.addEventListener('click', () => {
+      const isVisible = aboutSection.style.display === 'block';
+      aboutSection.style.display = isVisible ? 'none' : 'block';
+      aboutBtn.textContent = isVisible ? 'About' : 'Hide info';
+    });
+
+    loadBtn.addEventListener('click', () => {
+      const selectedDate = dateInput.value || null;
+      loadApod(selectedDate);
+    });
+
+    randomBtn.addEventListener('click', handleRandom);
+
+    // Автообновление через рекурсию: повторно вызываем loadApod каждые N миллисекунд
+    autoRefresh(() => loadApod(dateInput.value || null), 90000);
+
+    // Закомментированный пример: рекурсивная загрузка предыдущих дат
+    // function loadPrevious(dateStr) {
+    //   setTimeout(async () => {
+    //     const date = new Date(dateStr);
+    //     date.setDate(date.getDate() - 1);
+    //     const formatted = formatDate(date);
+    //     await loadApod(formatted);
+    //     loadPrevious(formatted);
+    //   }, 90000);
+    // }
+
+    // Стартовая загрузка текущего APOD
+    loadApod();
+  </script>
+</body>
+</html>
