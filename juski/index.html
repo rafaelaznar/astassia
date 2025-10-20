@@ -11,15 +11,29 @@
     <nav class="navbar navbar-expand bg-light border-bottom">
       <div class="container">
         <span class="navbar-brand fw-semibold">OpenWeather Forecast</span>
+        <a href="../index.html" class="navbar-brand mb-0 h6 text-dark text-decoration-none">Astassia</a>
       </div>
     </nav>
 
     <main class="container my-4">
       <form id="weatherForm" class="row g-3 align-items-end">
-        <div class="col-12 col-md-6">
+        <div class="col-12 col-md-4">
           <label for="city" class="form-label">Ciudad</label>
-          <input type="text" class="form-control" id="city" placeholder="Por ejemplo, Madrid o Valencia" />
+          <input
+            type="text"
+            class="form-control"
+            id="city"
+            placeholder="Por ejemplo, Madrid o Valencia"
+          />
         </div>
+
+        <div class="col-12 col-md-2">
+          <label class="form-label d-block invisible">Ubicación</label>
+          <button type="button" id="useLocation" class="btn btn-primary flex-grow-1 w-100">
+            📍 Mi ubicación
+          </button>
+        </div>
+
         <div class="col-6 col-md-2">
           <label for="days" class="form-label">Días</label>
           <select id="days" class="form-select">
@@ -30,11 +44,13 @@
             <option value="5" selected>5</option>
           </select>
         </div>
-        <div class="col-6 col-md-4 d-flex gap-2">
-          <button type="submit" class="btn btn-primary flex-grow-1">Obtener pronóstico</button>
-          <button type="button" id="clearBtn" class="btn btn-outline-secondary">Limpiar</button>
+
+        <div class="col-6 col-md-2 d-flex gap-2">
+          <button type="submit" class="btn btn-primary flex-grow-1">Obtener</button>
+          <button type="button" id="clearBtn" class="btn btn-primary flex-grow-1">Limpiar</button>
         </div>
       </form>
+
 
       <div id="alert" class="alert alert-warning d-none mt-3"></div>
       <div id="loading" class="text-muted mt-2 d-none">Cargando…</div>
@@ -42,9 +58,30 @@
       <div id="results" class="row g-3 mt-2"></div>
     </main>
 
+    <div id="intro" class="text-center py-5 text-muted">
+      <h2 class="h4 mb-3">🌦 Bienvenido</h2>
+      <p>Ingrese una ciudad para ver el pronóstico del tiempo.</p>
+      <p class="small text-secondary">Ejemplo: Madrid, Lima, Buenos Aires…</p>
+    </div>
+
+    <div class="modal fade" id="weatherModal" tabindex="-1" aria-labelledby="weatherModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="weatherModalLabel">Detalles del Clima</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div id="modalWeatherContent"></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          </div>
+        </div>
+      </div>
+    </div>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="script.js"></script>
   </body>
-
 </html>

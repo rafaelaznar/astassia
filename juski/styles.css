@@ -1,11 +1,19 @@
-.card + .card { margin-top: .5rem; }
+body {
+  background: linear-gradient(135deg, #c9cddf 0%, #9780ac 100%);
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.card + .card {
+  margin-top: .5rem;
+}
 
 .skeleton {
   background: linear-gradient(90deg, #f2f3f5 25%, #e9ecef 37%, #f2f3f5 63%);
   background-size: 400% 100%;
   animation: shimmer 1.2s infinite linear;
   border-radius: .5rem;
-  height: 90px;
+ height: 90px;
 }
 
 @keyframes shimmer {
@@ -13,34 +21,145 @@
   100% { background-position: 0 0; }
 }
 
-#alert { border-width: 1px; }
+#alert {
+  border-width: 1px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
 
 .forecast-header {
-  background: linear-gradient(135deg, rgba(13, 110, 253, 0.12), rgba(111, 66, 193, 0.12));
-  border: 1px solid rgba(13, 110, 253, 0.2);
+  background: linear-gradient(135deg, rgba(255, 107, 107, 0.15), rgba(255, 159, 67, 0.15));
+  border: 1px solid rgba(255, 107, 107, 0.3);
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.forecast-card {
+.card-body {
   background: linear-gradient(180deg, #ffffff 0%, #f8f9ff 100%);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.forecast-card:hover {
+.card-body:hover {
   transform: translateY(-4px);
-  box-shadow: 0 0.5rem 1.5rem rgba(13, 110, 253, 0.15);
+  box-shadow: 0 12px 24px rgba(13, 110, 253, 0.25);
+  background: linear-gradient(180deg, #f0f4ff 0%, #e6f0ff 100%);
 }
 
 .weather-icon {
   width: 72px;
   height: 72px;
+  transition: transform 0.3s ease;
+}
+
+.weather-icon {
+  width: 72px;
+  height: 72px;
+  transition: transform 0.3s ease;
 }
 
 .forecast-card dl dt {
   font-size: 0.75rem;
   letter-spacing: 0.04em;
+  color: #6c757d;
+  text-transform: uppercase;
 }
 
 .forecast-card dl dd {
   font-size: 0.95rem;
+  font-weight: 500;
+  color: #495057;
 }
 
+
+button {
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+}
+
+.btn-outline-secondary {
+  border-color: #ced4da;
+  color: #6c757d;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #e9ecef;
+  border-color: #adb5bd;
+}
+
+.form-control, .form-select {
+  border-radius: 8px;
+  border: 1px solid #ced4da;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 0.25rem rgba(102, 126, 234, 0.25);
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.animate-pulse {
+  animation: pulse 2s infinite;
+}
+
+.forecast-card {
+  cursor: pointer;
+}
+
+.forecast-card:active {
+  transform: translateY(-2px);
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #5a6fd8, #6a4190);
+}
