@@ -1,8 +1,5 @@
-/* Небольшие стили поверх Bootstrap */
-
 .card + .card { margin-top: .5rem; }
 
-/* Скелетон-заглушка для загрузки (упрощённая) */
 .skeleton {
   background: linear-gradient(90deg, #f2f3f5 25%, #e9ecef 37%, #f2f3f5 63%);
   background-size: 400% 100%;
@@ -16,7 +13,6 @@
   100% { background-position: 0 0; }
 }
 
-/* Тонкая подсветка сообщений */
 #alert { border-width: 1px; }
 
 /* Блок заголовка результатов */

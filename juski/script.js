@@ -1,4 +1,4 @@
-const API_KEY = "YOUR_OPENWEATHER_API_KEY";
+const API_KEY = "2e2b8c25ee5e15fcc1c88ca44137d17d";
 
 const selectors = {
   form: "#weatherForm",
