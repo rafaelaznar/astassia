@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test de Cultura General</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>TEST DE CULTURA GENERAL</h1>
+
+    <div id="pregunta"></div>
+
+    <div id="opciones"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+
+            const url = "https://opentdb.com/api.php?amount=10&category=19&difficulty=medium&type=multiple&encode=url3986";
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const preguntas = data.results.map(p => {
+                        return {
+                            pregunta: decodeText(p.question),
+                            correcta: decodeText(p.correct_answer),
+                            opciones: mezclarPreguntas([...p.incorrect_answers.map(op => decodeText(op)), decodeText(p.correct_answer)])
+                        }
+                    });
+                    
+                    console.log(preguntas); // Verifica que se han cargado correctamente las preguntas
+                    
+                    siguientePregunta(preguntas);
+                });
+            
+            // Recibe un texto codificado en URL, lo decodifica y devuelve el texto normal
+            function decodeText(text) {
+                return decodeURIComponent(text);
+            }
+
+            // Baraja aleatoriamente los elementos del array de respuestas
+            function mezclarPreguntas(array) {
+
+                // El método .sort recibe una función de comparación (Math.random()) que determina el orden del array.
+                // Math.random() genera un número aleatorio entre 0 y 1. Si restamos 0.5, obtenemos valores entre -0.5 y 0.5.
+                // Al devolver un número positivo o negativo aleatoriamente, .sort() mezcla los elementos del array de manera
+                // aleatoria
+                return array.sort(() => Math.random() - 0.5);
+            }
+
+            class Pregunta {
+                constructor(texto, opciones, correcta) {
+                    this.texto = texto;
+                    this.opciones = opciones;
+                    this.correcta = correcta;
+                }
+
+                opcionCorrecta(respuesta) {
+                    return respuesta == this.correcta;
+                }
+            }
+
+            const preguntas = data.results.map(p => {
+                const texto = decodeText(p.question);
+                const correcta = decodeText(p.correct_answer);
+                const opciones = mezclarPreguntas([...p.incorrect_answers.map(op => decodeText(op)), correcta]);
+
+                return new Pregunta(texto, opciones, correcta);
+            });
+
+            function mostrarPregunta(pregunta) {
+                const contenedor = document.getElementById("contenedor");
+                contenedor.innerHTML = `
+                    <h2>${preguntaObj.texto}</h2>
+                    ${pregunta.opciones.map(op => `<button class="opcion">${op}</button>`).join("")}
+                `;
+
+                document.querySelectorAll(".opcion").forEach(boton => {
+                    boton.addEventListener("click", () => {
+                        if (pregunta.esCorrecta(boton.textContent)) {
+                            alert("✅ ¡Correcto!");
+                        } else {
+                            alert(`❌ Incorrecto. La respuesta era: ${preguntaObj.correcta}`);
+                        }
+                    });
+                });
+            }
+
+            let indice = 0;
+
+            function siguientePregunta() {
+                if (indice < preguntas.length) {
+                    mostrarPregunta(preguntas[indice]);
+                    indice++;
+                } else {
+                    alert("🎉 ¡Enhorabuena! ¡Has acabado el test!");
+                }
+            }
+        });
+    </script>
+</body>
+</html>
