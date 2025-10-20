@@ -19,3 +19,34 @@
 /* Тонкая подсветка сообщений */
 #alert { border-width: 1px; }
 
+/* Блок заголовка результатов */
+.forecast-header {
+  background: linear-gradient(135deg, rgba(13, 110, 253, 0.12), rgba(111, 66, 193, 0.12));
+  border: 1px solid rgba(13, 110, 253, 0.2);
+}
+
+/* Карточки прогноза */
+.forecast-card {
+  background: linear-gradient(180deg, #ffffff 0%, #f8f9ff 100%);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.forecast-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0.5rem 1.5rem rgba(13, 110, 253, 0.15);
+}
+
+.weather-icon {
+  width: 72px;
+  height: 72px;
+}
+
+.forecast-card dl dt {
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+}
+
+.forecast-card dl dd {
+  font-size: 0.95rem;
+}
+
