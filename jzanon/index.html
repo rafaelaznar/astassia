@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Personajes</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>LISTA DE PERSONAJES DE STAR WARS</h1>
+    
+    <h2>Buscador: <input type="text" id="buscador" placeholder="Buscar personaje..."></h2>
+
+    <div id="personajes"></div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+
+            const url = "https://rawcdn.githack.com/akabab/starwars-api/0.2.1/api/all.json";
+            let personajes = []; // Aquí almacenaremos los personajes
+
+            function mostrarPersonajes(lista) {
+                $("#personajes").empty(); // Limpiamos antes de mostrar
+
+                lista.forEach(personaje => {
+                    const tarjeta = `
+                        <div class="personaje">
+                            <img src="${personaje.image}" alt="${personaje.name}">
+                            <h2>
+                                Nombre: ${personaje.name}<br>
+                                Especie: ${personaje.species || "desconocida"}<br>
+                                Planeta: ${personaje.homeworld || "desconocido"}<br>
+                            </h2>
+                        </div>
+                    `;
+
+                    // Seleccionamos el elemento del DOM de los personajes, e insertamos la plantilla HTML
+                    $("#personajes").append(tarjeta);
+                });
+            }
+
+            // Cargamos los datos de la API
+            $.getJSON(url, function(data) {
+                personajes = data;
+                mostrarPersonajes(personajes);
+            });
+
+            $("#buscador").on("input", function() {
+                const texto = $(this).val().toLowerCase();
+                const filtro = personajes.filter(p => p.name.toLowerCase().includes(texto));
+
+                // Si al buscar un personaje no hay ningún resultado, se informará al usuario que ese personaje no existe
+                if (filtro.length === 0) {
+                    $("#personajes").empty();
+                    $("#personajes").append(`
+                        <p>Lo siento, el personaje que buscas no existe.</p>
+                    `);
+                } else {
+                    mostrarPersonajes(filtro);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
