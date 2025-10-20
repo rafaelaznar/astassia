@@ -157,12 +157,12 @@ $(function () {
           day.icon +
           '@2x.png" alt="' +
           day.description +
-          '" class="position-absolute top-0 end-0 me-3 mt-3" width="64" height="64" />'
+          '" class="weather-icon position-absolute top-0 end-0 me-3 mt-3" width="64" height="64" />'
         : "";
 
       const cardHtml =
         '<div class="col-12 col-md-4">' +
-        '<div class="card h-100 position-relative">' +
+        '<div class="card h-100 position-relative forecast-card" data-bs-toggle="modal" data-bs-target="#weatherModal" data-day=\'' + JSON.stringify(day) + '\'>' +
         iconHtml +
         '<div class="card-body">' +
         '<h3 class="h5 card-title text-capitalize">' +
@@ -185,7 +185,80 @@ $(function () {
 
       $results.append(cardHtml);
     });
+    
+    $(document).off('click', '.forecast-card').on('click', '.forecast-card', function() {
+      const dayData = $(this).data('day');
+      const modalContent = `
+        <div class="d-flex flex-column align-items-center">
+          <h4 class="text-center mb-4">${formatDateLabel(dayData.date)}</h4>
+          <img src="https://openweathermap.org/img/wn/${dayData.icon}@2x.png" alt="${dayData.description}" class="mb-3" width="100" height="100" />
+          <h5 class="text-capitalize text-center">${dayData.description}</h5>
+          <div class="w-100 mt-4">
+            <div class="row">
+              <div class="col-6">
+                <p class="mb-1"><strong>Temp. Máxima:</strong></p>
+                <p class="fs-5 text-primary">${Math.round(dayData.tempMax)}°C</p>
+              </div>
+              <div class="col-6">
+                <p class="mb-1"><strong>Temp. Mínima:</strong></p>
+                <p class="fs-5 text-primary">${Math.round(dayData.tempMin)}°C</p>
+              </div>
+            </div>
+            <div class="row mt-3">
+              <div class="col-6">
+                <p class="mb-1"><strong>Humedad:</strong></p>
+                <p class="fs-6">${dayData.humidity != null ? dayData.humidity : "—"}%</p>
+              </div>
+              <div class="col-6">
+                <p class="mb-1"><strong>Viento:</strong></p>
+                <p class="fs-6">${dayData.windSpeed != null ? Number(day.windSpeed).toFixed(1) : "—"} m/s</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      $('#modalWeatherContent').html(modalContent);
+    });
   }
+  
+  // Initialize modal event handlers after the DOM is fully loaded
+  $(document).ready(function() {
+    // Use event delegation to handle clicks on forecast cards that may be added later
+    $(document).on('click', '.forecast-card', function() {
+      const dayData = $(this).data('day');
+      if(dayData) {
+        const modalContent = `
+          <div class="d-flex flex-column align-items-center">
+            <h4 class="text-center mb-4">${formatDateLabel(dayData.date)}</h4>
+            <img src="https://openweathermap.org/img/wn/${dayData.icon}@2x.png" alt="${dayData.description}" class="mb-3" width="10" height="100" />
+            <h5 class="text-capitalize text-center">${dayData.description}</h5>
+            <div class="w-100 mt-4">
+              <div class="row">
+                <div class="col-6">
+                  <p class="mb-1"><strong>Temp. Máxima:</strong></p>
+                  <p class="fs-5 text-primary">${Math.round(dayData.tempMax)}°C</p>
+                </div>
+                <div class="col-6">
+                  <p class="mb-1"><strong>Temp. Mínima:</strong></p>
+                  <p class="fs-5 text-primary">${Math.round(dayData.tempMin)}°C</p>
+                </div>
+              <div class="row mt-3">
+                <div class="col-6">
+                  <p class="mb-1"><strong>Humedad:</strong></p>
+                  <p class="fs-6">${dayData.humidity != null ? dayData.humidity : "—"}%</p>
+                </div>
+                <div class="col-6">
+                  <p class="mb-1"><strong>Viento:</strong></p>
+                  <p class="fs-6">${dayData.windSpeed != null ? Number(day.windSpeed).toFixed(1) : "—"} m/s</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        $('#modalWeatherContent').html(modalContent);
+      }
+    });
+  });
 
   if ($clear.length) {
     $clear.on("click", function () {
@@ -201,6 +274,8 @@ $(function () {
     $form.on("submit", function (event) {
       event.preventDefault();
       hideAlert();
+
+      $("#intro").addClass("d-none");
 
       const city = ($city.val() || "").trim();
       const daysValue = parseInt($days.val(), 10);
@@ -235,4 +310,58 @@ $(function () {
   } else {
     console.error("Formulario de clima no encontrado.");
   }
+
+  $("#useLocation").on("click", function () {
+    if (!navigator.geolocation) {
+      showAlert("La geolocalización no es compatible con su navegador.");
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      function (pos) {
+        const { latitude, longitude } = pos.coords;
+        toggleLoading(true);
+
+        $.ajax({
+          url: "https://api.openweathermap.org/geo/1.0/reverse",
+          data: {
+            lat: latitude,
+            lon: longitude,
+            limit: 1,
+            appid: API_KEY,
+          },
+          dataType: "json",
+        })
+          .then(function (geoData) {
+            const place =
+              Array.isArray(geoData) && geoData.length > 0 ? geoData[0] : null;
+            const location = {
+              name: place?.name || "Ubicación desconocida",
+              state: place?.state || "",
+              country: place?.country || "",
+            };
+
+            return fetchForecast(latitude, longitude).then((forecast) => ({
+              location,
+              forecast,
+            }));
+          })
+          .then(function ({ location, forecast }) {
+            const daily = extractDailyForecast(forecast.list, 5);
+            renderForecast(location, daily);
+            $("#intro").addClass("d-none");
+          })
+          .fail(function (err) {
+            console.error(err);
+            showAlert(err.message || "Error al obtener el pronóstico o la ubicación.");
+          })
+          .always(function () {
+            toggleLoading(false);
+          });
+      },
+      function () {
+        showAlert("No se pudo obtener su ubicación.");
+      }
+    );
+  });
 });
