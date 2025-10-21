@@ -1,11 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <title>Formulario con jQuery</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script defer src="script.js"></script>
 </head>
 <body>
-    
+  <h1>Registro de Usuario</h1>
+  
+  <form id="registroForm">
+    <input type="text" id="nombre" placeholder="Nombre completo"><br>
+    <input type="email" id="email" placeholder="Correo electrónico"><br>
+    <input type="number" id="edad" placeholder="Edad"><br>
+    <button type="submit">Registrar</button>
+  </form>
+
+  <p id="mensaje"></p>
+
+  <h2>Usuarios desde la API</h2>
+  <ul id="listaUsuarios"></ul>
 </body>
 </html>

@@ -1,0 +1,12 @@
+body {
+  font-family: Arial;
+  margin: 2rem;
+}
+input {
+  margin: 5px 0;
+  padding: 8px;
+}
+#mensaje {
+  color: red;
+  font-weight: bold;
+}
