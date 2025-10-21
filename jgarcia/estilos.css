@@ -396,7 +396,6 @@ textarea.form-control {
 }
 
 .invalid-feedback {
-    display: block;
     color: #dc3545;
     font-size: 0.9rem;
     margin-top: 6px;
