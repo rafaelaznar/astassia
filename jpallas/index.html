@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valencia CF</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        #team-info {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        #team-logo {
+            width: 100%;
+            max-width: 200px;
+            margin: 20px 0;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        p {
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="team-info">
+        <h1 id="team-name">Cargando...</h1>
+        <img id="team-logo" alt="Logo del equipo">
+        <p id="team-description"></p>
+        <p><strong>Manager:</strong> <span id="team-manager"></span></p>
+        <p><strong>Ubicación:</strong> <span id="team-location"></span></p>
+        <p><strong>Establecido:</strong> <span id="team-established"></span></p>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            const apiKey = '123';        // Tu API key
+            const teamId = '133725';     // ID del Valencia CF
+
+            $.ajax({
+                url: `https://www.thesportsdb.com/api/v1/json/${apiKey}/lookupteam.php?id=${teamId}`,
+                method: 'GET',
+                success: function(data) {
+                    if (data.teams && data.teams.length > 0) {
+                        const team = data.teams[0];
+
+                        $('#team-name').text(team.strTeam);
+                        $('#team-logo').attr('src', team.strTeamBadge);
+                        $('#team-description').text(team.strDescriptionES || team.strDescriptionEN);
+                        $('#team-manager').text(team.strManager);
+                        $('#team-location').text(team.strStadiumLocation);
+                        $('#team-established').text(team.intFormedYear);
+                    } else {
+                        $('#team-name').text('No se encontró información del equipo.');
+                    }
+                },
+                error: function() {
+                    $('#team-name').text('Error al conectar con la API.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
