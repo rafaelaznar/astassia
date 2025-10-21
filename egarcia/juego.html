@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adivina el Personaje</title>
+    <link rel="icon" type="image/png" href="imagenes/favicon.png">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css"
+        rel="stylesheet">
+    <link href="estilos.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Botón para volver al inicio -->
+    <a href="index.html" class="btn-volver">
+        <i class="bi bi-arrow-left-circle-fill"></i>
+        <span>Volver al Inicio</span>
+    </a>
+
+    <div class="container py-4">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <h1 class="text-center text-white mb-4">
+                    ¿Quién es este personaje?
+                </h1>
+
+                <!-- Contador de personajes -->
+                <p class="contador-personajes">Personaje <span id="contadorTexto">0</span></p>
+
+                <!-- Tarjeta principal del juego -->
+                <div class="card shadow mb-4">
+                    <div class="card-body">
+                        <!-- Carta del personaje con imagen -->
+                        <div id="cartaPersonaje" class="carta-personaje mb-4">
+                            <img id="imagenPersonaje" src="" alt="Personaje" class="img-fluid">
+                        </div>
+
+                        <!-- Contenedor de pistas -->
+                        <div class="pista-container mb-4">
+                            <h5 class="text-primary mb-3">
+                                <i class="bi bi-lightbulb-fill"></i>
+                                Pista <span id="pistaNumero">1</span>/3
+                            </h5>
+                            <div id="pistaTexto" class="pista-box">
+                                Cargando datos...
+                            </div>
+                        </div>
+
+                        <!-- Contenedor de opciones -->
+                        <div id="opcionesContainer" class="d-grid gap-3"></div>
+                    </div>
+                </div>
+
+                <!-- Tarjeta de resultado -->
+                <div class="card shadow d-none" id="resultadoCard">
+                    <div class="card-body text-center">
+                        <div id="resultadoContenido"></div>
+                    </div>
+                </div>
+
+                <!-- Botón siguiente (ahora fuera de las tarjetas) -->
+                <div class="text-center mt-3">
+                    <button class="btn btn-primary btn-lg" id="siguienteBtn" style="display: none;">
+                        <i class="bi bi-arrow-right-circle"></i>
+                        Siguiente Personaje
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="juego.js"></script>
+</body>
+
+</html>
