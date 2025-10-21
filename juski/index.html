@@ -1,45 +1,43 @@
 <!doctype html>
-<html lang="ru">
+<html lang="es">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>OpenWeather Forecast (jQuery)</title>
-    <!-- Bootstrap 5 CSS -->
+    <title>OpenWeather Forecast</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <nav class="navbar navbar-expand bg-light border-bottom">
       <div class="container">
-        <span class="navbar-brand fw-semibold">OpenWeather Forecast (jQuery)</span>
+        <span class="navbar-brand fw-semibold">OpenWeather Forecast</span>
       </div>
     </nav>
 
     <main class="container my-4">
       <form id="weatherForm" class="row g-3 align-items-end">
         <div class="col-12 col-md-6">
-          <label for="city" class="form-label">Город</label>
-          <input type="text" class="form-control" id="city" placeholder="Например, Madrid или Valencia" />
+          <label for="city" class="form-label">Ciudad</label>
+          <input type="text" class="form-control" id="city" placeholder="Por ejemplo, Madrid o Valencia" />
         </div>
         <div class="col-6 col-md-2">
-          <label for="days" class="form-label">Дней</label>
+          <label for="days" class="form-label">Días</label>
           <select id="days" class="form-select">
             <option value="1">1</option>
             <option value="2">2</option>
-            <option value="3" selected>3</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5" selected>5</option>
           </select>
         </div>
         <div class="col-6 col-md-4 d-flex gap-2">
-          <button type="submit" class="btn btn-primary flex-grow-1">Получить прогноз</button>
-          <button type="button" id="clearBtn" class="btn btn-outline-secondary">Очистить</button>
+          <button type="submit" class="btn btn-primary flex-grow-1">Obtener pronóstico</button>
+          <button type="button" id="clearBtn" class="btn btn-outline-secondary">Limpiar</button>
         </div>
       </form>
 
-      <p class="text-muted small mt-1">Для работы укажите ключ OpenWeather в файле <code>script.js</code>.</p>
-
-      <!-- Сообщения и загрузка -->
       <div id="alert" class="alert alert-warning d-none mt-3"></div>
-      <div id="loading" class="text-muted mt-2 d-none">Загрузка…</div>
+      <div id="loading" class="text-muted mt-2 d-none">Cargando…</div>
 
       <div id="results" class="row g-3 mt-2"></div>
     </main>
