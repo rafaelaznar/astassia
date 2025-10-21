@@ -70,29 +70,52 @@
                 $("#personajes").empty().append(`<p>Se ha producido un error al cargar los datos</p>`);
             });
 
-            function actualizarFiltros() {
-                const texto = $("#buscador").val().toLowerCase();
-                const especie = $("#filtroEspecie").val().toLowerCase();
-                const planeta = $("#filtroPlaneta").val().toLowerCase();
+            let buscadorActivo = null; // No hay ningún buscador activo al arrancar la página
 
-                // Se controla qué buscados está activo
-                if (texto !== "") {
-                    $("#filtroEspecie, #filtroPlaneta").prop("disable", true);
-                } else if (especie !== "") {
-                    $("#buscador, #filtroPlaneta").prop("disable", true);
-                } else if (planeta !== "") {
-                    $("#buscador, #filtroEspecie").prop("disable", true);
-                } else {
+            function actualizarFiltros(e) {
+                const id = e.target.id; // Averigua qué input disparó el evento
+
+                const texto = normalizar($("#buscador").val());
+                const especie = normalizar($("#filtroEspecie").val());
+                const planeta = normalizar($("#filtroPlaneta").val());
+
+                // Determina qué buscador es el que activó el usuario
+                if (!buscadorActivo) {
+
+                    // Si ninguno está activo, y el usuario empieza a escribir en uno, se marca ese
+                    if (texto !== "") {
+                        buscadorActivo = "buscador";
+                    } else if (especie !== "") {
+                        buscadorActivo = "filtroEspecie";
+                    } else if (planeta !== "") {
+                        buscadorActivo = "filtroPlaneta";
+                    }
+                }
+
+                // Se controla la habilitación según el buscador activo
+                if (buscadorActivo === "buscador") {
+                    $("#filtroEspecie, #filtroPlaneta").prop("disabled", true);
+                } else if (buscadorActivo === "filtroEspecie") {
+                    $("#buscador, #filtroPlaneta").prop("disabled", true);
+                } else if (buscadorActivo === "filtroPlaneta") {
+                    $("#buscador, #filtroEspecie").prop("disabled", true);
+                }
+
+                // Si todos los buscadores están vacíos, se reactivan
+                if (texto === "" && especie === "" && planeta === "") {
+                    buscadorActivo = null;
                     $("#buscador, #filtroEspecie, #filtroPlaneta").prop("disabled", false);
+                    mostrarPersonajes(personajes);
+                    return;
                 }
 
                 let filtrados = personajes;
 
-                if (texto !== "") {
-                    filtrados = personajes.filter(p => p.name.toLowerCase().includes(texto));
-                } else if (especie !== "") {
-                    filtrados = personajes.filter(p => p.species.toLowerCase().includes(especie));
-                } else if (planeta !== "") {
+                if (buscadorActivo === "buscador" && texto !== "") {
+                    filtrados = personajes.filter(p => normalizar(p.name).includes(texto));
+                } else if (buscadorActivo === "filtroEspecie" && especie !== "") {
+                    filtrados = personajes.filter(p => normalizar(p.species).includes(especie));
+                } else if (buscadorActivo === "filtroPlaneta" && planeta !== "") {
                     filtrados = personajes.filter(p => normalizar(p.homeworld).includes(planeta));
                 }
 
