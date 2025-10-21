@@ -9,7 +9,7 @@
 <body>
     <h1>LISTA DE PERSONAJES DE STAR WARS</h1>
     
-    <h2>Buscar PERSONAJE: <input type="text" id="buscador" placeholder="Introduce un nombre de un personaje"></h2>
+    <h2>Buscar PERSONAJE: <input type="text" id="buscador" placeholder="Introduce el nombre de un personaje"></h2>
 
     <h2>Buscar PERSONAJES por su ESPECIE: <input type="text" id="filtroEspecie" placeholder="Introduce una especie"></h2>
 
@@ -28,6 +28,11 @@
             function mostrarPersonajes(lista) {
                 $("#personajes").empty(); // Limpiamos antes de mostrar
 
+                if (lista.length === 0) {
+                    $("#personajes").append(`<p>No hay personajes disponibles</p>`)
+                    return;
+                }
+
                 lista.forEach(personaje => {
                     const tarjeta = `
                         <div class="personaje">
@@ -45,26 +50,56 @@
                 });
             }
 
+            function normalizar(valor) {
+                
+                // Convierte el valor a string.
+                // Quita espacios, pasa a minúsculas y elimina diacríticos
+                const s = String(valor || "").trim().toLowerCase();
+                
+                // Normaliza y elimina las marcas combinantes
+                return s.normalize ? s.normalize("NFD").replace(/[\u0300-\u036f]/g, "") : s;
+            }
+
             // Cargamos los datos de la API
-            $.getJSON(url, function(data) {
+            $.getJSON(url)
+            .done(function(data) {
                 personajes = data;
-                mostrarPersonajes(personajes);
+                mostrarPersonajes(personajes); // Muestra todos los personajes al arrancar la página
+            })
+            .fail(function() {
+                $("#personajes").empty().append(`<p>Se ha producido un error al cargar los datos</p>`);
             });
 
-            $("#buscador").on("input", function() {
-                const texto = $(this).val().toLowerCase();
-                const filtro = personajes.filter(p => p.name.toLowerCase().includes(texto));
+            function actualizarFiltros() {
+                const texto = $("#buscador").val().toLowerCase();
+                const especie = $("#filtroEspecie").val().toLowerCase();
+                const planeta = $("#filtroPlaneta").val().toLowerCase();
 
-                // Si al buscar un personaje no hay ningún resultado, se informará al usuario que ese personaje no existe
-                if (filtro.length === 0) {
-                    $("#personajes").empty();
-                    $("#personajes").append(`
-                        <p>Lo siento, el personaje que buscas no existe.</p>
-                    `);
+                // Se controla qué buscados está activo
+                if (texto !== "") {
+                    $("#filtroEspecie, #filtroPlaneta").prop("disable", true);
+                } else if (especie !== "") {
+                    $("#buscador, #filtroPlaneta").prop("disable", true);
+                } else if (planeta !== "") {
+                    $("#buscador, #filtroEspecie").prop("disable", true);
                 } else {
-                    mostrarPersonajes(filtro);
+                    $("#buscador, #filtroEspecie, #filtroPlaneta").prop("disabled", false);
                 }
-            });
+
+                let filtrados = personajes;
+
+                if (texto !== "") {
+                    filtrados = personajes.filter(p => p.name.toLowerCase().includes(texto));
+                } else if (especie !== "") {
+                    filtrados = personajes.filter(p => p.species.toLowerCase().includes(especie));
+                } else if (planeta !== "") {
+                    filtrados = personajes.filter(p => normalizar(p.homeworld).includes(planeta));
+                }
+
+                mostrarPersonajes(filtrados);
+            }
+
+            $("#buscador, #filtroEspecie, #filtroPlaneta").on("input", actualizarFiltros);
         });
     </script>
 </body>
