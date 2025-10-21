@@ -11,15 +11,32 @@
   <h1>Registro de Usuario</h1>
   
   <form id="registroForm">
-    <input type="text" id="nombre" placeholder="Nombre completo"><br>
-    <input type="email" id="email" placeholder="Correo electrónico"><br>
-    <input type="number" id="edad" placeholder="Edad"><br>
+    <!-- Nombre: validado solo por longitud -->
+    <input type="text" id="nombre" placeholder="Nombre (3-100 caracteres)"><br>
+
+    <!-- Vision: ahora se teclea -->
+    <input type="text" id="vision" placeholder="Vision (Anemo, Geo, Electro, Dendro, Cryo, Pyro, Hydro)"><br>
+
+    <!-- Weapon: ahora se teclea -->
+    <input type="text" id="weapon" placeholder="Arma (Sword, Bow, Claymore, Polearm, Catalyst)"><br>
+
     <button type="submit">Registrar</button>
   </form>
 
   <p id="mensaje"></p>
 
   <h2>Usuarios desde la API</h2>
+
+  <!-- Controles de orden -->
+  <div id="sortControls" style="text-align:center;margin-bottom:8px;">
+    <select id="sortField" aria-label="Campo para ordenar">
+      <option value="name">Nombre</option>
+      <option value="vision">Vision</option>
+      <option value="weapon">Weapon</option>
+    </select>
+    <button id="sortBtn" type="button">Ordenar</button>
+  </div>
+
   <ul id="listaUsuarios"></ul>
 </body>
 </html>
