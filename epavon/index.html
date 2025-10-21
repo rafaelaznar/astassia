@@ -2,13 +2,29 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Atrapa el cuadrado</title>
+  <title>Atrapa la imagen</title>
   <link rel="stylesheet" href="style.css">
   <script type="module" src="game.js" defer></script>
 </head>
 <body>
-  <h1>Atrapa el Cuadrado </h1>
+  <h1>Atrapa la Imagen</h1>
+
+  <div id="targetBox">
+    <div>Atrapa a:</div>
+    <img id="targetImg" src="" alt="Objetivo">
+    <div id="targetName"></div>
+  </div>
+
   <p>Puntos: <span id="puntos">0</span></p>
+
+  <!-- Control de sonido -->
+  <div id="soundControls">
+    <button id="soundToggle" type="button">Música</button>
+  </div>
+
   <div id="tablero"></div>
+
+  <!-- Iframe de YouTube oculto (se usará para reproducir en background) -->
+  <iframe id="ytPlayer" src="" allow="autoplay" sandbox="allow-same-origin allow-scripts allow-forms" style="display:none;width:0;height:0;border:0;"></iframe>
 </body>
 </html>
