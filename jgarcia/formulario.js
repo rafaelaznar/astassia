@@ -49,7 +49,7 @@ $(document).ready(function () {
 
     $('#telefono').on('blur', function () {
         if (this.value.trim() !== '') {
-            validarCampo(this, regexTelefono, 'El teléfono debe tener 9 dígitos (opcional: +34 al inicio)');
+            validarCampo(this, regexTelefono, 'El teléfono debe tener 9 dígitos y empezar por 6,7,8 o 9 (opcional: +34 al inicio)');
         } else {
             this.classList.remove('is-invalid', 'is-valid');
         }
