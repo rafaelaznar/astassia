@@ -20,16 +20,31 @@
     <!-- Top navbar with logo, filters toggle, and fixed search -->
     <nav class="navbar navbar-light bg-white fixed-top shadow-sm">
       <div class="container-fluid gap-3">
-        <div class="d-flex align-items-center gap-2">
-          <button class="btn btn-ink btn-sm btn-wide" type="button" data-bs-toggle="offcanvas" data-bs-target="#filters" aria-controls="filters">Filtros</button>
-          <a href="./index.html" class="brand-mark text-decoration-none" aria-label="Logo">A</a>
-          <a href="./index.html" class="navbar-brand mb-0 h6 text-dark text-decoration-none">Astassia</a>
+        <div class="d-flex align-items-center gap-4">
+          <button class="btn btn-royal btn-icon" type="button" data-bs-toggle="offcanvas" data-bs-target="#filters" aria-controls="filters">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M3 6h18M6 12h12M10 18h4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>Filtros</span>
+          </button>
+          <a href="./index.html" class="navbar-brand mb-0 h6 text-dark text-decoration-none d-flex align-items-center gap-2">Astassia</a>
         </div>
 
         <form id="searchForm" class="d-flex flex-grow-1 gap-2" role="search">
           <input id="query" class="form-control search-pill me-2" type="search" placeholder="Buscar fotos o vídeos" aria-label="Buscar" />
-          <button id="searchBtn" class="btn btn-royal" type="submit">Buscar</button>
-          <a href="../index.html" class="btn btn-royal">Home</a>
+          <button id="searchBtn" class="btn btn-royal btn-icon" type="submit">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M11 19a8 8 0 1 1 5.293-14.293A8 8 0 0 1 11 19zm6-2 4 4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>Buscar</span>
+          </button>
+          <a href="../index.html" class="btn btn-royal btn-icon">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M3 10.5 12 3l9 7.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M5 21v-9h4v9h6v-9h4v9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>Home</span>
+          </a>
         </form>
       </div>
     </nav>
@@ -37,7 +52,12 @@
     <!-- Offcanvas sidebar for filters on the left -->
     <div class="offcanvas offcanvas-start" tabindex="-1" id="filters" aria-labelledby="filtersLabel">
       <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="filtersLabel">Filtros</h5>
+        <h5 class="offcanvas-title d-flex align-items-center gap-2" id="filtersLabel">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3 6h18M6 12h12M10 18h4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>Filtros</span>
+        </h5>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
       </div>
       <div class="offcanvas-body">
@@ -103,22 +123,50 @@
             <option value="8k">8K</option>
           </select>
         </div>
+        <button id="searchBtn" class="btn btn-royal btn-icon" type="submit">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M11 19a8 8 0 1 1 5.293-14.293A8 8 0 0 1 11 19zm6-2 4 4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>Buscar</span>
+        </button>
       </div>
     </div>
 
     <main class="container-fluid pb-5 content-wrap">
+      <section id="welcomeHero" class="welcome-hero bg-white rounded-4 shadow-sm p-4 mt-5 mb-4">
+        <div class="row align-items-center">
+          <div class="col-12 col-lg-8">
+            <h1 class="display-6 fw-semibold mb-3">Bienvenido a Astassia</h1>
+            <p class="lead mb-0">
+              Te mostramos una selección aleatoria sobre
+              <span id="welcomeTopic" class="fw-semibold text-royal">inspiración</span>
+              para que empieces a explorar desde el primer momento.
+            </p>
+          </div>
+        </div>
+      </section>
       <div id="status" class="mb-3"></div>
       <section id="results" class="masonry"></section>
       <nav id="paginationBar" class="pagination-bar fixed-bottom d-none" aria-label="Paginación de resultados">
         <ul class="pagination justify-content-center">
           <li class="page-item">
-            <button id="prevPage" class="page-link">Anterior</button>
+            <button id="prevPage" type="button" class="page-link d-flex align-items-center gap-2">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="m15 6-6 6 6 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span>Anterior</span>
+            </button>
           </li>
           <li class="page-item disabled">
             <span id="pageIndicator" class="page-link">Página 1</span>
           </li>
           <li class="page-item">
-            <button id="nextPage" class="page-link">Siguiente</button>
+            <button id="nextPage" type="button" class="page-link d-flex align-items-center gap-2">
+              <span>Siguiente</span>
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="m9 6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
           </li>
         </ul>
       </nav>
@@ -134,8 +182,22 @@
           </div>
           <div class="modal-body" id="modalContent"></div>
           <div class="modal-footer">
-            <button type="button" id="openBtn" class="btn btn-outline-secondary">Abrir en Pexels</button>
-            <button type="button" id="downloadBtn" class="btn btn-royal">Descargar</button>
+            <button type="button" id="openBtn" class="btn btn-outline-secondary btn-icon">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M14 3h7v7" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M21 3 10 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M5 5h6M5 5v14h14v-6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span>Abrir en Pexels</span>
+            </button>
+            <button type="button" id="downloadBtn" class="btn btn-royal btn-icon">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 3v12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M7 12l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M5 21h14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span>Descargar</span>
+            </button>
           </div>
         </div>
       </div>

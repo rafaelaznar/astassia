@@ -1,7 +1,7 @@
 :root {
   --bg-soft: #f6f7f9;
-  --ink: #0b0b0f;           /* casi negro */
-  --royal: #261a64;         /* morado oscuro */
+  --ink: #0b0b0f;
+  --royal: #261a64;
   --royal-600: #261a64;
   --border: #e5e7eb;
   --card: #ffffff;
@@ -15,7 +15,6 @@ body {
 
 .bg-soft { background: var(--bg-soft); }
 
-/* Navbar */
 .navbar { border-bottom: 1px solid var(--border); }
 .brand-mark {
   width: 28px; height: 28px; border-radius: 50%;
@@ -28,20 +27,44 @@ body {
   border: 1px solid #e5e7eb;
 }
 
-/* Buttons */
 .btn-ink { background: var(--ink); color: #fff; }
 .btn-ink:hover { background: #14141a; color: #fff; }
-.btn-royal { background: var(--royal); color: #fff; }
-.btn-royal:hover { background: var(--royal-600); color: #fff; }
+.btn-royal {
+  background: var(--royal);
+  font-size: large;
+  color: #fff;
+  transition: all 0.3s ease;
+  width: 150px;
+}
+.btn-royal:hover {
+  background: var(--royal-600);
+  color: #fff;
+  transform: scale(1.03);
+}
 .btn-wide { min-width: 110px; }
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+}
+.icon {
+  width: 1.1em;
+  height: 1.1em;
+  flex-shrink: 0;
+  fill: currentColor;
+  stroke: currentColor;
+}
+.page-link .icon {
+  width: 1em;
+  height: 1em;
+  flex-shrink: 0;
+}
 
-/* Content wrapper compensates fixed navbar height */
 .content-wrap { padding-top: 92px; }
 
-/* Alerts inside status */
 #status .alert { border: 1px solid var(--border); background: #fff; color: #374151; }
 
-/* Masonry layout similar to Pinterest */
 .masonry {
   column-gap: 16px;
   padding: 8px;
@@ -72,13 +95,52 @@ body {
 .pin .pin-link { color: var(--ink); text-decoration: none; font-weight: 500; }
 .pin .pin-meta { color: #6b7280; font-size: 12px; }
 
-/* Offcanvas soft background */
 .offcanvas { background: #fff; }
 
-/* Pagination fixed bar */
 .pagination-bar {
   background: rgba(255,255,255,0.96);
   border-top: 1px solid var(--border);
   box-shadow: 0 -2px 8px rgba(0,0,0,0.05);
   padding: 8px 12px;
+}
+
+#previewModal .modal-dialog {
+  max-width: 90vw;
+  height: 100vh;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+#previewModal .modal-content {
+  width: auto;
+  max-height: 92vh;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+}
+
+#previewModal .modal-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.75rem;
+  overflow: hidden;
+}
+
+#previewModal .modal-header,
+#previewModal .modal-footer {
+  flex-shrink: 0;
+}
+
+#previewModal .modal-body img,
+#previewModal .modal-body video {
+  max-height: 85vh;
+  max-width: 90vw;
+  width: auto;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  object-fit: contain;
 }
