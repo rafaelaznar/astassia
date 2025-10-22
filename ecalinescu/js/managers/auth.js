@@ -171,24 +171,45 @@ class AuthManager {
             favoriteArtist: formData.get('favoriteArtist').trim()
         };
 
-        // Validar campos básicos únicamente
+        // Validar campos básicos
         const nameValid = this.validateField('userName');
         const emailValid = this.validateField('userEmail');
-        
         if (!nameValid || !emailValid) {
             NotificationManager.show('Error', 'Por favor corrige los errores en el formulario', 'error');
             return;
         }
 
         try {
+            // Si hay artista, validar existencia en AudioDB antes de continuar
+            const artist = userData.favoriteArtist;
+            if (artist && artist.length >= 2) {
+                const basicValid = this.validateField('favoriteArtist');
+                if (!basicValid) return;
+                let exists = false;
+                try { exists = await AudioDBService.exists(artist); } catch { exists = true; }
+                if (!exists) {
+                    const input = document.getElementById('favoriteArtist');
+                    const errorDiv = document.getElementById('favoriteArtistError');
+                    input.classList.remove('valid');
+                    input.classList.add('error');
+                    errorDiv.textContent = 'Artista no encontrado. Por favor ingresa un artista musical real.';
+                    errorDiv.classList.add('show');
+                    NotificationManager.show('Error', 'El artista indicado no existe', 'error');
+                    return;
+                }
+            }
+
             // Simular autenticación
             await this.authenticateUser(userData);
             
-            // Añadir artista favorito usando AudioDB
-            await this.searchAndAddFavoriteArtist(userData.favoriteArtist);
-            
+            // Añadir artista favorito si pasó validación y existe
+            if (artist && artist.length >= 2) await this.searchAndAddFavoriteArtist(artist);
+
             this.hideModal();
-            NotificationManager.show('¡Bienvenido!', `Hola ${userData.name}, se ha añadido ${userData.favoriteArtist} a tus favoritos`, 'success');
+            const msg = (artist && artist.length >= 2)
+                ? `Hola ${userData.name}, se ha añadido ${artist} a tus favoritos`
+                : `Hola ${userData.name}`;
+            NotificationManager.show('¡Bienvenido!', msg, 'success');
             
         } catch (error) {
             console.error('Error en autenticación:', error);
@@ -294,9 +315,8 @@ class AuthManager {
             // Verificar en AudioDB con un pequeño delay para evitar demasiadas peticiones
             setTimeout(async () => {
                 try {
-                    const artistInfo = await AudioDBService.getArtistInfo(artistName);
-                    
-                    if (artistInfo && (artistInfo.image || artistInfo.name !== artistName)) {
+                    const exists = await AudioDBService.exists(artistName);
+                    if (exists) {
                         // Artista encontrado
                         input.classList.remove('validating', 'error');
                         input.classList.add('valid');
@@ -371,7 +391,8 @@ class AuthManager {
      * Añade directamente el artista favorito usando AudioDB (sin búsqueda)
      */
     static async searchAndAddFavoriteArtist(artistName) {
-        if (!window.musicApp) return;
+        if (!window.musicApp) return false;
+        if (!artistName || artistName.trim().length < 2) return false;
         
         try {
             console.log('🎨 Añadiendo artista favorito desde AudioDB:', artistName);
@@ -414,7 +435,7 @@ class AuthManager {
                 } else {
                     console.log('ℹ️ El artista ya está en favoritos:', artistInfo.name);
                 }
-            } else {
+                } else {
                 console.warn('⚠️ No se encontró información del artista en AudioDB:', artistName);
                 // Crear entrada básica si AudioDB no tiene información
                 const basicArtistData = {
@@ -442,8 +463,10 @@ class AuthManager {
                     }
                 }
             }
+            return true;
         } catch (error) {
             console.error('Error al añadir artista favorito:', error);
+            return false;
         }
     }
 

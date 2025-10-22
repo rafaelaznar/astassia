@@ -23,6 +23,9 @@ class AudioDBService {
             console.warn('AudioDB:', e); return { name, image:null, thumb:null, banner:null, logo:null, biography:null, genre:null, website:null };
         }
     }
+    static async exists(name){
+        try{ if(!name||name.trim().length<2) return false; const url=`${CONFIG.AUDIODB_API_URL}/search.php?s=${encodeURIComponent(name)}`; const res=await fetch(url); if(!res.ok) throw new Error(`HTTP ${res.status}`); const data=await res.json(); return !!(data&&data.artists&&data.artists.length); }catch(e){ console.warn('AudioDB exists:',e); return false; }
+    }
     static async searchSimilarArtists(name, limit=10){
         try { const main = await this.getArtistInfo(name); const r = []; if (main.image) r.push(main); if (r.length<limit) console.warn('AudioDB free: búsqueda por género no disponible'); return r.slice(0,limit);} catch(e){ console.error('Artist similar:', e); return []; }
     }
