@@ -1,0 +1,169 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+:root{
+  --bg: #061226; /* dark background */
+  --surface: #0f1724;
+  --text: #e6eef6;
+  --muted: #9fb0c8;
+  --accent: #3b82f6;
+  --accent-2: #7c3aed;
+  --success: #16a34a;
+  --danger: #ef4444;
+  --glass: rgba(255,255,255,0.03);
+  --radius: 12px;
+  --shadow: 0 8px 30px rgba(2,6,23,0.6);
+  --container: 1100px;
+  --card-min-height: 140px;
+  --card-img-width: 90px;
+  --card-img-height: 120px;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;font-family:'Inter', 'Segoe UI', Roboto, Arial, sans-serif;
+  background:linear-gradient(180deg,#061226 0%,#071226 100%);
+  color:var(--text);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+}
+
+header,footer{padding:1rem;text-align:center;color:var(--muted)}
+header h1{margin:0;font-size:1.5rem}
+
+main{max-width:var(--container);margin:2rem auto;padding:0 1rem}
+
+/* Card base */
+.card{background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));padding:1rem;border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid rgba(255,255,255,0.03)}
+
+/* Buttons */
+.btn-primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#fff;padding:.6rem 1rem;border-radius:10px;border:none;cursor:pointer;box-shadow:0 8px 30px rgba(59,130,246,0.12);}
+.btn-primary:focus{outline:3px solid rgba(59,130,246,0.14);outline-offset:2px}
+.btn-secondary{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted);padding:.5rem .85rem;border-radius:8px;cursor:pointer}
+.btn-link{background:none;border:none;color:var(--muted);cursor:pointer}
+
+/* Forms */
+.form-row{display:flex;gap:.75rem}
+input[type=text],input[type=number],textarea,select{flex:1;padding:.6rem;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);color:var(--text);transition:box-shadow .12s ease,transform .08s ease}
+input:focus,textarea:focus,select:focus{outline:none;box-shadow:0 8px 24px rgba(59,130,246,0.08);transform:translateY(-1px)}
+textarea{min-height:90px}
+
+.form-actions{margin-top:.5rem}
+.small{font-size:.85rem;color:var(--muted)}
+.hidden{display:none}
+
+/* Grid results (list of movies) - consolidated rules for uniform cards */
+.movie-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+  gap:0.9rem;
+  padding:0;
+  margin:1rem 0 0 0;
+  list-style:none;
+  align-items:start;
+}
+
+/* Make search and sort controls more prominent */
+#movie-input{padding:.8rem;font-size:1rem}
+#sort-select{max-width:260px;padding:.6rem;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06)}
+
+/* Slightly increase card min-height for better balance */
+:root{--card-min-height:160px}
+
+.movie-grid li{
+  background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));
+  padding:0.6rem;
+  border-radius:12px;
+  cursor:pointer;
+  display:flex;
+  gap:0.6rem;
+  align-items:stretch;
+  transition:transform .18s ease,box-shadow .18s ease;
+  height:var(--card-min-height);
+  overflow:hidden;
+}
+
+.movie-grid li:hover{transform:translateY(-4px);box-shadow:0 12px 28px rgba(2,6,23,0.55)}
+
+.movie-grid img{width:var(--card-img-width);height:var(--card-img-height);object-fit:cover;border-radius:6px;flex-shrink:0}
+
+.movie-meta{flex:1;display:flex;flex-direction:column;justify-content:space-between;padding-left:0.5rem}
+.movie-title{font-weight:700;font-size:1rem;color:var(--text);margin:0}
+.movie-sub{font-size:0.85rem;color:var(--muted);margin-top:0.15rem}
+
+/* Clamp title and meta to keep consistent heights */
+.movie-title{display:-webkit-box;overflow:hidden;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2}
+.movie-sub{display:-webkit-box;overflow:hidden;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2}
+
+/* ensure actions (buttons) sit at bottom when present */
+.movie-meta .meta-actions{margin-top:auto;display:flex;gap:0.5rem;align-items:center}
+
+/* Details button styling inside each movie card */
+.details-btn{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#fff;padding:.35rem .6rem;border-radius:8px;border:none;cursor:pointer}
+.details-btn:focus{outline:2px solid rgba(59,130,246,0.18)}
+
+/* Feedback form upgrades */
+#feedback-form .form-row, #feedback-form .form-actions{display:flex;gap:.6rem}
+#feedback-form input[type=url], #feedback-form input#fb-app-version{flex:1}
+#feedback-form textarea{min-height:90px}
+
+#panel-feedback .card{background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));padding:1rem;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
+#panel-feedback h3{margin-top:0;margin-bottom:.6rem}
+#panel-feedback select, #panel-feedback input, #panel-feedback textarea{background:rgba(255,255,255,0.02);border-radius:8px;padding:.55rem;border:1px solid rgba(255,255,255,0.04);color:var(--text)}
+#panel-feedback .form-row{flex-wrap:wrap}
+
+/* New structured meta for movie cards */
+.meta-content{display:flex;flex-direction:column;gap:0.25rem}
+.movie-plot{font-size:0.85rem;color:var(--muted);overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;line-clamp:3}
+.meta-actions{display:flex;gap:0.5rem;align-items:center}
+
+/* ensure footer actions align and movie-meta uses full height */
+.movie-meta{display:flex;flex-direction:column;justify-content:space-between}
+.movie-meta .meta-actions{margin-top:0}
+
+#movie-details{margin-top:1rem}
+
+.sr-only{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap}
+
+/* Focus states */
+.movie-grid li:focus,.movie-grid li:focus-visible{outline:3px solid rgba(59,130,246,0.9);outline-offset:3px}
+
+/* Spinner */
+.spinner{width:48px;height:48px;border-radius:50%;border:6px solid rgba(255,255,255,0.06);border-top-color:var(--accent);animation:spin 1s linear infinite;margin:1rem auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Tabs */
+#tools-section{padding:.75rem}
+#tools-tabs{display:flex;gap:.5rem;margin-bottom:.75rem}
+.tab-btn{background:rgba(255,255,255,0.02);color:var(--muted);border:1px solid rgba(255,255,255,0.03);padding:.45rem .75rem;border-radius:8px;cursor:pointer}
+.tab-btn[aria-selected="true"]{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#fff;box-shadow:0 6px 18px rgba(59,130,246,0.12)}
+
+/* Error */
+.error{color:var(--danger)}
+
+/* Game UI specific */
+#game-card{margin-top:.75rem}
+.game-controls{display:flex;gap:.5rem;align-items:center;margin-bottom:.5rem}
+#game-timer{font-weight:600;color:var(--accent)}
+#game-difficulty,#game-mode{padding:.35rem;border-radius:8px}
+#game-leaderboard{margin-top:.6rem;font-size:.9rem;color:var(--muted)}
+
+/* Responsive tweaks */
+@media (max-width:900px){
+  .movie-grid{grid-template-columns:repeat(3,1fr)}
+}
+
+@media (max-width:700px){
+  .form-row{flex-direction:column}
+  .movie-grid{grid-template-columns:repeat(2,1fr)}
+  header h1{font-size:1.2rem}
+}
+
+/* Small screens */
+@media (max-width:520px){
+  .movie-grid{grid-template-columns:repeat(2,1fr)}
+  .movie-grid img{width:60px;height:90px}
+}
+
+/* Animations */
+.fade-in{animation:fadeIn .32s ease both}@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* End */
