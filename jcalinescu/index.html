@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Moodify+ Emocional</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Text:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Botón de navegación fijo - siempre visible -->
+  <div class="header-navigation-fixed">
+    <a href="../index.html" id="btnVolverIndice" class="btn-volver-indice" title="Volver a la galería de proyectos">
+      🏠 Volver a Proyectos DAW
+    </a>
+  </div>
+
+  <!-- Pantalla de introducción emotiva -->
+  <div id="introduccion">
+    <div id="textoIntroduccion">
+      <p id="linea1" class="linea-texto"></p>
+      <p id="linea2" class="linea-texto"></p>
+      <p id="linea3" class="linea-texto"></p>
+      <p id="linea4" class="linea-texto"></p>
+      <p id="linea5" class="linea-texto"></p>
+    </div>
+  </div>
+
+  <!-- Contenido principal (inicialmente oculto) -->
+  <div id="contenedor">
+    <h1>💫 Moodify+ 💫</h1>
+    <p>Descubre recomendaciones y frases inspiradoras según tu estado de ánimo.</p>
+
+    <form id="moodForm">
+      <div class="form-section">
+        <label for="nombre">Nombre:</label><br>
+  <input type="text" id="nombre" placeholder="Tu nombre..." required>
+      </div>
+
+      <div class="form-section">
+        <label for="email">Correo electrónico:</label><br>
+  <input type="email" id="email" placeholder="tucorreo@example.com" required>
+      </div>
+
+      <div id="sectionEstadoAnimo" class="form-section">
+        <label id="labelEstadoAnimo" for="estadoAnimo">¿Cómo te sientes hoy?</label><br>
+  <select id="estadoAnimo" required>
+          <option value="">Selecciona...</option>
+          <option value="feliz">😊 Feliz</option>
+          <option value="triste">😢 Triste</option>
+          <option value="estresado">😰 Estresado</option>
+          <option value="motivado">💪 Motivado</option>
+        </select>
+      </div>
+
+      <div class="form-section">
+        <button type="submit" id="btnEnviar">Mostrar recomendación</button>
+      </div>
+    </form>
+
+    <div id="mensaje"></div>
+  </div>
+
+  <!-- Nueva pantalla de experiencia immersiva -->
+  <div id="pantallaExperiencia">
+    <!-- Overlay para transiciones de fondo -->
+    <div id="bgOverlay"></div>
+    <!-- Pista de salida (tecla ESC) -->
+  <div id="exitHint">
+      Pulsa ESC para volver al formulario
+    </div>
+    <!-- Botón volver (opcional) -->
+  <button id="btnVolver">
+      ESC ↩ Volver
+    </button>
+
+  <!-- Frases centradas a pantalla completa -->
+  <div id="contenedorFrases">
+      <h1 id="fraseAutomatica">
+        🔄 Cargando tu experiencia personalizada...
+      </h1>
+    </div>
+
+  </div>
+
+    
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
