@@ -5,23 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Test de Matemáticas</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
 </head>
 <body>
-    <h1>MATH TEST</h1>
-
-    <div id="resultado"></div>
-
-    <div id="pregunta"></div>
-
-    <div id="opciones"></div>
-
-    <div id="contenedorStart">
-        <button id="start">¡Comenzar el test!</button>
+    <div id="encabezado">
+        <h1>MATH TEST</h1>
     </div>
 
-    <div id="navegacion">
-        <button id="anterior"> Volver a la pregunta anterior</button>
-        <button id="siguiente">Siguiente pregunta</button>
+    <div id="contenido">
+        <img src="matematicas.png" alt="matematicas" id="imagenInicio">
+
+        <div id="subtitulo">
+            <p>¿Crees que eres bueno en matemáticas?</p>
+            <p>¡Haz este test y demuestrálo!</p>
+        </div>
+
+        <div id="contenedorStart">
+            <button id="start">¡Comenzar el test!</button>
+        </div>
+
+        <div id="resultado"></div>
+
+        <div id="pregunta"></div>
+
+        <div id="opciones"></div>
+
+        <div id="navegacion">
+            <button id="anterior"> Volver a la pregunta anterior</button>
+            <button id="siguiente">Siguiente pregunta</button>
+        </div>
+
+        <p id="progreso">Pregunta 1 / 10</p>
     </div>
 
     <script>
@@ -30,12 +44,10 @@
             const url = "https://opentdb.com/api.php?amount=10&category=19&difficulty=medium&type=multiple&encode=url3986";
 
             let preguntas = [];
-            
-            let indice = 0;
 
             let respuestas = [];
-
-            let puntuacion = 0;
+            
+            let indice = 0;
 
             fetch(url)
                 .then(response => response.json())
@@ -105,32 +117,31 @@
             document.getElementById("start").addEventListener("click", () => {
                 document.getElementById("pregunta").style.display = "block";
 
-                document.getElementById("start").style.display = "none"; // Se oculta el botón una vez has hecho clic
-                document.getElementById("navegacion").style.display = "block"; // Entonces se muestran los botones de navegación
+                document.getElementById("imagenInicio").style.display = "none";
+                document.getElementById("subtitulo").style.display = "none";
+
+                document.getElementById("start").style.display = "none";
+                document.getElementById("navegacion").style.display = "block";
+                document.getElementById("progreso").style.display = "block";
+
                 mostrarPregunta(indice); // Muestra la primera pregunta
             });
 
             document.getElementById("siguiente").addEventListener("click", () => {
                 if (indice < preguntas.length - 1) {
                     indice++;
+
+                    document.getElementById("progreso").textContent = `Pregunta ${indice + 1} / ${preguntas.length}`;
+
                     mostrarPregunta(indice);
                 } else {
+                    document.getElementById("resultado").innerHTML = `<h2>🎉 ¡Enhorabuena! ¡Has acabado el test!</h2>`;
+                    mostrarResumen();
 
-                    // Calcular puntuación
-                    puntuacion = preguntas.reduce((acc, p, idx) => {
-                        return acc + (respuestas[idx] === p.correcta ? 1 : 0);
-                    }, 0);
-
-                    document.getElementById("resultado").innerHTML = `<h2>🎉 ¡Enhorabuena! ¡Has acabado el test!</h2><br>
-                                                                      <p>Tu puntuación es de ${puntuacion}</p>`;
-
-                    document.getElementById("pregunta").innerHTML = "";
                     document.getElementById("pregunta").style.display = "none";
-
-                    document.getElementById("opciones").innerHTML = "";
-
-                    document.getElementById("anterior").style.display = "none";
-                    document.getElementById("siguiente").style.display = "none";
+                    document.getElementById("opciones").style.display = "none";
+                    document.getElementById("navegacion").style.display = "none";
+                    document.getElementById("progreso").style.display = "none";
                 }
             });
 
@@ -140,6 +151,53 @@
                     mostrarPregunta(indice)
                 }
             });
+
+            function mostrarResumen() {
+                const contenedorPregunta = document.getElementById("pregunta");
+                const contenedorOpciones = document.getElementById("opciones");
+
+                // Calcular puntuación
+                let aciertos = 0;
+
+                preguntas.forEach((pregunta, i) => {
+                    if (respuestas[i] === pregunta.correcta) {
+                        aciertos++;
+                    }
+                });
+
+                let tabla = `
+                    <h2>Resultados</h2>
+                    <p>Puntuación: <strong>${aciertos}</strong> / <strong>${preguntas.length}</strong></p>
+                    <table>
+                        <tr>
+                            <th>Nº de Pregunta</th>
+                            <th>Mi Respuesta</th>
+                            <th>Respuesta Correcta</th>
+                            <th>Resultado</th> 
+                        </tr>
+                `;
+
+                preguntas.forEach((pregunta, i) => {
+                    const respuestaUsuario = respuestas[i] || "(sin responder)";
+                    const respuestaCorrecta = pregunta.correcta;
+                    const esCorrecta = respuestaUsuario === respuestaCorrecta;
+
+                    tabla += `
+                        <tr>
+                            <td>${i + 1}</td>
+                            <td>${respuestaUsuario}</td>
+                            <td>${respuestaCorrecta}</td>
+                            <td>${esCorrecta ? '✅' : '❌'}</td>    
+                        </tr>
+                    `;
+                });
+
+                tabla += `</table>`;
+
+                document.getElementById("resultado").innerHTML = ""; // Limpiamos antes de mostrar la tabla
+
+                document.getElementById("resultado").innerHTML = tabla;
+            }
         });
     </script>
 </body>
