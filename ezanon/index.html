@@ -3,21 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test de Matemáticas</title>
+    <title>Test de Historia</title>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
 </head>
 <body>
     <div id="encabezado">
-        <h1>MATH TEST</h1>
+        <h1>HISTORY TEST</h1>
     </div>
 
     <div id="contenido">
-        <img src="matematicas.png" alt="matematicas" id="imagenInicio">
 
         <div id="subtitulo">
-            <p>¿Crees que eres bueno en matemáticas?</p>
-            <p>¡Haz este test y demuestrálo!</p>
+            <p>¿Se te da bien la historia?</p>
+            <p>¡Haz este test y compruébalo!</p>
         </div>
 
         <div id="contenedorStart">
@@ -41,7 +40,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
 
-            const url = "https://opentdb.com/api.php?amount=10&category=19&difficulty=medium&type=multiple&encode=url3986";
+            const url = "https://opentdb.com/api.php?amount=50&category=23&difficulty=medium&type=multiple&encode=url3986";
 
             let preguntas = [];
 
@@ -52,7 +51,9 @@
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
-                    preguntas = data.results.map(p => new Pregunta (
+                    const preguntasSeleccionadas = preguntasAleatorias(data.results, 10);
+
+                    preguntas = preguntasSeleccionadas.map(p => new Pregunta (
                         decodeText(p.question),
                         mezclarPreguntas([...p.incorrect_answers.map(op => decodeText(op)), decodeText(p.correct_answer)]),
                         decodeText(p.correct_answer)
@@ -82,6 +83,18 @@
                     this.opciones = opciones;
                     this.correcta = correcta;
                 }
+            }
+
+            function preguntasAleatorias(preguntas, numeroPreguntas = 10) {
+                
+                // Copiamos el array de preguntas original, para no modificar el original
+                const preguntas2 = [...preguntas];
+
+                // Barajamos usando sort
+                preguntas2.sort(() => Math.random() - 0.5);
+
+                // Entonces, cogemos primeros los 10 elementos
+                return preguntas2.slice(0, numeroPreguntas);
             }
 
             function mostrarPregunta(i) {
@@ -117,7 +130,6 @@
             document.getElementById("start").addEventListener("click", () => {
                 document.getElementById("pregunta").style.display = "block";
 
-                document.getElementById("imagenInicio").style.display = "none";
                 document.getElementById("subtitulo").style.display = "none";
 
                 document.getElementById("start").style.display = "none";

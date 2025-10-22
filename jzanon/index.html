@@ -24,6 +24,7 @@
         $(document).ready(function() {
 
             const url = "https://rawcdn.githack.com/akabab/starwars-api/0.2.1/api/all.json";
+
             let personajes = []; // Aquí se almacenan los personajes
 
             function mostrarPersonajes(lista) {
@@ -54,10 +55,9 @@
             function normalizar(valor) {
                 
                 // Convierte el valor a string.
-                // Quita espacios, pasa a minúsculas y elimina diacríticos
+                // Quita espacios, pasa a minúsculas y elimina acentos diacríticos
                 const s = String(valor || "").trim().toLowerCase();
                 
-                // Normaliza y elimina las marcas combinantes
                 return s.normalize ? s.normalize("NFD").replace(/[\u0300-\u036f]/g, "") : s;
             }
 
