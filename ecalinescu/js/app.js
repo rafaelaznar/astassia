@@ -109,87 +109,32 @@ class MusicApp {
     updateAuthenticationUI() {
         const isAuthenticated = AuthManager.isAuthenticated;
 
-        // Ocultar/mostrar tab de favoritos completamente
+        // Tab y sección de favoritos
         const favoritesTab = document.querySelector('[data-tab="favorites"]');
-        if (favoritesTab) {
-            if (!isAuthenticated) {
-                favoritesTab.style.display = 'none';
-            } else {
-                favoritesTab.style.display = 'flex';
-            }
+        if (favoritesTab) favoritesTab.style.display = isAuthenticated ? 'flex' : 'none';
+        if (this.favoritesSection) {
+            if (!isAuthenticated) { this.favoritesSection.classList.remove('active'); this.favoritesSection.style.display='none'; }
+            else this.favoritesSection.style.display='';
         }
 
-        // Ocultar/mostrar sección de favoritos completamente
-        const favoritesSection = document.getElementById('favoritesSection');
-        if (favoritesSection) {
-            if (!isAuthenticated) {
-                // Si no está autenticado, remover la clase active y ocultar
-                favoritesSection.classList.remove('active');
-                favoritesSection.style.display = 'none';
-            } else {
-                // Si está autenticado, permitir que el sistema de tabs controle la visibilidad
-                favoritesSection.style.display = '';
-            }
-        }
-
-        // Modificar desplegable de tipo de búsqueda
-        const entityFilter = document.getElementById('entityFilter');
+        // Desplegable de tipo de búsqueda
+        const entityFilter = this.entityFilter;
         if (entityFilter) {
             if (!isAuthenticated) {
-                // Guardar y remover opciones de álbumes y artistas para usuarios no autenticados
-                const albumOption = entityFilter.querySelector('option[value="album"]');
-                const artistOption = entityFilter.querySelector('option[value="musicArtist"]');
-                
-                if (albumOption && !entityFilter.dataset.albumOptionSaved) {
-                    entityFilter.dataset.albumOptionText = albumOption.textContent;
-                    entityFilter.dataset.albumOptionSaved = 'true';
-                    albumOption.remove();
-                }
-                
-                if (artistOption && !entityFilter.dataset.artistOptionSaved) {
-                    entityFilter.dataset.artistOptionText = artistOption.textContent;
-                    entityFilter.dataset.artistOptionSaved = 'true';
-                    artistOption.remove();
-                }
-                
-                // Asegurar que esté seleccionado "musicTrack" (canciones)
-                entityFilter.value = 'musicTrack';
+                const albumOpt = entityFilter.querySelector('option[value="album"]');
+                const artistOpt = entityFilter.querySelector('option[value="musicArtist"]');
+                if (albumOpt && !entityFilter.dataset.albumOptionSaved){ entityFilter.dataset.albumOptionText=albumOpt.textContent; entityFilter.dataset.albumOptionSaved='true'; albumOpt.remove(); }
+                if (artistOpt && !entityFilter.dataset.artistOptionSaved){ entityFilter.dataset.artistOptionText=artistOpt.textContent; entityFilter.dataset.artistOptionSaved='true'; artistOpt.remove(); }
+                entityFilter.value='musicTrack';
             } else {
-                // Restaurar opciones para usuarios autenticados
-                if (entityFilter.dataset.albumOptionSaved === 'true') {
-                    const albumOption = document.createElement('option');
-                    albumOption.value = 'album';
-                    albumOption.textContent = entityFilter.dataset.albumOptionText;
-                    entityFilter.appendChild(albumOption);
-                    delete entityFilter.dataset.albumOptionSaved;
-                    delete entityFilter.dataset.albumOptionText;
-                }
-                
-                if (entityFilter.dataset.artistOptionSaved === 'true') {
-                    const artistOption = document.createElement('option');
-                    artistOption.value = 'musicArtist';
-                    artistOption.textContent = entityFilter.dataset.artistOptionText;
-                    entityFilter.appendChild(artistOption);
-                    delete entityFilter.dataset.artistOptionSaved;
-                    delete entityFilter.dataset.artistOptionText;
-                }
+                if (entityFilter.dataset.albumOptionSaved==='true'){ const o=document.createElement('option'); o.value='album'; o.textContent=entityFilter.dataset.albumOptionText; entityFilter.appendChild(o); delete entityFilter.dataset.albumOptionSaved; delete entityFilter.dataset.albumOptionText; }
+                if (entityFilter.dataset.artistOptionSaved==='true'){ const o=document.createElement('option'); o.value='musicArtist'; o.textContent=entityFilter.dataset.artistOptionText; entityFilter.appendChild(o); delete entityFilter.dataset.artistOptionSaved; delete entityFilter.dataset.artistOptionText; }
             }
         }
 
-        // Habilitar/deshabilitar botón de limpiar favoritos
-        if (this.clearFavorites) {
-            this.clearFavorites.disabled = !isAuthenticated;
-        }
-
-        // Si no está autenticado y está en la tab de favoritos, cambiar a resultados
-        if (!isAuthenticated && this.currentTab === 'favorites') {
-            this.switchTab('results');
-        }
-
-        // Re-renderizar las tarjetas actuales para actualizar botones de favoritos
-        if (this.currentTab === 'results' && this.currentResults.length > 0) {
-            this.renderResults();
-        }
+        if (this.clearFavorites) this.clearFavorites.disabled = !isAuthenticated;
+        if (!isAuthenticated && this.currentTab === 'favorites') this.switchTab('results');
+        if (this.currentTab === 'results' && this.currentResults.length > 0) this.renderResults();
     }
 
     /**
@@ -469,7 +414,7 @@ class MusicApp {
         const trackId = card.dataset.trackId;
         
         // Convertir a número solo si es un ID numérico, mantener como string si es de AudioDB
-        const normalizedTrackId = isNaN(trackId) ? trackId : parseInt(trackId);
+        const normalizedTrackId = this.normalizeId(trackId);
         
         const song = this.findSongById(normalizedTrackId);
         if (!song) return;
@@ -495,8 +440,8 @@ class MusicApp {
         const card = event.target.closest('.song-card');
         const trackId = card.dataset.trackId;
         
-        // Convertir a número solo si es un ID numérico, mantener como string si es de AudioDB
-        const normalizedTrackId = isNaN(trackId) ? trackId : parseInt(trackId);
+    // Convertir a número solo si es un ID numérico, mantener como string si es de AudioDB
+    const normalizedTrackId = this.normalizeId(trackId);
         
         if (this.isFavorite(normalizedTrackId)) {
             this.removeFavorite(normalizedTrackId);
@@ -532,7 +477,7 @@ class MusicApp {
      */
     removeFavorite(trackId) {
         // Normalizar el ID para comparación
-        const normalizedTrackId = isNaN(trackId) ? trackId : parseInt(trackId);
+        const normalizedTrackId = this.normalizeId(trackId);
         const songIndex = this.favorites.findIndex(song => song.trackId === normalizedTrackId);
         if (songIndex === -1) return;
         
@@ -547,11 +492,8 @@ class MusicApp {
      * Verifica si una canción es favorita
      */
     isFavorite(trackId) {
-        if (!trackId || !this.favorites || this.favorites.length === 0) {
-            return false;
-        }
-        // Normalizar el ID para comparación
-        const normalizedTrackId = isNaN(trackId) ? trackId : parseInt(trackId);
+        if (!trackId || !this.favorites || this.favorites.length === 0) return false;
+        const normalizedTrackId = this.normalizeId(trackId);
         return this.favorites.some(song => song.trackId === normalizedTrackId);
     }
 
@@ -560,7 +502,7 @@ class MusicApp {
      */
     findSongById(trackId) {
         // Normalizar el ID para comparación
-        const normalizedTrackId = isNaN(trackId) ? trackId : parseInt(trackId);
+        const normalizedTrackId = this.normalizeId(trackId);
         return this.currentResults.find(song => song.trackId === normalizedTrackId) ||
                this.favorites.find(song => song.trackId === normalizedTrackId);
     }
@@ -695,11 +637,9 @@ class MusicApp {
      */
     updateFavoriteButton(card, isFavorite) {
         const favoriteBtn = card.querySelector('[data-action="favorite"]');
-        const icon = favoriteBtn.querySelector('i');
-        
+        const cls = isFavorite ? 'fas fa-heart' : 'far fa-heart';
         favoriteBtn.classList.toggle('active', isFavorite);
-        icon.className = isFavorite ? 'fas fa-heart' : 'far fa-heart';
-        favoriteBtn.innerHTML = `<i class="${icon.className}"></i>${isFavorite ? 'Quitar' : 'Favorito'}`;
+        favoriteBtn.innerHTML = `<i class="${cls}"></i>${isFavorite ? 'Quitar' : 'Favorito'}`;
         favoriteBtn.setAttribute('aria-label', `${isFavorite ? 'Quitar' : 'Agregar'} favorito`);
     }
 
@@ -757,12 +697,7 @@ class MusicApp {
         this.isLoading = isLoading;
         this.loading.classList.toggle('show', isLoading);
         this.searchBtn.disabled = isLoading;
-        
-        if (isLoading) {
-            this.searchBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Buscando...';
-        } else {
-            this.searchBtn.innerHTML = '<i class="fas fa-search"></i> Buscar';
-        }
+        this.searchBtn.innerHTML = isLoading ? '<i class="fas fa-spinner fa-spin"></i> Buscando...' : '<i class="fas fa-search"></i> Buscar';
     }
 
     /**
@@ -789,26 +724,14 @@ class MusicApp {
      * Muestra estado vacío para resultados
      */
     showEmptyResults() {
-        this.resultsGrid.innerHTML = `
-            <div class="empty-state">
-                <i class="fas fa-search"></i>
-                <h3>Sin resultados</h3>
-                <p>No se encontraron canciones para tu búsqueda. Intenta con otros términos.</p>
-            </div>
-        `;
+        this.resultsGrid.innerHTML = `<div class="empty-state"><i class="fas fa-search"></i><h3>Sin resultados</h3><p>No se encontraron canciones para tu búsqueda. Intenta con otros términos.</p></div>`;
     }
 
     /**
      * Muestra estado vacío para favoritos
      */
     showEmptyFavorites() {
-        this.favoritesGrid.innerHTML = `
-            <div class="empty-state">
-                <i class="fas fa-heart-broken"></i>
-                <h3>Sin favoritos aún</h3>
-                <p>Las canciones que marques como favoritas aparecerán aquí.</p>
-            </div>
-        `;
+        this.favoritesGrid.innerHTML = `<div class="empty-state"><i class="fas fa-heart-broken"></i><h3>Sin favoritos aún</h3><p>Las canciones que marques como favoritas aparecerán aquí.</p></div>`;
     }
 
     /**
@@ -823,9 +746,7 @@ class MusicApp {
     /**
      * Maneja eventos de entrada en búsqueda
      */
-    handleSearchInput() {
-        this.hideError();
-    }
+    handleSearchInput() { this.hideError(); }
 
     /**
      * Maneja cambios en filtros
@@ -843,11 +764,12 @@ class MusicApp {
     /**
      * Maneja cambios en ordenación
      */
-    handleSortChange() {
-        if (this.currentResults.length > 0) {
-            this.renderResults();
-        }
-    }
+    handleSortChange() { if (this.currentResults.length > 0) this.renderResults(); }
+
+    /**
+     * Normaliza IDs: número si es numérico, string si no
+     */
+    normalizeId(id){ return isNaN(id) ? id : parseInt(id); }
 
 }
 
