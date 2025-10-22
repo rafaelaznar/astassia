@@ -12,13 +12,17 @@ input {
   font-weight: bold;
 }
 
-#registroForm {
+#searchForm {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-p, h1{
+p, h1, h2{
   text-align: center;
 }
 
+#resultsTable{
+  margin: auto;
+  text-align: center;
+}

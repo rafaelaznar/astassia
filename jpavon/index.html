@@ -2,30 +2,26 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Formulario con jQuery</title>
+  <title>Buscar personajes</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/x-icon" href="favicon.png"/>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script defer src="script.js"></script>
 </head>
 <body>
-  <h1>Registro de Usuario</h1>
+  <h1>Buscar Personajes</h1>
   
-  <form id="registroForm">
-    <!-- Nombre: validado solo por longitud -->
-    <input type="text" id="nombre" placeholder="Nombre (3-100 caracteres)"><br>
-
-    <!-- Vision: ahora se teclea -->
-    <input type="text" id="vision" placeholder="Vision (Anemo, Geo, Electro, Dendro, Cryo, Pyro, Hydro)"><br>
-
-    <!-- Weapon: ahora se teclea -->
-    <input type="text" id="weapon" placeholder="Arma (Sword, Bow, Claymore, Polearm, Catalyst)"><br>
-
-    <button type="submit">Registrar</button>
+  <form id="searchForm">
+    <input type="text" id="searchName" placeholder="Nombre (parcial)"><br>
+    <input type="text" id="searchVision" placeholder="Vision (Anemo, Geo, ... )"><br>
+    <input type="text" id="searchWeapon" placeholder="Arma (Sword, Bow, ... )"><br>
+    <button type="submit">Buscar</button>
+    <button type="button" id="clearBtn">Limpiar</button>
   </form>
 
   <p id="mensaje"></p>
 
-  <h2>Usuarios desde la API</h2>
+  <h2>Resultados</h2>
 
   <!-- Controles de orden -->
   <div id="sortControls" style="text-align:center;margin-bottom:8px;">
@@ -37,6 +33,19 @@
     <button id="sortBtn" type="button">Ordenar</button>
   </div>
 
-  <ul id="listaUsuarios"></ul>
+  <!-- Tabla de resultados -->
+  <table id="resultsTable" border="1" cellspacing="0" cellpadding="6" style="margin: 0 auto;">
+    <thead>
+      <tr>
+        <th>Imagen</th>
+        <th>Nombre</th>
+        <th>Vision</th>
+        <th>Weapon</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- filas generadas dinámicamente -->
+    </tbody>
+  </table>
 </body>
 </html>
