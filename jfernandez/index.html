@@ -18,7 +18,7 @@
     </div>
 
     <main>
-      <!-- Formulario de usuario (experiencia personalizada) -->
+      <!-- Formulario de usuario -->
       <section id="user-section" class="card">
         <form id="user-form" aria-labelledby="user-title">
           <h3 id="user-title">Configura tu experiencia</h3>
@@ -30,7 +30,6 @@
               aria-label="Nombre"
             />
             <select id="user-genre" aria-label="Género favorito" placeholder="Elige tu género favorito">
-              
               <option value="Action">Acción</option>
               <option value="Adventure">Aventura</option>
               <option value="Comedy">Comedia</option>
@@ -72,10 +71,7 @@
             />
             <button type="submit" class="btn-primary">Buscar</button>
           </div>
-          <div
-            class="form-row"
-            style="margin-top: 0.5rem; align-items: center; gap: 0.5rem"
-          >
+          <div class="form-row" style="margin-top: 0.5rem; align-items: center; gap: 0.5rem">
             <label for="sort-select" class="small">Ordenar por:</label>
             <select id="sort-select" aria-label="Ordenar resultados">
               <option value="relevance">Más relevantes (por OMDb)</option>
@@ -115,6 +111,7 @@
                   id="filter-year"
                   min="1900"
                   max="2100"
+                  step="1"
                   placeholder="Ej: 2019"
                 />
               </div>
@@ -125,12 +122,12 @@
                   id="filter-year-to"
                   min="1900"
                   max="2100"
+                  step="1"
                   placeholder="Ej: 2022"
                 />
               </div>
             </div>
-            <select id="user-genre" aria-label="Género favorito" placeholder="Elige tu género favorito">
-              
+            <select id="filter-genre" aria-label="Género" placeholder="Elige tu género favorito">
               <option value="Action">Acción</option>
               <option value="Adventure">Aventura</option>
               <option value="Comedy">Comedia</option>
@@ -140,11 +137,10 @@
               <option value="Sci-Fi">Ciencia ficción</option>
               <option value="Thriller">Suspense</option>
             </select>
-              <select id="filter-type" aria-label="Tipo">
-                <option value="movie">Película</option>
-                <option value="series">Serie</option>
-              </select>
-            </div>
+            <select id="filter-type" aria-label="Tipo">
+              <option value="movie">Película</option>
+              <option value="series">Serie</option>
+            </select>
           </div>
         </form>
         <p id="error-msg" class="error" role="status" aria-live="polite"></p>
