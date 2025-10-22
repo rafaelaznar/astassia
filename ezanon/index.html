@@ -13,7 +13,6 @@
     </div>
 
     <div id="contenido">
-
         <div id="subtitulo">
             <p>¿Se te da bien la historia?</p>
             <p>¡Haz este test y compruébalo!</p>
@@ -58,8 +57,6 @@
                         mezclarPreguntas([...p.incorrect_answers.map(op => decodeText(op)), decodeText(p.correct_answer)]),
                         decodeText(p.correct_answer)
                     ));
-                    
-                    siguientePregunta();
                 });
             
             // Recibe un texto codificado en URL, lo decodifica y devuelve el texto normal
@@ -93,7 +90,7 @@
                 // Barajamos usando sort
                 preguntas2.sort(() => Math.random() - 0.5);
 
-                // Entonces, cogemos primeros los 10 elementos
+                // Entonces, cogemos los primeros 10 elementos
                 return preguntas2.slice(0, numeroPreguntas);
             }
 
@@ -128,11 +125,10 @@
             }
 
             document.getElementById("start").addEventListener("click", () => {
-                document.getElementById("pregunta").style.display = "block";
-
                 document.getElementById("subtitulo").style.display = "none";
-
                 document.getElementById("start").style.display = "none";
+
+                document.getElementById("pregunta").style.display = "block";
                 document.getElementById("navegacion").style.display = "block";
                 document.getElementById("progreso").style.display = "block";
 
@@ -154,6 +150,8 @@
                     document.getElementById("opciones").style.display = "none";
                     document.getElementById("navegacion").style.display = "none";
                     document.getElementById("progreso").style.display = "none";
+
+                    document.getElementById("reiniciar").style.display = "block";
                 }
             });
 
