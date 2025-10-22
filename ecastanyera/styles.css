@@ -1,0 +1,285 @@
+/* reseteo basico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-image: url("imagenes/background.jpeg");
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    min-height: 100vh;
+    padding: 20px;
+    transition: background 0.5s ease;
+    /* variable para color de selección del album */
+    --album-accent: linear-gradient(135deg, #e3b8d2 0%, #ddacc0 100%);
+    --album-accent-border: #a47777;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* titulo principal */
+h1 {
+    text-align: center;
+    color: white;
+    margin-bottom: 30px;
+    font-size: 2.5rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+/* seccion del juego */
+.game-section {
+    background: white;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    margin-bottom: 20px;
+}
+
+.album-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 3px solid #eee;
+}
+
+/* imagen del album */
+.album-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 10px;
+    object-fit: cover;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.album-info {
+    flex: 1;
+}
+
+.album-info h2 {
+    color: #333;
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.instructions {
+    color: #666;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+/* espacio de las canciones */
+.songs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+/* tarjeta de cancion */
+.song-card {
+    padding: 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    border: 3px solid transparent;
+    background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+    transition: all 0.3s ease;
+}
+
+.song-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+}
+
+/* cuando esta seleccionada */
+.song-card.selected {
+    border-color: var(--album-accent-border);
+    background: var(--album-accent);
+}
+
+.song-card.selected .song-title,
+.song-card.selected .song-album {
+    color: white;
+}
+
+/* cuando es correcta */
+.song-card.correct {
+    background-color: #87af88;
+}
+
+/* cuando es incorrecta */
+.song-card.incorrect {
+    background-color: #f44336;
+}
+
+.song-card.correct .song-title,
+.song-card.correct .song-album,
+.song-card.incorrect .song-title,
+.song-card.incorrect .song-album {
+    color: white;
+}
+
+.song-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.song-album {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* controles y botones */
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+/* enlace botón para volver al inicio (seguirá la temática) */
+.btn-return-home {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 30px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, rgb(134, 105, 160) 0%, rgba(108,92,231,1) 100%);
+    box-shadow: 0 8px 20px rgba(79,70,229,0.22);
+    transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+    border: 2px solid rgba(255,255,255,0.08);
+}
+
+.btn-return-home:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 12px 30px rgba(79,70,229,0.28);
+    opacity: 0.98;
+}
+
+/* estilo alternativo: combinar con el color del album si se quiere usar la variable --album-accent */
+.btn-return-home.album-accent {
+    background: var(--album-accent);
+    border: 2px solid var(--album-accent-border);
+    color: white;
+}
+
+button {
+    padding: 15px 40px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+.btn-finish {
+    background-color: darkgrey;
+    color: white;
+}
+
+.btn-finish:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.btn-finish:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-new-game {
+    background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+    color: white;
+}
+
+.btn-new-game:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+}
+
+/* pantalla de resultados */
+.results {
+    background: white;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    text-align: center;
+    display: none;
+}
+
+.results h2 {
+    color: #333;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+.score {
+    font-size: 4rem;
+    font-weight: bold;
+    margin: 20px 0;
+}
+
+/* colores segun puntuacion */
+.score.excellent {
+    color: #4caf50;
+}
+
+.score.good {
+    color: #2196f3;
+}
+
+.score.fair {
+    color: #ff9800;
+}
+
+.score.poor {
+    color: #f44336;
+}
+
+.stats {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin: 30px 0;
+    font-size: 1.2rem;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: bold;
+    color: darkgrey;
+}
+
+.stat-label {
+    color: #666;
+    margin-top: 5px;
+}
+
+/* pantalla de carga */
+.loading {
+    text-align: center;
+    color: white;
+    font-size: 1.5rem;
+    padding: 40px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.hidden {
+    display: none;
+}
