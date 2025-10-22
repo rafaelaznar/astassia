@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Document</title>
+</head>
+<body>
+    <main>
+        <!-- panel que saltará en caso de perder -->
+        <div id="panelFracaso">
+            <div>
+                <p>Has fallado!!</p>
+                <p id="palabraFinal"></p>
+                <button onclick="location.reload()">Reiniciar</button>
+            </div>
+        </div>
+        <!-- panel que saltará en caso de ganar -->
+        <div id="panelVictoria">
+            <div>
+                <p>Has ganado!!</p>
+                <button onclick="location.reload()">Reiniciar</button>
+            </div>
+        </div>
+        <!-- html que muestra el estado del juego -->
+        <div>
+            <p id="letrasContenidas"></p>
+            <p id="resultado">Cargando Palabra...</p>
+            <p id="palabra"></p>
+            <form id="miFormulario">
+                <input type="text" name="intento" id="intento">
+                <input type="submit" value="Enviar">
+            </form>
+            <div style="margin-top: 20px; display: flex; gap: 10px; align-items: flex-start; width: 100%;">
+                <a style="align-self: flex-start;" href="../index.html"><button style="border: 2px solid #A0293D; background: rgb(241, 196, 196); color: #A0293D;" >Indice</button></a>
+            </div>
+        </div>
+    </main>
+     <script>
+        //objeto de palabra
+        class Palabra {
+            constructor(word) {
+                this.word = word;
+                this.length = word.length;
+            }
+        }
+        //funcion principal del juego
+        function juegoPalabra(palabraObj) {
+            let contadorIntentos = 0;
+            let intentoAntiguo = "";
+            let letrasContenidas = [];
+            let letraValida = null;
+            //nos imprime la longitud de la palabra y prepara el input
+            document.getElementById("resultado").innerHTML = "Palabra de " + palabraObj.length + " letras, tienes 10 intentos.";
+            //aplica un maximo en el input de la palabra la longitud de la palabra
+            document.querySelector("#intento").setAttribute("maxlength", palabraObj.length);
+            const form = document.getElementById('miFormulario');
+            form.addEventListener('submit', function(event){
+                //no recarga la página al enviar el formulario
+                event.preventDefault();
+                //guarda lo escrito en el input
+                const intento = form.intento.value;
+                //si es mayor que 0 enviará el resultado
+                if(intento.length > 0 && contadorIntentos < 10){
+                    contadorIntentos++;
+                    letraValida = false;
+                    //si haces 10 intentos muestra el panel de fracaso
+                    if(contadorIntentos >= 10){
+                        document.getElementById('panelFracaso').style.display = 'flex';
+                        document.getElementById('palabraFinal').innerText = "La palabra era: " + palabraObj.word;
+                    }
+                    
+                    //separa la palabra y tu palabra en un array para compararlas
+                    intentoArray = intento.split("");
+                    palabraArray = palabraObj.word.split("");
+                    palabraEncriptada = "";
+                    //comprueba las letras contenidas y las aciertas
+                    for (let i = 0; i < intentoArray.length; i++) {
+                        //si la palabra tiene la letra que está comprobando y no está en la variable letrasContenidas ya guardado le guarda ahí
+                        if(palabraArray.includes(intentoArray[i]) && !letrasContenidas.includes(intentoArray[i])){
+                            letrasContenidas.push(intentoArray[i]);
+                        }
+                    }
+                    //compara las letras de la palabra y tu intento para mostrar las acertadas
+                    //va guardando en palabra encriptada las letras acertadas y _ las que no
+                    for (let i = 0; i < palabraArray.length; i++) {
+                        if(intentoArray[i] === palabraArray[i]){
+                            palabraEncriptada = palabraEncriptada + " " +intentoArray[i];
+                        }
+                        else{
+                            palabraEncriptada = palabraEncriptada + " " + "_";
+                        }
+                    }//por si la palabra es más larga que tu intento añade ... (no debería poder serlo)
+                        if(intentoArray.length > palabraArray.length){
+                                palabraEncriptada = palabraEncriptada + "...";
+                        }
+                    //añade el intento a la variable intentoAntiguo para así disponer de todos los intentos
+                    if (contadorIntentos==1){
+                        intentoAntiguo = palabraEncriptada;
+                    }else{
+                        intentoAntiguo = intentoAntiguo + "<br>" + palabraEncriptada;
+                    }
+                    //imprime en pantalla lo hacertado de la palabra hasta ahora
+                    document.getElementById("resultado").innerHTML = intentoAntiguo;
+                    //si las palabras son iguales ganas!!
+                    if(intento === palabraObj.word){
+                        document.getElementById("panelVictoria").style.display = 'flex';
+                    }
+                    //imprime las letras que has escrito y están en la palabra
+                    document.getElementById("letrasContenidas").innerHTML = "Letras contenidas: " + letrasContenidas.join(", ");
+                }
+                
+            })
+        }
+        // hasta que el html y css no esté pintado no podrá ejecutarse en js del interior
+        document.addEventListener('DOMContentLoaded', function() {
+            //funcion que busca palabra válida
+            function buscarPalabraValida() {
+                //hacemos un fetch a la api para obtener la palabra
+                fetch('https://rae-api.com/api/random')
+                    //comprobará si la respuesta es correcta y la parseará a json
+                    .then(response => {
+                        if (!response.ok) throw new Error('Network response was not ok');
+                        return response.json();
+                    })
+                    .then(palabra => {
+                        //obtendremos la palabra del json
+                        let palabraWordle = palabra.data.word;
+                        //comprobamos que la palabra tenga 8 letras o menos para que no complique el juego
+                        if(palabraWordle.length > 8){
+                            console.log(`Palabra "${palabraWordle}" demasiado larga (${palabraWordle.length} letras), buscando otra...`);
+                            //si tiene más de 8 letras vuelve a llamar a la función
+                            buscarPalabraValida(); 
+                            return; 
+                        }
+                        //Creamos un objeto de la palabra para usar su información
+                        const palabraObj = new Palabra(palabraWordle);
+                        juegoPalabra(palabraObj);
+                    })
+                    //si hay algún error en el fetch o en la respuesta lo capturará aquí
+                    .catch(error => {
+                        console.error('Error fetching the file:', error);
+                        setTimeout(buscarPalabraValida, 1000);
+                    });
+            }
+            // el codigo empezará aqui, llamando a la función que busca palabra válida
+            buscarPalabraValida();
+        });
+
+
+    </script>
+</body>
+</html>
