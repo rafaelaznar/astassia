@@ -7,7 +7,7 @@ $(document).ready(function () {
     window.SR.config.apiKey &&
     window.SR.config.apiKey !== "TU_API_KEY_AQUI"
       ? window.SR.config.apiKey
-      : "ec625885"; // valor por defecto para pruebas locales (reemplazar localmente)
+      : "22688800"; // valor por defecto para pruebas locales (reemplazar localmente)
 
   /************* User Module *************/
   const userModule = (() => {
