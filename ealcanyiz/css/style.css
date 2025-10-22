@@ -1,4 +1,3 @@
-
 :root {
     --granate-oscuro: #722F37;
     --granate-medio: #8B1538;
@@ -302,5 +301,132 @@ input[type="submit"]:active {
     #panelVictoria p {
         font-size: 1.5rem;
         margin-bottom: 15px;
+    }
+}
+
+/* Overlay and form styles moved from inline index.html */
+/* Estilos del overlay y formulario movidos desde index.html */
+#formularioDificultad {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.45);
+    z-index: 9999;
+}
+#formularioDificultad > div {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    color: var(--granate-oscuro);
+}
+#formularioDificultad input[type="text"],
+#formularioDificultad input[type="radio"] {
+    margin: 8px 0 12px 0;
+}
+#formularioDificultad button {
+    display: block;
+    margin-top: 10px;
+    width: 100%;
+}
+
+/* Estilos detallados para el formulario de inicio (overlay) */
+#formularioDificultad > div p:first-child {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--granate-oscuro);
+    text-align: center;
+}
+#formDificultadForm {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 6px;
+}
+#formDificultadForm label {
+    font-weight: 600;
+    color: var(--granate-oscuro);
+    margin-top: 6px;
+}
+#formDificultadForm input[type="text"] {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 2px solid rgba(160,41,61,0.12);
+    font-size: 1rem;
+    color: var(--granate-oscuro);
+}
+#formDificultadForm input[type="text"]:focus {
+    outline: none;
+    border-color: var(--granate-claro);
+    box-shadow: 0 6px 18px rgba(160,41,61,0.08);
+}
+/* Agrupar radios en una fila clara */
+#formDificultadForm .radio-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 6px;
+}
+#formDificultadForm input[type="radio"] {
+    accent-color: var(--granate-claro);
+    transform: scale(1.05);
+    margin-right: 6px;
+}
+#formDificultadForm .radio-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--granate-oscuro);
+    background: rgba(160,41,61,0.03);
+    padding: 6px 8px;
+    border-radius: 8px;
+    font-weight: 600;
+}
+#formDificultadForm button[type="submit"] {
+    background: linear-gradient(45deg, var(--granate-medio), var(--granate-claro));
+    color: var(--blanco-roto);
+    border: none;
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 8px;
+}
+#formDificultadForm button[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(136,0,26,0.12);
+}
+/* Mensaje de ayuda / subtítulo opcional */
+#formularioDificultad .subtitulo {
+    font-size: 0.95rem;
+    color: rgba(114,47,55,0.9);
+    margin-top: 6px;
+    text-align: center;
+}
+
+@media (max-width: 420px) {
+    #formularioDificultad > div {
+        padding: 16px;
+    }
+    #formularioDificultad > div p:first-child {
+        font-size: 1.25rem;
+    }
+    #formDificultadForm .radio-label {
+        font-size: 0.95rem;
+        padding: 6px 6px;
+    }
+    #formDificultadForm input[type="text"] {
+        padding: 9px 10px;
+        font-size: 0.95rem;
     }
 }
