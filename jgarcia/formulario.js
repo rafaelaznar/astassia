@@ -40,7 +40,7 @@ $(document).ready(function () {
     });
 
     $('#edad').on('blur', function () {
-        validarCampo(this, regexEdad, 'La edad debe tener numeros y tener mínimo 5 años');
+        validarCampo(this, regexEdad, 'La edad debe tener numeros, tener mínimo 5 años  y máximo 99');
     });
 
     $('#edad').on('input', function () {
