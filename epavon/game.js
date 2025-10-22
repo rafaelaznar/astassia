@@ -1,6 +1,4 @@
-// Configura aquí las rutas a las imágenes que tengas en la carpeta assets
 const IMAGES = [
-  // Ajusta estos nombres a los archivos reales en tu carpeta assets
   'assets/Mario.png',
   'assets/Luigi.png',
   'assets/Wario.png',
@@ -19,7 +17,6 @@ const puntosSpan = document.getElementById("puntos");
 const targetImgEl = document.getElementById("targetImg");
 const targetNameEl = document.getElementById("targetName");
 
-// Ajusta la rejilla según columnas/filas
 tableroDiv.style.gridTemplateColumns = `repeat(${columnas}, 60px)`;
 tableroDiv.style.gridAutoRows = `60px`;
 
