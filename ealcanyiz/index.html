@@ -22,6 +22,7 @@
                         <label class="radio-label"><input type="radio" name="dificultad" value="dificil"> Difícil (6 intentos)</label>
                     </div>
                     <button type="submit">Comenzar Juego</button>
+                    <p id="formCargando"></p>
                 </form>
             </div>
         </div>
@@ -72,6 +73,7 @@
             // ocultar paneles de fin si estaban visibles
             document.getElementById('panelFracaso').style.display = 'none';
             document.getElementById('panelVictoria').style.display = 'none';
+            document.getElementById('formCargando').innerText = '';
             // limpiar estado visible
             document.getElementById('resultado').innerText = 'Cargando...';
             document.getElementById('letrasContenidas').innerText = '';
@@ -167,11 +169,13 @@
             fd.addEventListener('submit', function(e){
                 e.preventDefault();
                 // capturar nombre y dificultad
+                
                 playerName = fd.nombre.value.trim() || 'Jugador';
                 const dificultad = fd.dificultad.value;
                 if(dificultad === 'facil') maxIntentos = 10;
                 else if(dificultad === 'medio') maxIntentos = 8;
                 else if(dificultad === 'dificil') maxIntentos = 6;
+                document.getElementById('formCargando').innerText = `Bienvenido ${playerName}, cargando palabra...`;
 
                 // ocultar formulario
                 document.getElementById('formularioDificultad').style.display = 'none';
