@@ -256,9 +256,10 @@ class AuthManager {
                 break;
 
             case 'favoriteArtist':
+                // Campo opcional: si está vacío, es válido y sin mensaje
                 if (!value) {
-                    isValid = false;
-                    errorMessage = 'El artista favorito es obligatorio';
+                    isValid = true;
+                    errorMessage = '';
                 } else if (value.length < 2) {
                     isValid = false;
                     errorMessage = 'El nombre del artista debe tener al menos 2 caracteres';
