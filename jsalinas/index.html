@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda de Consolas</title>
+
+     <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+
+
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" href="#"><i class="bi bi-controller"></i> Consolas</a>
+    </div>
+  </nav>
+    <div class="container my-5">
+  <h1 class="text-center mb-4">Bienvenido a la Tienda de consolas</h1>
+
+  <div class="row" id="productos"></div>
+  <hr>
+   <!-- Carrito -->
+  <h3>Carrito</h3>
+  <ul id="carrito" class="list-group mb-3"></ul>
+  <p><strong>Total:</strong> <span id="total">€0.00</span></p>
+  <button id="comprar" class="btn btn-success"><i class="bi bi-bag-check"></i> Comprar</button>
+   <button id="vaciar" class="btn btn-outline-danger btn-sm"><i class="bi bi-trash"></i> Vaciar carrito</button>
+   <div id="mensaje-compra" class="alert mt-3" style="display:none;"></div>
+   <hr>
+   <!-- Formulario de opinion del cliente -->
+  <h3>Encuesta de satisfacción</h3>
+  <p>Nos gustaría conocer tu opinión sobre la tienda</p>
+
+  <form id="formOpiniones" class="carrito-container">
+    <div class="mb-3">
+      <label for="nombre" class="form-label">Tu nombre:</label>
+      <input type="text" id="nombre" class="form-control" placeholder="Escribe tu nombre">
+    </div>
+
+    <div class="mb-3">
+      <label for="opinion" class="form-label">¿Qué te pareció la web?</label>
+      <textarea id="opinion" class="form-control" rows="3" placeholder="Escribe tu opinión aquí..."></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label for="puntuacion" class="form-label">¿Qué opinion tienes sobre la tienda?</label>
+      <select id="puntuacion" class="form-select">
+        <option value="">Selecciona una opción</option>
+        <option value="1">Muy mala</option>
+        <option value="2">Regular</option>
+        <option value="3">Buena</option>
+        <option value="4">Muy buena</option>
+        <option value="5">Excelente</option>
+      </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Enviar opinión</button>
+  </form>
+
+  <div id="mensaje-opinion" class="alert mt-3" style="display:none;"></div>
+  
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+var carrito = [];
+
+    function formatoEuro(num) {
+      return num.toLocaleString('es-ES', { style: 'currency', currency: 'EUR' });
+    }
+
+    function renderizarCarrito() {
+      var $c = $('#carrito');
+      $c.empty();
+      var total = 0;
+
+      for (var i = 0; i < carrito.length; i++) {
+        var item = carrito[i];
+        var li = $('<li class="list-group-item d-flex justify-content-between align-items-center"></li>');
+        li.text(item.nombre + ' x' + item.cantidad + ' - ' + formatoEuro(item.precio * item.cantidad));
+
+        var btn = $('<button class="btn btn-danger btn-sm">Eliminar</button>');
+        (function(indice){
+          btn.on('click', function(){ carrito.splice(indice,1); renderizarCarrito(); });
+        })(i);
+
+        li.append(btn);
+        $c.append(li);
+        total += item.precio * item.cantidad;
+      }
+
+      $('#total').text(formatoEuro(total));
+    }
+
+    $(document).ready(function(){
+      // Carga de productos desde un archivo JSON mediante AJAX
+      $.ajax({
+        url: 'productos.json',
+        method: 'GET',
+        dataType: 'json',
+        success: function(data){
+          var $productos = $('#productos');
+          $productos.empty();
+
+          // Recorre el JSON y genera las tarjetas de productos
+          for(var i=0;i<data.length;i++){
+            var p = data[i];
+            var card = '<div class="col-md-4 mb-4">' +
+                         '<div class="card">' +
+                           '<img src="'+p.imagen+'" class="card-img-top" alt="'+p.nombre+'">' +
+                           '<div class="card-body">' +
+                             '<h5 class="card-title">'+p.nombre+'</h5>' +
+                             '<p class="card-text">'+p.descripcion+'</p>' +
+                             '<p><strong>Precio:</strong> €'+p.precio+'</p>' +
+                             '<button class="btn btn-primary agregar" data-id="'+p.id+'" data-nombre="'+p.nombre+'" data-precio="'+p.precio+'">' +
+                               'Añadir al carrito' +
+                             '</button>' +
+                           '</div>' +
+                         '</div>' +
+                       '</div>';
+            $productos.append(card);
+          }
+          // Evento de botón "Añadir al carrito"
+          $('.agregar').on('click', function(){
+            var id = $(this).data('id');
+            var nombre = $(this).data('nombre');
+            var precio = parseFloat($(this).data('precio'));
+            var encontrado = false;
+
+            for(var i=0;i<carrito.length;i++){
+              if(carrito[i].id===id){ carrito[i].cantidad+=1; encontrado=true; break; }
+            }
+            if(!encontrado) carrito.push({id:id,nombre:nombre,precio:precio,cantidad:1});
+            renderizarCarrito();
+          });
+
+        },
+        error: function(){ alert('Error al cargar los productos'); }
+      });
+      // Vaciar carrito
+      $('#vaciar').on('click', function(){ carrito=[]; renderizarCarrito(); });
+
+      $('#comprar').on('click', function(){
+        if(carrito.length === 0){
+          $('#mensaje-compra').text('Tu carrito está vacío. Añade productos antes de comprar.')
+                               .removeClass('alert-success').addClass('alert-warning').show();
+          return;
+        }
+
+        $('#mensaje-compra').text('¡Gracias por tu compra! Total: ' + $('#total').text())
+                            .removeClass('alert-warning').addClass('alert-success').show();
+
+        carrito = [];
+        renderizarCarrito();
+        setTimeout(function(){ $('#mensaje-compra').hide(); }, 5000);
+          });
+
+        
+// Formulario de opinion
+$('#formOpiniones').on('submit', function(e){
+  e.preventDefault();
+  
+  var nombre = $('#nombre').val().trim();
+  var opinion = $('#opinion').val().trim();
+  var puntuacion = $('#puntuacion').val();
+
+  // Validación básica
+  if(nombre === '' || opinion === '' || puntuacion === ''){
+    $('#mensaje-opinion')
+      .removeClass('alert-success')
+      .addClass('alert-warning')
+      .text('Por favor completa todos los campos antes de enviar.')
+      .show();
+    return;
+  }
+
+  if(opinion.length < 10){
+    $('#mensaje-opinion')
+      .removeClass('alert-success')
+      .addClass('alert-warning')
+      .text('Tu opinión es demasiado corta. Cuéntanos un poco más.')
+      .show();
+    return;
+  }
+
+  // Si todo está bien
+  $('#mensaje-opinion')
+    .removeClass('alert-warning')
+    .addClass('alert-success')
+    .html('<strong>¡Gracias, ' + nombre + '!</strong> Tu opinión ha sido registrada.')
+    .show();
+
+  // Limpiar el formulario
+  $('#formOpiniones')[0].reset();
+
+  // Ocultar mensaje después de unos segundos
+  setTimeout(function(){
+    $('#mensaje-opinion').fadeOut();
+  }, 5000);
+});
+
+    });
+</script>
+    </div>
+    
+</body>
+</html>

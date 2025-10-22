@@ -1,0 +1,46 @@
+[
+  {
+    "id": 1,
+    "nombre": "Nintendo Switch 2",
+    "descripcion": "La nueva consola portátil y de sobremesa de Nintendo.",
+    "precio": 480.00,
+    "imagen": "imgSalinas/switch2.jpg"
+  },
+  {
+    "id": 2,
+    "nombre": "PlayStation 5",
+    "descripcion": "La consola más potente del mercado.",
+    "precio": 550.00,
+    "imagen": "imgSalinas/ps5.jpg"
+  },
+
+  {
+    "id": 3,
+    "nombre": "Xbox Series X",
+    "descripcion": "La consola de última generación de Microsoft.",
+    "precio": 500.00,
+    "imagen": "imgSalinas/xboxseriesx.jpg"
+  },
+
+  {
+    "id": 4,
+    "nombre": "Nintendo Switch Lite",
+    "descripcion": "Versión portátil y ligera de la Nintendo Switch.",
+    "precio": 220.00,
+    "imagen": "imgSalinas/switchlite.jpg"
+  },
+  {
+    "id": 5,
+    "nombre": "PlayStation 4 Pro",
+    "descripcion": "Consola de PlayStation con gráficos mejorados.",
+    "precio": 350.00,
+    "imagen": "imgSalinas/ps4pro.jpg"
+  },
+  {
+    "id": 6,
+    "nombre": "Xbox Series S",
+    "descripcion": "Versión más compacta y económica de la Xbox Series X.",
+    "precio": 300.00,
+    "imagen": "imgSalinas/xboxseriess.jpg"
+  }
+]
