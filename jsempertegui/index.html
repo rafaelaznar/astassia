@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi lista To-Do con JQuery</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+  <div class="container mt-5 px-5">
+    <div class="card shadow">
+      <div class="card-header bg-primary text-white">
+        <h4 class="mb-0">📝 Mi Lista de Tareas</h4>
+      </div>
+      <div class="card-body">
+        <div class="input-group mb-3">
+          <input type="text" id="taskInput" class="form-control" placeholder="Escribe una tarea...">
+          <div class="input-group-append">
+            <button id="addTask" class="btn btn-success">Agregar</button>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <button class="btn btn-outline-primary btn-sm filter-btn active" data-filter="all">Todas</button>
+          <button class="btn btn-outline-warning btn-sm filter-btn" data-filter="pending">Pendientes</button>
+          <button class="btn btn-outline-success btn-sm filter-btn" data-filter="completed">Completadas</button>
+        </div>
+        <main id="tablon"></main>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

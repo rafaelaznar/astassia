@@ -1,0 +1,19 @@
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #74ABE2, #5563DE);
+}
+
+
+.list-group-item.completed {
+    text-decoration: none; 
+    color: #888;
+    background-color: #f8f9fa;
+}
+
+.list-group-item .btn {
+    margin-left: 10px;
+}
+
+.card {
+    border-radius: 1rem;
+}
