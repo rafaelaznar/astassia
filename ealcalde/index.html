@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Tetris</title>
+  <link rel="stylesheet" href="css/style.css">
+  <meta name="theme-color" content="#061023">
+</head>
+<body>
+  <div id="pages">
+    <!-- Página de inicio -->
+    <div id="welcome-page" class="page active">
+      <div class="welcome-container">
+        <section class="card welcome-screen">
+          <h1>¡Bienvenido al Tetris!</h1>
+          <p>Introduce tus datos para empezar a jugar</p>
+          <form id="loginForm">
+            <div class="form-group">
+              <label for="userName">Nombre</label>
+              <input type="text" id="userName" placeholder="Tu nombre" required autofocus>
+            </div>
+            <div class="form-group">
+              <label for="userBirthdate">Fecha de nacimiento</label>
+              <input type="date" id="userBirthdate" required>
+            </div>
+            <button type="submit" class="play-button">¡JUGAR!</button>
+          </form>
+          <div class="welcome-actions">
+            <button type="button" id="helpBtnWelcome" class="help-button">¿Cómo funciona?</button>
+          </div>
+      <div id="authMsg" class="msg" role="status" aria-live="polite"></div>
+          <p class="age-notice">* Debes tener 18 años cumplidos para jugar</p>
+            </section>
+      </div>
+    </div>
+
+    <!-- Página del juego -->
+    <div id="game-page" class="page">
+        <header>
+        <h2>Tetris</h2>
+        <div id="playerInfo"></div>
+          <div style="position:absolute;left:1rem;top:0.5rem;display:flex;gap:0.5rem;">
+            <button id="helpBtnGame" class="help-button" aria-label="¿Cómo funciona?">¿Cómo funciona?</button>
+          </div>
+        <div style="position:absolute;right:1rem;top:0.5rem;display:flex;gap:0.5rem;">
+          <button id="backBtn" class="help-button" aria-label="Volver a la pantalla de inicio">Volver</button>
+        </div>
+      </header>
+
+      <main class="game-layout">
+        <section id="game-section" class="card">
+          <div id="tetrisContainer">
+            <canvas id="tetris" width="200" height="400"></canvas>
+            <div id="hud">
+              <div class="hud-stats">
+                <div class="hud-stat">
+                  <small>Puntos</small>
+                  <strong id="score">0</strong>
+                </div>
+                <div class="hud-stat">
+                  <small>Nivel</small>
+                  <strong id="level">1</strong>
+                </div>
+                <div class="hud-stat">
+                  <small>Líneas</small>
+                  <strong id="lines">0</strong>
+                </div>
+              </div>
+              <div class="controls">
+                <button id="startBtn">Iniciar</button>
+                <button id="pauseBtn">Pausa</button>
+                <button id="endBtn">Terminar</button>
+              </div>
+            </div>
+          </div>
+          <div id="gameMsg" class="msg" role="status" aria-live="polite"></div>
+        </section>
+
+        <section id="leaderboard-section" class="card">
+          <h3>Tabla de puntuaciones</h3>
+          <div id="leaderboard"></div>
+          <button id="clearScores" class="secondary">Borrar puntuaciones</button>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- Modal de ayuda -->
+  <div id="helpModal" class="help-modal" role="dialog" aria-modal="true" aria-labelledby="helpTitle" aria-hidden="true">
+    <div class="help-dialog" role="document">
+      <header class="help-header">
+        <h2 id="helpTitle">¿Cómo funciona?</h2>
+        <button id="helpClose" class="help-close" aria-label="Cerrar ayuda">&times;</button>
+      </header>
+      <div class="help-content">
+        <section>
+          <h3>Objetivo</h3>
+          <p>Coloca las piezas para completar líneas. Cada línea completada desaparece y suma puntos</p>
+        </section>
+        <section>
+          <h3>Controles</h3>
+          <ul>
+            <li><strong>W</strong>: Rotar</li>
+            <li><strong>A</strong>: Izquierda</li>
+            <li><strong>S</strong>: Bajar</li>
+            <li><strong>D</strong>: Derecha</li>
+          </ul>
+        </section>
+        <section>
+          <h3>Puntuación y nivel</h3>
+          <p>Cada línea suma puntos multiplicados por el nivel. El nivel sube cada 5 líneas y acelera la caída</p>
+        </section>
+        <section>
+          <h3>Fin de partida</h3>
+          <p>Si una pieza queda por encima del tablero al colocarse o aparecen bloques en la primera fila, la partida termina</p>
+        </section>
+        <section>
+          <h3>Consejos</h3>
+          <ul>
+            <li>Deja espacio para la pieza larga para intentar un Tetris (4 líneas)</li>
+            <li>Evita crear huecos debajo de salientes</li>
+          </ul>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
