@@ -48,6 +48,11 @@ app.use(express.urlencoded({ extended: true }));
 // Servir archivos estáticos
 app.use(express.static(path.join(__dirname)));
 
+// Redirección de /jalcalde/index.html a la raíz
+app.get('/jalcalde/index.html', (req, res) => {
+    res.redirect('/');
+});
+
 // Ruta para servir index.html en la ruta raíz
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
