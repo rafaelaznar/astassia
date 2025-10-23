@@ -11,14 +11,109 @@
 $(document).ready(function(){
   
   // =================== CONFIGURACIÓN GLOBAL ===================
-  const CONFIG = window.APP_CONFIG || {
-    NASA_API_KEY: 'x7y7fDZraWoSIDUSZiy2khtqQQeMpgMLWiSrcPUo',
-    NASA_NEOWS_URL: 'https://api.nasa.gov/neo/rest/v1/feed',
-    NASA_EPIC_URL: 'https://api.nasa.gov/EPIC/api/natural',
-    EPIC_IMAGE_BASE: 'https://epic.gsfc.nasa.gov/archive/natural',
-    DANGER_THRESHOLD: 5000000,
-    MOON_DISTANCE: 384400
-  };
+  // api.js
+  // Control del módulo de asteroides: obtiene y muestra información desde la NASA NEO API
+
+  const API_KEY = typeof NASA_API_KEY !== "undefined" ? NASA_API_KEY : "DEMO_KEY";
+  const API_URL = `https://api.nasa.gov/neo/rest/v1/feed?api_key=${API_KEY}`;
+
+  /**
+   * Carga los asteroides cercanos desde la API de la NASA
+   */
+  async function loadAsteroids() {
+    const listContainer = document.getElementById("asteroidsList");
+    const statusText = document.getElementById("loadingText");
+    const totalCount = document.getElementById("totalCount");
+    const dangerousCount = document.getElementById("dangerousCount");
+    const safeCount = document.getElementById("safeCount");
+
+    if (!listContainer) {
+      console.error("❌ No se encontró el contenedor #asteroidsList");
+      return;
+    }
+
+    // Mensaje inicial de carga
+    listContainer.innerHTML = "";
+    if (statusText) statusText.textContent = "Rastreando asteroides cercanos...";
+
+    try {
+      const response = await fetch(API_URL);
+      if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
+
+      const data = await response.json();
+
+      // Combinar asteroides de todos los días disponibles
+      const allAsteroids = [];
+      Object.keys(data.near_earth_objects).forEach(date => {
+        data.near_earth_objects[date].forEach(neo => {
+          const approach = neo.close_approach_data?.[0];
+          if (!approach) return;
+
+          allAsteroids.push({
+            id: neo.id,
+            name: neo.name,
+            date: approach.close_approach_date_full || approach.close_approach_date,
+            diameter: neo.estimated_diameter?.meters?.estimated_diameter_max || 0,
+            distance: parseFloat(approach.miss_distance?.kilometers || 0),
+            velocity: parseFloat(approach.relative_velocity?.kilometers_per_hour || 0),
+            dangerous: !!neo.is_potentially_hazardous_asteroid
+          });
+        });
+      });
+
+      // Calcular estadísticas
+      const dangerous = allAsteroids.filter(a => a.dangerous);
+      const safe = allAsteroids.filter(a => !a.dangerous);
+
+      if (totalCount) totalCount.textContent = allAsteroids.length;
+      if (dangerousCount) dangerousCount.textContent = dangerous.length;
+      if (safeCount) safeCount.textContent = safe.length;
+
+      // Renderizar lista de asteroides
+      renderAsteroids(allAsteroids);
+
+      if (statusText) statusText.textContent = "";
+    } catch (error) {
+      console.error("❌ Error cargando asteroides:", error);
+      if (statusText)
+        statusText.textContent = "❌ No se pudo obtener información de la NASA.";
+    }
+  }
+
+  /**
+   * Renderiza los asteroides en el DOM
+   * @param {Array} asteroids
+   */
+  function renderAsteroids(asteroids) {
+    const listContainer = document.getElementById("asteroidsList");
+    if (!listContainer) return;
+
+    if (asteroids.length === 0) {
+      listContainer.innerHTML =
+        "<p>No se detectaron asteroides cercanos en esta fecha.</p>";
+      return;
+    }
+
+    let html = "";
+
+    asteroids.forEach(a => {
+      html += `
+        <div class="asteroid-item ${a.dangerous ? "dangerous" : "safe"}">
+          <h4>${a.name}</h4>
+          <p><strong>Fecha:</strong> ${a.date}</p>
+          <p><strong>Distancia:</strong> ${a.distance.toLocaleString()} km</p>
+          <p><strong>Velocidad:</strong> ${a.velocity.toLocaleString()} km/h</p>
+          <p><strong>Diámetro estimado:</strong> ${a.diameter.toFixed(2)} m</p>
+          <p><strong>Peligroso:</strong> ${a.dangerous ? "Sí ⚠️" : "No ✅"}</p>
+        </div>
+      `;
+    });
+
+    listContainer.innerHTML = html;
+  }
+
+  // Ejecutar automáticamente al cargar la página
+  document.addEventListener("DOMContentLoaded", loadAsteroids);
 
   // =================== VARIABLES DE ESTADO ===================
   let allAsteroids = [];
