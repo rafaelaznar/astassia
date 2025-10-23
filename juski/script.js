@@ -11,6 +11,19 @@ $(document).ready(function () {
   const $loading = $("#loading");
   const $results = $("#results");
   const $clear = $("#clearBtn");
+  const $afterHeaderForm = $("#afterHeaderForm");
+  let formRelocated = false;
+
+  function hideIntroAndRelocateForm() {
+    $("#intro").addClass("d-none");
+
+    if (formRelocated || !$form.length || !$afterHeaderForm.length) {
+      return;
+    }
+
+    $afterHeaderForm.removeClass("d-none").append($form);
+    formRelocated = true;
+  }
 
   // el texto "Cargando" al recibir información
   function toggleLoading(isLoading) {
@@ -329,7 +342,7 @@ $(document).ready(function () {
       event.preventDefault();
       hideAlert();
 
-      $("#intro").addClass("d-none");
+      hideIntroAndRelocateForm();
 
       const city = ($city.val() || "").trim();
       const daysValue = parseInt($days.val(), 10);
@@ -368,7 +381,7 @@ $(document).ready(function () {
     console.error("Formulario de clima no encontrado.");
   }
 
-  // función para determinar mi ubicación geográfica y, si es posible, buscar el tiempo a la vez
+  // determinar mi ubicación geográfica y, si todo bien, buscar el tiempo a la vez
   $("#useLocation, #heroLocationBtn").on("click", function () {
 
     if (!navigator.geolocation) {
@@ -409,7 +422,8 @@ $(document).ready(function () {
           .then(function ({ location, forecast }) {
             const daily = extractDailyForecast(forecast.list, 5);
             renderForecast(location, daily);
-            $("#intro").addClass("d-none");
+            hideIntroAndRelocateForm();
+            $city.val(location.name);
           })
 
           .fail(function (err) {

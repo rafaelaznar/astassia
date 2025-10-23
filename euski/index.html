@@ -3,8 +3,6 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="favicon.png" />
     <title>Búsqueda de fotos y vídeos</title>
     <!-- Bootstrap 5 -->
     <link
@@ -17,7 +15,7 @@
     <script src="./script.js" defer></script>
   </head>
   <body class="bg-soft">
-    <!-- Top navbar with logo, filters toggle, and fixed search -->
+    <!-- top navbar with logo, filters toggle, and fixed search -->
     <nav class="navbar navbar-light bg-white fixed-top shadow-sm">
       <div class="container-fluid gap-3">
         <div class="d-flex align-items-center gap-4">
@@ -49,7 +47,7 @@
       </div>
     </nav>
 
-    <!-- Offcanvas sidebar for filters on the left -->
+    <!-- offcanvas sidebar for filters on the left -->
     <div class="offcanvas offcanvas-start" tabindex="-1" id="filters" aria-labelledby="filtersLabel">
       <div class="offcanvas-header">
         <h5 class="offcanvas-title d-flex align-items-center gap-2" id="filtersLabel">
@@ -69,7 +67,7 @@
           </select>
         </div>
 
-        <!-- Filtros para fotos -->
+        <!-- filtros para fotos -->
         <div data-section="photo" class="mb-3">
           <label class="form-label">Orientación (foto)</label>
           <select id="photoOrientation" class="form-select">
@@ -94,7 +92,7 @@
           <input id="photoColor" class="form-control" placeholder="rojo, negro o #ff0000" />
         </div>
 
-        <!-- Filtros para vídeos -->
+        <!-- filtros para vídeos -->
         <div data-section="video" class="mb-3 d-none">
           <label class="form-label">Orientación (vídeo)</label>
           <select id="videoOrientation" class="form-select">
@@ -123,7 +121,7 @@
             <option value="8k">8K</option>
           </select>
         </div>
-        <button id="searchBtn" class="btn btn-royal btn-icon" type="submit">
+        <button id="filtersSearchBtn" class="btn btn-royal btn-icon" type="button">
           <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
             <path d="M11 19a8 8 0 1 1 5.293-14.293A8 8 0 0 1 11 19zm6-2 4 4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
@@ -133,7 +131,7 @@
     </div>
 
     <main class="container-fluid pb-5 content-wrap">
-      <section id="welcomeHero" class="welcome-hero bg-white rounded-4 shadow-sm p-4 mt-5 mb-4">
+      <section id="welcomeHero" class="welcome-hero bg-white rounded-4 shadow-sm p-4 mb-4">
         <div class="row align-items-center">
           <div class="col-12 col-lg-8">
             <h1 class="display-6 fw-semibold mb-3">Bienvenido a Astassia</h1>
@@ -172,7 +170,7 @@
       </nav>
     </main>
 
-    <!-- Modal de previsualización al hacer clic -->
+    <!-- ventana modal al hacer clic -->
     <div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
