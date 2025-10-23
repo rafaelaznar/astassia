@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <!-- ============================= -->
+  <!-- CABECERA DEL DOCUMENTO HTML  -->
+  <!-- ============================= -->
+  <!-- Aquí se define la información básica de la página y los estilos que se van a usar -->
+  <meta charset="UTF-8"> <!-- Permite usar acentos y caracteres especiales -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Hace que la web se vea bien en móvil -->
+  <title>Sistema Solar - Animación</title> <!-- Título que aparece en la pestaña del navegador -->
+  <!-- ============================= -->
+  <!-- ESTILOS DE LA ANIMACIÓN      -->
+  <!-- ============================= -->
+  <!-- Aquí se definen los estilos para el fondo, los planetas y las órbitas -->
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #000;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+    }
+
+    #solar-system-container {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      background: radial-gradient(ellipse at center, #1a0033 0%, #000000 100%);
+      overflow: hidden;
+    }
+
+    /* Estrellas de fondo */
+    .star {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      animation: twinkle 3s infinite;
+    }
+
+    @keyframes twinkle {
+
+      0%,
+      100% {
+        opacity: 0.3;
+      }
+
+      50% {
+        opacity: 1;
+      }
+    }
+
+    /* Contenedor central del sistema solar */
+    .solar-system {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 1200px;
+      height: 1200px;
+    }
+
+    /* Sol */
+    .sun {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 120px;
+      height: 120px;
+      background: radial-gradient(circle, #ffd700, #ff8c00);
+      border-radius: 50%;
+      box-shadow: 0 0 60px #ff8c00, 0 0 100px #ffa500;
+      animation: pulse 4s ease-in-out infinite;
+      z-index: 10;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        transform: translate(-50%, -50%) scale(1);
+      }
+
+      50% {
+        transform: translate(-50%, -50%) scale(1.05);
+      }
+    }
+
+    /* Órbitas */
+    .orbit {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    /* Planetas */
+    .planet {
+      position: absolute;
+      border-radius: 50%;
+      transform-origin: center;
+    }
+
+    /* Mercurio */
+    .mercury-orbit {
+      width: 180px;
+      height: 180px;
+    }
+
+    .mercury {
+      width: 12px;
+      height: 12px;
+      background: #8c7853;
+      top: 0;
+      left: 50%;
+      margin-left: -6px;
+      animation: orbit-mercury 8s linear infinite;
+    }
+
+    @keyframes orbit-mercury {
+      from {
+        transform: rotate(0deg) translateX(90px) rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg) translateX(90px) rotate(-360deg);
+      }
+    }
+
+    /* Venus */
+    .venus-orbit {
+      width: 240px;
+      height: 240px;
+    }
+
+    .venus {
+      width: 18px;
+      height: 18px;
+      background: #ffc649;
+      top: 0;
+      left: 50%;
+      margin-left: -9px;
+      animation: orbit-venus 12s linear infinite;
+    }
+
+    @keyframes orbit-venus {
+      from {
+        transform: rotate(0deg) translateX(120px) rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg) translateX(120px) rotate(-360deg);
+      }
+    }
+
+    /* Tierra */
+    .earth-orbit {
+      width: 300px;
+      height: 300px;
+      border-color: rgba(100, 149, 237, 0.3);
+    }
+
+    .earth {
+      width: 20px;
+      height: 20px;
+      background: linear-gradient(135deg, #1e90ff 0%, #228b22 50%, #1e90ff 100%);
+      top: 0;
+      left: 50%;
+      margin-left: -10px;
+      animation: orbit-earth 16s linear infinite;
+      box-shadow: 0 0 10px rgba(30, 144, 255, 0.5);
+    }
+
+    @keyframes orbit-earth {
+      from {
+        transform: rotate(0deg) translateX(150px) rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg) translateX(150px) rotate(-360deg);
+      }
+    }
+
+    /* Marte */
+    .mars-orbit {
+      width: 380px;
+      height: 380px;
+    }
+
+    .mars {
+      width: 16px;
+      height: 16px;
+      background: #cd5c5c;
+      top: 0;
+      left: 50%;
+      margin-left: -8px;
+      animation: orbit-mars 20s linear infinite;
+    }
+
+    @keyframes orbit-mars {
+      from {
+        transform: rotate(0deg) translateX(190px) rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg) translateX(190px) rotate(-360deg);
+      }
+    }
+
+    /* Júpiter */
+    .jupiter-orbit {
+      width: 520px;
+      height: 520px;
+    }
+
+    .jupiter {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #c88b3a 0%, #a67c52 50%, #c88b3a 100%);
+      top: 0;
+      left: 50%;
+      margin-left: -20px;
+      animation: orbit-jupiter 28s linear infinite;
+    }
+
+    @keyframes orbit-jupiter {
+      from {
+        transform: rotate(0deg) translateX(260px) rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg) translateX(260px) rotate(-360deg);
+      }
+    }
+
+    /* Saturno */
+    .saturn-orbit {
+      width: 680px;
+      height: 680px;
+    }
+
+    .saturn {
+      width: 35px;
+      height: 35px;
+      background: #fad5a5;
+      top: 0;
+      left: 50%;
+      margin-left: -17.5px;
+      animation: orbit-saturn 36s linear infinite;
+      position: relative;
+    }
+
+    .saturn::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 60px;
+      height: 60px;
+      border: 3px solid rgba(250, 213, 165, 0.6);
+      border-radius: 50%;
+      box-sizing: border-box;
+    }
+
+    @keyframes orbit-saturn {
+      from {
+        transform: rotate(0deg) translateX(340px) rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg) translateX(340px) rotate(-360deg);
+      }
+    }
+
+    /* Urano */
+    .uranus-orbit {
+      width: 820px;
+      height: 820px;
+    }
+
+    .uranus {
+      width: 24px;
+      height: 24px;
+      background: #4fd0e7;
+      top: 0;
+      left: 50%;
+      margin-left: -12px;
+      animation: orbit-uranus 44s linear infinite;
+    }
+
+    @keyframes orbit-uranus {
+      from {
+        transform: rotate(0deg) translateX(410px) rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg) translateX(410px) rotate(-360deg);
+      }
+    }
+
+    /* Neptuno */
+    .neptune-orbit {
+      width: 960px;
+      height: 960px;
+    }
+
+    .neptune {
+      width: 22px;
+      height: 22px;
+      background: #4169e1;
+      top: 0;
+      left: 50%;
+      margin-left: -11px;
+      animation: orbit-neptune 52s linear infinite;
+    }
+
+    @keyframes orbit-neptune {
+      from {
+        transform: rotate(0deg) translateX(480px) rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg) translateX(480px) rotate(-360deg);
+      }
+    }
+
+    /* Controles */
+    .controls {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.7);
+      padding: 15px 30px;
+      border-radius: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      z-index: 100;
+    }
+
+    .controls button {
+      background: linear-gradient(135deg, #0B3D91, #FC3D21);
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      margin: 0 5px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+
+    .controls button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(252, 61, 33, 0.4);
+    }
+
+    /* Info panel */
+    .info-panel {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: rgba(0, 0, 0, 0.8);
+      padding: 20px;
+      border-radius: 10px;
+      border: 1px solid rgba(252, 61, 33, 0.3);
+      color: white;
+      max-width: 300px;
+      z-index: 100;
+    }
+
+    .info-panel h2 {
+      color: #FC3D21;
+      margin-bottom: 10px;
+      font-size: 1.5rem;
+    }
+
+    .info-panel p {
+      font-size: 0.9rem;
+      line-height: 1.5;
+      opacity: 0.9;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="solar-system-container">
+    <!-- ============================= -->
+    <!-- PANEL DE INFORMACIÓN         -->
+    <!-- ============================= -->
+    <!-- Explica qué se ve en la animación y cómo usar los controles -->
+    <div class="info-panel">
+      <h2>🌌 Sistema Solar</h2>
+      <p>Animación interactiva del sistema solar con los 8 planetas orbitando alrededor del Sol.</p>
+      <p style="margin-top: 10px; font-size: 0.8rem; opacity: 0.7;">
+        Usa los controles para pausar/reanudar la animación.
+      </p>
+    </div>
+
+    <!-- ============================= -->
+    <!-- SISTEMA SOLAR ANIMADO        -->
+    <!-- ============================= -->
+    <!-- Aquí se dibuja el Sol y los planetas con sus órbitas -->
+    <div class="solar-system">
+      <!-- Sol -->
+      <div class="sun"></div>
+
+      <!-- Mercurio -->
+      <div class="orbit mercury-orbit"></div>
+      <div class="planet mercury"></div>
+
+      <!-- Venus -->
+      <div class="orbit venus-orbit"></div>
+      <div class="planet venus"></div>
+
+      <!-- Tierra -->
+      <div class="orbit earth-orbit"></div>
+      <div class="planet earth"></div>
+
+      <!-- Marte -->
+      <div class="orbit mars-orbit"></div>
+      <div class="planet mars"></div>
+
+      <!-- Júpiter -->
+      <div class="orbit jupiter-orbit"></div>
+      <div class="planet jupiter"></div>
+
+      <!-- Saturno -->
+      <div class="orbit saturn-orbit"></div>
+      <div class="planet saturn"></div>
+
+      <!-- Urano -->
+      <div class="orbit uranus-orbit"></div>
+      <div class="planet uranus"></div>
+
+      <!-- Neptuno -->
+      <div class="orbit neptune-orbit"></div>
+      <div class="planet neptune"></div>
+    </div>
+
+    <!-- ============================= -->
+    <!-- CONTROLES DE ANIMACIÓN       -->
+    <!-- ============================= -->
+    <!-- Permiten pausar y reanudar la animación de los planetas -->
+    <div class="controls">
+      <button id="stopBtn">⏸ Pausar</button>
+      <button id="startBtn">▶ Reanudar</button>
+    </div>
+  </div>
+
+  <!-- ============================= -->
+  <!-- LÓGICA DE LA ANIMACIÓN       -->
+  <!-- ============================= -->
+  <!-- Aquí va el código que genera las estrellas y gestiona los controles -->
+  <script>
+    // Generar estrellas aleatorias para el fondo
+    const container = document.getElementById('solar-system-container');
+    for (let i = 0; i < 200; i++) {
+      const star = document.createElement('div');
+      star.className = 'star';
+      star.style.width = Math.random() * 3 + 'px';
+      star.style.height = star.style.width;
+      star.style.left = Math.random() * 100 + '%';
+      star.style.top = Math.random() * 100 + '%';
+      star.style.animationDelay = Math.random() * 3 + 's';
+      container.appendChild(star);
+    }
+
+    // Controles de animación para pausar y reanudar los planetas
+    const planets = document.querySelectorAll('.planet');
+    const stopBtn = document.getElementById('stopBtn');
+    const startBtn = document.getElementById('startBtn');
+
+    stopBtn.addEventListener('click', () => {
+      planets.forEach(planet => {
+        planet.style.animationPlayState = 'paused';
+      });
+    });
+
+    startBtn.addEventListener('click', () => {
+      planets.forEach(planet => {
+        planet.style.animationPlayState = 'running';
+      });
+    });
+  </script>
+</body>
+
+</html>

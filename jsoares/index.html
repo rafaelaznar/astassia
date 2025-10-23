@@ -2,19 +2,27 @@
 <html lang="es">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Monitor de Asteroides NEO - NASA</title>
+  <!-- ============================= -->
+  <!-- CABECERA DEL DOCUMENTO HTML  -->
+  <!-- ============================= -->
+  <!-- Aquí se define la información básica de la página y los estilos que se van a usar -->
+  <meta charset="UTF-8"> <!-- Permite usar acentos y caracteres especiales -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Hace que la web se vea bien en móvil -->
+  <title>Monitor de Asteroides NEO - NASA</title> <!-- Título que aparece en la pestaña del navegador -->
 
-  <!-- Bootstrap 5.3 -->
+  <!-- Bootstrap 5.3: estilos modernos y responsivos -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 
-  <!-- Google Fonts -->
+  <!-- Google Fonts: fuentes personalizadas para títulos y textos -->
   <link
     href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap"
     rel="stylesheet">
 
+  <!-- ============================= -->
+  <!-- ESTILOS DE LA APP            -->
+  <!-- ============================= -->
+  <!-- Aquí se definen los estilos para el fondo, la navegación, los objetos y las secciones -->
   <style>
     :root {
       --nasa-red: #FC3D21;
@@ -514,6 +522,71 @@
       font-size: 1.2rem;
     }
 
+    /* NASA Eyes Integration Styles */
+    .nasa-eyes-embed {
+      transition: all 0.3s ease;
+    }
+
+    .nasa-eyes-embed:hover {
+      transform: translateY(-2px);
+    }
+
+    .embed-container {
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      transition: box-shadow 0.3s ease;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .embed-container:hover {
+      box-shadow: 0 8px 30px rgba(252, 61, 33, 0.2);
+    }
+
+    .eyes-info {
+      border-left: 4px solid var(--nasa-red);
+    }
+
+    .nasa-eyes-backup {
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    .backup-visual {
+      background: linear-gradient(135deg, rgba(11, 61, 145, 0.1), rgba(252, 61, 33, 0.05));
+      border-radius: 15px;
+      border: 2px solid rgba(252, 61, 33, 0.2);
+    }
+
+    .data-item {
+      padding: 0.5rem;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 5px;
+      border-left: 3px solid var(--nasa-blue);
+    }
+
+    /* Responsive para el embed */
+    @media (max-width: 768px) {
+      .embed-container {
+        height: 300px !important;
+      }
+
+      .eyes-info {
+        font-size: 0.9rem;
+      }
+    }
+
+    /* Animaciones */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
     /* Responsive */
     @media (max-width: 768px) {
       .section-title {
@@ -528,7 +601,17 @@
 </head>
 
 <body>
-  <!-- Sistema Tierra-céntrico como fondo -->
+  <!-- ============================= -->
+  <!-- FONDO ANIMADO Y SISTEMA      -->
+  <!-- ============================= -->
+  <!--
+    Este bloque crea un fondo animado con estrellas y un sistema Tierra-céntrico.
+    Es solo decorativo y no afecta la funcionalidad, pero da un aspecto espacial.
+    Dentro de #earth-system-container se dibujan:
+      - La Tierra (centro)
+      - El Sol, la Luna, satélites y asteroides girando en órbitas
+    Todo esto se mueve con JavaScript/jQuery para dar sensación de movimiento real.
+  -->
   <div id="earth-system-container">
     <!-- Sistema Tierra-céntrico -->
     <div class="earth-system">
@@ -560,7 +643,16 @@
     </div>
   </div>
 
-  <!-- Navigation -->
+  <!-- ============================= -->
+  <!-- BARRA DE NAVEGACIÓN          -->
+  <!-- ============================= -->
+  <!--
+    Barra de navegación principal (navbar):
+    Permite moverse entre las secciones de la app sin recargar la página.
+    Cada enlace tiene un data-section que se usa en el JS para mostrar la sección correspondiente.
+    El botón Login abre el modal de autenticación.
+    El logo de la NASA es solo decorativo.
+  -->
   <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
     <div class="container-fluid">
       <a class="navbar-brand" href="#inicio">
@@ -584,7 +676,16 @@
     </div>
   </nav>
 
-  <!-- Hero Carousel -->
+  <!-- ============================= -->
+  <!-- HERO CAROUSEL                -->
+  <!-- ============================= -->
+  <!--
+    Carrusel de imágenes (heroCarousel):
+    Muestra 3 slides con imágenes de fondo y mensajes destacados.
+    Cada slide tiene un botón que lleva a una sección específica (asteroides seguros, peligrosos, o la Tierra).
+    El carrusel se controla con los botones de flecha o los indicadores.
+    Las imágenes de fondo se cargan desde Unsplash.
+  -->
   <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
     <div class="carousel-indicators">
       <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"></button>
@@ -633,15 +734,38 @@
     </button>
   </div>
 
-  <!-- Main Content -->
+  <!-- ============================= -->
+  <!-- CONTENIDO PRINCIPAL DE LA APP -->
+  <!-- ============================= -->
+  <!--
+    Aquí se muestran las diferentes secciones de la app.
+    Solo una sección está visible a la vez (la que tiene la clase 'active').
+    El cambio de sección se hace con JS al hacer clic en la navbar o los botones del carrusel.
+  -->
   <main id="mainContent">
-    <!-- Inicio -->
+    <!-- ============================= -->
+    <!-- SECCIÓN: INICIO             -->
+    <!-- ============================= -->
+    <!--
+      Sección de bienvenida.
+      Muestra el título y una breve descripción del sistema.
+      Abajo se muestran tarjetas con estadísticas principales:
+        - Total de asteroides detectados
+        - Cuántos son peligrosos
+        - Velocidad máxima registrada
+        - El asteroide más cercano (en distancias lunares)
+      Los valores se actualizan dinámicamente con JS.
+    -->
     <section id="inicio" class="section-content active">
       <div class="container py-5">
         <h2 class="section-title text-center">Monitor de Asteroides NEO</h2>
         <p class="lead text-center mb-5">Sistema de seguimiento de objetos cercanos a la Tierra</p>
 
-        <!-- Stats Row -->
+        <!--
+          Tarjetas de estadísticas:
+          Cada tarjeta muestra un dato clave sobre los asteroides.
+          Los valores se rellenan con JavaScript al cargar los datos desde la API.
+        -->
         <div class="row g-4 mb-5" id="statsContainer">
           <div class="col-md-3">
             <div class="stat-card">
@@ -675,12 +799,28 @@
       </div>
     </section>
 
-    <!-- Asteroides -->
+    <!-- ============================= -->
+    <!-- SECCIÓN: ASTEROIDES         -->
+    <!-- ============================= -->
+    <!--
+      Lista de asteroides detectados por la NASA.
+      Incluye filtros para ver todos, solo peligrosos o solo seguros.
+      Al hacer clic en un filtro, se actualiza la lista sin recargar la página.
+      La lista se llena dinámicamente con datos de la API o de respaldo.
+      Cada asteroide muestra nombre, distancia, velocidad y nivel de peligro.
+    -->
     <section id="asteroides" class="section-content">
       <div class="container py-5">
         <h2 class="section-title text-center">Lista de Asteroides</h2>
 
         <div class="card-custom">
+          <!--
+            Botones de filtro:
+            - Todos: muestra todos los asteroides
+            - Peligrosos: solo los que la NASA marca como potencialmente peligrosos
+            - Seguros: los que no representan peligro
+            El número entre paréntesis se actualiza con JS.
+          -->
           <div class="mb-4">
             <button class="btn btn-outline-light filter-btn active me-2" data-filter="all">
               Todos (<span id="countAll">0</span>)
@@ -693,50 +833,121 @@
             </button>
           </div>
 
-          <div id="asteroidsLoading" class="loading-spinner">
-            <div class="spinner-border"></div>
-            <p class="mt-3">Rastreando asteroides cercanos...</p>
-          </div>
-
-          <div id="asteroidsList" class="scroll-list" style="display: none;"></div>
+          <!--
+            Spinner de carga:
+            Se muestra mientras se obtienen los datos de la API.
+            Cuando termina la carga, se oculta y aparece la lista de asteroides.
+          -->
+          <div class="spinner-border"></div>
+          <p class="mt-3">Rastreando asteroides cercanos...</p>
         </div>
+
+        <!--
+          Aquí se insertan los asteroides con JS.
+          Cada asteroide es una tarjeta con información relevante.
+        -->
+      </div>
       </div>
     </section>
 
-    <!-- Tierra -->
+    <!-- ============================= -->
+    <!-- SECCIÓN: TIERRA              -->
+    <!-- ============================= -->
+    <!--
+      Sección para mostrar imágenes de la Tierra desde el espacio.
+      Utiliza la API EPIC de la NASA para obtener fotos recientes.
+      Si la API falla, se usan imágenes de respaldo.
+      El usuario puede navegar entre imágenes con botones.
+    -->
     <section id="tierra" class="section-content">
       <div class="container py-5">
         <h2 class="section-title text-center">Tierra desde el Espacio</h2>
 
-        <div id="earthLoading" class="loading-spinner">
-          <div class="spinner-border"></div>
-          <p class="mt-3">Cargando imágenes de la Tierra...</p>
-        </div>
+        <div class="card-custom">
+          <!--
+            Spinner de carga:
+            Se muestra mientras se obtienen las imágenes de la Tierra.
+            Cuando termina la carga, se muestra la imagen y los controles de navegación.
+          -->
+          <div id="earthLoading" class="loading-spinner">
+            <div class="spinner-border"></div>
+            <p class="mt-3">Cargando vista de la Tierra...</p>
+          </div>
 
-        <div id="earthContent" class="card-custom" style="display: none;"></div>
+          <div id="earthContent" style="display: none;">
+            <!--
+              Aquí se inserta la imagen de la Tierra y los controles para navegar entre fotos.
+              Si la API falla, se muestra una imagen de respaldo.
+            -->
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- Eyes Tools -->
+    <!-- ============================= -->
+    <!-- SECCIÓN: NASA EYES TOOLS      -->
+    <!-- ============================= -->
+    <!--
+      Herramientas interactivas de NASA Eyes:
+      - Eyes on the Earth: muestra datos en tiempo real del satélite SWOT (nivel del agua, topografía oceánica)
+      - Eyes on Asteroids: visualización 3D de asteroides cercanos a la Tierra
+      Cada tarjeta tiene un botón para cargar la vista y otro para actualizarla.
+      El contenido se inserta dinámicamente con JS.
+    -->
     <section id="eyes" class="section-content">
       <div class="container py-5">
         <h2 class="section-title text-center">👁️ NASA Eyes Tools</h2>
 
         <div class="row g-4">
+          <!--
+            Dos tarjetas principales:
+            - Eyes on the Earth: integra un visor interactivo de la NASA para ver datos de la Tierra
+            - Eyes on Asteroids: visor 3D de asteroides y sus órbitas
+            Los visores se cargan solo cuando el usuario lo solicita (para ahorrar recursos).
+          -->
+          <!-- Card de Eyes on the Earth con integración directa -->
           <div class="col-md-6">
             <div class="eyes-card">
               <h3 style="color: var(--nasa-blue); margin-bottom: 1rem;">
-                🌍 Eyes on the Earth
+                🌍 Eyes on the Earth - SWOT
               </h3>
               <p style="line-height: 1.6;">
-                Monitorea los datos ambientales de la Tierra en tiempo real. Visualiza nubes,
-                temperatura del océano, niveles de CO₂ y otros eventos climáticos importantes.
+                Monitorea los datos ambientales de la Tierra en tiempo real con el satélite SWOT.
+                Visualiza topografía oceánica y datos hidrológicos directamente en esta ventana.
               </p>
-              <a href="https://eyes.nasa.gov/apps/earth/" target="_blank" class="btn btn-danger-neon mt-3">
-                Explorar Tierra <i class="bi bi-box-arrow-up-right"></i>
-              </a>
+
+              <!--
+                Aquí se inserta el visor interactivo de NASA Eyes para la Tierra.
+                Si la carga falla, se muestra información de respaldo.
+              -->
+              <div id="nasaEyesContainer" class="mt-3">
+                <div class="loading-spinner" id="eyesLoading">
+                  <div class="spinner-border"></div>
+                  <p class="mt-2">Cargando NASA Eyes...</p>
+                </div>
+                <div id="eyesContent" style="display: none;">
+                  <!-- Aquí se cargará el contenido dinámicamente -->
+                </div>
+              </div>
+
+              <div class="mt-3">
+                <!--
+                  Botones:
+                  - Cargar Vista: inserta el visor de NASA Eyes
+                  - Actualizar: recarga el visor por si hay cambios o errores
+                -->
+                <!-- Botones para cargar o actualizar la vista de NASA Eyes -->
+                <button class="btn btn-danger-neon me-2" onclick="loadNASAEyes('swot')">
+                  <i class="bi bi-play-circle"></i> Cargar Vista
+                </button>
+                <button class="btn btn-outline-light" onclick="refreshNASAEyes('swot')">
+                  <i class="bi bi-arrow-clockwise"></i> Actualizar
+                </button>
+              </div>
             </div>
           </div>
+
+          <!-- Card de Eyes on Asteroids con integración directa -->
           <div class="col-md-6">
             <div class="eyes-card">
               <h3 style="color: var(--nasa-blue); margin-bottom: 1rem;">
@@ -746,14 +957,47 @@
                 Explora en 3D los asteroides cercanos a la Tierra. Visualiza sus órbitas,
                 tamaños y trayectorias en tiempo real con datos actualizados de la NASA.
               </p>
-              <a href="https://eyes.nasa.gov/apps/asteroids/" target="_blank" class="btn btn-danger-neon mt-3">
-                Ver Asteroides 3D <i class="bi bi-box-arrow-up-right"></i>
-              </a>
+
+              <!--
+                Aquí se inserta el visor interactivo de NASA Eyes para asteroides.
+                Si la carga falla, se muestra información de respaldo.
+              -->
+              <div id="nasaAsteroidsContainer" class="mt-3">
+                <div class="loading-spinner" id="asteroidsEyesLoading">
+                  <div class="spinner-border"></div>
+                  <p class="mt-2">Cargando vista de asteroides...</p>
+                </div>
+                <div id="asteroidsEyesContent" style="display: none;">
+                  <!-- Aquí se cargará el contenido dinámicamente -->
+                </div>
+              </div>
+
+              <div class="mt-3">
+                <!--
+                  Botones:
+                  - Cargar Vista: inserta el visor de NASA Eyes Asteroids
+                  - Actualizar: recarga el visor por si hay cambios o errores
+                -->
+                <!-- Botones para cargar o actualizar la vista de NASA Eyes Asteroids -->
+                <button class="btn btn-danger-neon me-2" onclick="loadNASAEyes('asteroids')">
+                  <i class="bi bi-play-circle"></i> Cargar Vista
+                </button>
+                <button class="btn btn-outline-light" onclick="refreshNASAEyes('asteroids')">
+                  <i class="bi bi-arrow-clockwise"></i> Actualizar
+                </button>
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- Comentarios autenticados -->
+        <!-- ============================= -->
+        <!-- SECCIÓN: COMENTARIOS Y VALORACIÓN -->
+        <!-- ============================= -->
+        <!--
+          Aquí los usuarios autenticados pueden dejar comentarios y valoraciones sobre la app.
+          El formulario solo aparece si el usuario ha iniciado sesión.
+          Los comentarios se guardan en localStorage y se muestran en la misma sección.
+        -->
         <div class="card-custom mt-4">
           <h4 style="color: var(--nasa-blue);">Comentarios y Valoración</h4>
           <div id="commentsSection"></div>
@@ -763,7 +1007,17 @@
     </section>
   </main>
 
-  <!-- Auth Modal -->
+  <!-- ============================= -->
+  <!-- MODAL DE AUTENTICACIÓN        -->
+  <!-- ============================= -->
+  <!--
+    Ventana emergente (modal) para iniciar sesión o registrarse.
+    Incluye dos formularios:
+      - Login: para usuarios existentes
+      - Registro: para nuevos usuarios
+    El cambio entre formularios se hace con enlaces dentro del modal.
+    Los datos se validan antes de enviarse.
+  -->
   <div class="modal fade" id="authModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content" style="background: rgba(26, 26, 46, 0.95); color: #ffffff;">
@@ -816,7 +1070,13 @@
     </div>
   </div>
 
-  <!-- Footer -->
+  <!-- ============================= -->
+  <!-- PIE DE PÁGINA                 -->
+  <!-- ============================= -->
+  <!--
+    Pie de página con información del proyecto y créditos.
+    Aquí puedes poner tu nombre, tecnologías usadas y cualquier aviso legal.
+  -->
   <footer class="footer">
     <div class="container text-center">
       <h5>Monitor de Asteroides NEO</h5>
@@ -825,685 +1085,25 @@
     </div>
   </footer>
 
-  <!-- jQuery 3.7.1 -->
+  <!--
+    jQuery 3.7.1:
+    Librería que facilita la manipulación del DOM, eventos y peticiones AJAX.
+    Esencial para que funcione toda la lógica de la app.
+  -->
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-  <!-- Bootstrap 5.3 JS -->
+  <!--
+    Bootstrap 5.3 JS:
+    Scripts para el menú, el carrusel y otros componentes interactivos.
+    Permite que la app sea responsiva y moderna.
+  -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-  <script>
-    // Configuración
-    var CONFIG = {
-      NASA_API_KEY: 'x7y7fDZraWoSIDUSZiy2khtqQQeMpgMLWiSrcPUo',
-      NASA_NEOWS_URL: 'https://api.nasa.gov/neo/rest/v1/feed',
-      NASA_EPIC_URL: 'https://api.nasa.gov/EPIC/api/natural',
-      EPIC_IMAGE_BASE: 'https://epic.gsfc.nasa.gov/archive/natural',
-      DANGER_THRESHOLD: 5000000,
-      MOON_DISTANCE: 384400
-    };
-
-    // Variables globales
-    var allAsteroids = [];
-    var currentFilter = 'all';
-    var currentUser = null;
-    var epicImages = [];
-    var currentEpicIndex = 0;
-
-    // Inicialización
-    $(document).ready(function () {
-      console.log('🚀 Monitor de Asteroides - jQuery iniciado');
-
-      // Inicializar animación Tierra-céntrica
-      initEarthSystem();
-
-      setupNavigation();
-      setupAuth();
-      loadAsteroids();
-
-      currentUser = loadSession();
-      updateAuthUI();
-
-      // Inicializar comentarios
-      renderComments();
-      renderCommentForm();
-    });
-
-    // Animación Tierra-céntrica
-    function initEarthSystem() {
-      // Generar estrellas aleatorias con jQuery
-      const $container = $('#earth-system-container');
-      for (let i = 0; i < 250; i++) {
-        const size = Math.random() * 2.5 + 0.5;
-        $('<div>')
-          .addClass('star')
-          .css({
-            width: size + 'px',
-            height: size + 'px',
-            left: Math.random() * 100 + '%',
-            top: Math.random() * 100 + '%',
-            animationDelay: Math.random() * 3 + 's'
-          })
-          .appendTo($container);
-      }
-
-      // Variables de animación
-      let animationSpeed = 1;
-      let isPaused = false;
-      let angles = {
-        sun: 0,
-        moon: 0,
-        satellites: [0, 120, 240],
-        asteroids: [0, 60, 120, 180, 240, 300]
-      };
-
-      // Función de animación con jQuery
-      function animate() {
-        if (!isPaused) {
-          // Animar Sol
-          angles.sun += 0.3 * animationSpeed;
-          const sunRadius = 200;
-          const sunX = Math.cos(angles.sun * Math.PI / 180) * sunRadius;
-          const sunY = Math.sin(angles.sun * Math.PI / 180) * sunRadius;
-          $('#sun').css({
-            left: '50%',
-            top: '50%',
-            marginLeft: sunX + 'px',
-            marginTop: sunY + 'px',
-            transform: 'translate(-50%, -50%)'
-          });
-
-          // Animar Luna
-          angles.moon += 1.2 * animationSpeed;
-          const moonRadius = 90;
-          const moonX = Math.cos(angles.moon * Math.PI / 180) * moonRadius;
-          const moonY = Math.sin(angles.moon * Math.PI / 180) * moonRadius;
-          $('#moon').css({
-            left: '50%',
-            top: '50%',
-            marginLeft: moonX + 'px',
-            marginTop: moonY + 'px',
-            transform: 'translate(-50%, -50%)'
-          });
-
-          // Animar Satélites
-          angles.satellites = angles.satellites.map((angle, index) => {
-            const newAngle = angle + 0.8 * animationSpeed;
-            const satRadius = 120;
-            const satX = Math.cos(newAngle * Math.PI / 180) * satRadius;
-            const satY = Math.sin(newAngle * Math.PI / 180) * satRadius;
-            $(`#satellite${index + 1}`).css({
-              left: '50%',
-              top: '50%',
-              marginLeft: satX + 'px',
-              marginTop: satY + 'px',
-              transform: 'translate(-50%, -50%) rotate(' + newAngle + 'deg)'
-            });
-            return newAngle;
-          });
-
-          // Animar Asteroides
-          angles.asteroids = angles.asteroids.map((angle, index) => {
-            const newAngle = angle + 0.5 * animationSpeed;
-            const astRadius = 160;
-            const astX = Math.cos(newAngle * Math.PI / 180) * astRadius;
-            const astY = Math.sin(newAngle * Math.PI / 180) * astRadius;
-            $(`#asteroid${index + 1}`).css({
-              left: '50%',
-              top: '50%',
-              marginLeft: astX + 'px',
-              marginTop: astY + 'px',
-              transform: 'translate(-50%, -50%)'
-            });
-            return newAngle;
-          });
-        }
-
-        requestAnimationFrame(animate);
-      }
-
-      // Iniciar animación
-      animate();
-    }
-
-    // Navegación
-    function setupNavigation() {
-      $('.nav-link[data-section]').on('click', function (e) {
-        e.preventDefault();
-        var section = $(this).data('section');
-        navigateToSection(section);
-
-        // Cerrar menú móvil
-        if ($('#navbarNav').hasClass('show')) {
-          $('.navbar-toggler').click();
-        }
-      });
-
-      // Botones carousel
-      $('.btn-danger-neon[data-section]').on('click', function (e) {
-        e.preventDefault();
-        var section = $(this).data('section');
-        var filter = $(this).data('filter');
-
-        navigateToSection(section);
-
-        if (filter) {
-          setTimeout(function () {
-            currentFilter = filter;
-            $('.filter-btn').removeClass('active');
-            $('.filter-btn[data-filter="' + filter + '"]').addClass('active');
-            renderAsteroids();
-          }, 500);
-        }
-      });
-
-      // Filtros de asteroides
-      $(document).on('click', '.filter-btn', function () {
-        $('.filter-btn').removeClass('active');
-        $(this).addClass('active');
-        currentFilter = $(this).data('filter');
-        renderAsteroids();
-      });
-    }
-
-    function navigateToSection(sectionId) {
-      $('.section-content').removeClass('active');
-      $('#' + sectionId).addClass('active');
-
-      $('.nav-link').removeClass('active');
-      $('.nav-link[data-section="' + sectionId + '"]').addClass('active');
-
-      $('html, body').animate({
-        scrollTop: $('#' + sectionId).offset().top - 80
-      }, 500);
-
-      // Cargar datos específicos de la sección
-      if (sectionId === 'tierra' && epicImages.length === 0) {
-        loadEarth();
-      }
-    }
-
-    // Asteroides
-    function loadAsteroids() {
-      var today = new Date();
-      var weekAgo = new Date(today);
-      weekAgo.setDate(weekAgo.getDate() - 7);
-
-      var startDate = weekAgo.toISOString().split('T')[0];
-      var endDate = today.toISOString().split('T')[0];
-
-      var url = CONFIG.NASA_NEOWS_URL +
-        '?start_date=' + startDate +
-        '&end_date=' + endDate +
-        '&api_key=' + CONFIG.NASA_API_KEY;
-
-      $.ajax({
-        url: url,
-        method: 'GET',
-        dataType: 'json',
-        timeout: 15000,
-        success: function (data) {
-          console.log('✅ NASA NeoWs API exitosa');
-          processAsteroids(data);
-        },
-        error: function (xhr, status, error) {
-          console.error('❌ Error NASA API:', error);
-          loadBackupAsteroids();
-        }
-      });
-    }
-
-    function processAsteroids(data) {
-      allAsteroids = [];
-      var neoData = data.near_earth_objects;
-
-      $.each(neoData, function (date, asteroids) {
-        $.each(asteroids, function (index, ast) {
-          var approach = ast.close_approach_data[0];
-
-          allAsteroids.push({
-            name: ast.name,
-            diameter: ast.estimated_diameter.meters.estimated_diameter_max,
-            distance: parseFloat(approach.miss_distance.kilometers),
-            velocity: parseFloat(approach.relative_velocity.kilometers_per_hour),
-            dangerous: ast.is_potentially_hazardous_asteroid,
-            date: approach.close_approach_date
-          });
-        });
-      });
-
-      allAsteroids.sort(function (a, b) {
-        return a.distance - b.distance;
-      });
-
-      updateStats();
-      renderAsteroids();
-    }
-
-    function updateStats() {
-      var dangerous = allAsteroids.filter(function (a) {
-        return a.dangerous;
-      });
-
-      var maxVel = allAsteroids.reduce(function (max, a) {
-        return Math.max(max, a.velocity);
-      }, 0);
-
-      var closest = allAsteroids.length > 0 ? allAsteroids[0] : null;
-      var closestMoons = closest ? (closest.distance / CONFIG.MOON_DISTANCE).toFixed(2) : '∞';
-
-      $('#totalAsteroids').text(allAsteroids.length);
-      $('#dangerousCount').text(dangerous.length);
-      $('#maxSpeed').text(formatNumber(maxVel));
-      $('#closestMoons').text(closestMoons);
-
-      $('#countAll').text(allAsteroids.length);
-      $('#countDangerous').text(dangerous.length);
-      $('#countSafe').text(allAsteroids.length - dangerous.length);
-    }
-
-    function renderAsteroids() {
-      var filtered = allAsteroids;
-
-      if (currentFilter === 'dangerous') {
-        filtered = filtered.filter(function (a) { return a.dangerous; });
-      } else if (currentFilter === 'safe') {
-        filtered = filtered.filter(function (a) { return !a.dangerous; });
-      }
-
-      var html = '';
-      var display = filtered.slice(0, 30);
-
-      $.each(display, function (index, ast) {
-        var dangerClass = getDangerClass(ast);
-        var badge = ast.dangerous ?
-          '<span class="badge bg-danger">PELIGROSO</span>' :
-          '<span class="badge bg-success">SEGURO</span>';
-
-        var moons = (ast.distance / CONFIG.MOON_DISTANCE).toFixed(2);
-
-        html += '<div class="asteroid-item ' + dangerClass + '">';
-        html += '  <div class="d-flex justify-content-between">';
-        html += '    <div>';
-        html += '      <h6 class="mb-1">' + ast.name + ' ' + badge + '</h6>';
-        html += '      <small>';
-        html += '        <i class="bi bi-calendar"></i> ' + ast.date + ' | ';
-        html += '        <i class="bi bi-rulers"></i> ' + formatNumber(ast.distance) + ' km (' + moons + ' lunas) | ';
-        html += '        <i class="bi bi-speedometer2"></i> ' + formatNumber(ast.velocity) + ' km/h';
-        html += '      </small>';
-        html += '    </div>';
-        html += '  </div>';
-        html += '</div>';
-      });
-
-      $('#asteroidsList').html(html).show();
-      $('#asteroidsLoading').hide();
-    }
-
-    function getDangerClass(ast) {
-      if (ast.dangerous && ast.distance < CONFIG.DANGER_THRESHOLD) return 'danger-high';
-      if (ast.dangerous) return 'danger-medium';
-      return 'danger-low';
-    }
-
-    function formatNumber(num) {
-      return Math.round(num).toLocaleString('es-ES');
-    }
-
-    function loadBackupAsteroids() {
-      // Datos de respaldo estáticos
-      allAsteroids = [
-        {
-          name: '(2024 XY1) Backup',
-          diameter: 250,
-          distance: 2500000,
-          velocity: 45000,
-          dangerous: true,
-          date: '2025-10-22'
-        },
-        {
-          name: '(2024 AB2) Backup',
-          diameter: 150,
-          distance: 5500000,
-          velocity: 32000,
-          dangerous: false,
-          date: '2025-10-23'
-        }
-      ];
-
-      updateStats();
-      renderAsteroids();
-    }
-
-    // Tierra desde el Espacio
-    function loadEarth() {
-      var url = CONFIG.NASA_EPIC_URL + '?api_key=' + CONFIG.NASA_API_KEY;
-
-      $.ajax({
-        url: url,
-        method: 'GET',
-        dataType: 'json',
-        timeout: 10000,
-        success: function (data) {
-          console.log('✅ NASA EPIC API exitosa');
-          epicImages = data;
-          currentEpicIndex = 0;
-          displayEarth();
-        },
-        error: function () {
-          console.error('❌ Error EPIC API');
-          loadEarthBackup();
-        }
-      });
-    }
-
-    function displayEarth() {
-      if (epicImages.length === 0) {
-        $('#earthContent').html('<div class="alert alert-warning">No hay imágenes disponibles</div>').show();
-        $('#earthLoading').hide();
-        return;
-      }
-
-      var image = epicImages[currentEpicIndex];
-      var date = new Date(image.date);
-      var year = date.getFullYear();
-      var month = (date.getMonth() + 1).toString().padStart(2, '0');
-      var day = date.getDate().toString().padStart(2, '0');
-
-      var imageUrl = CONFIG.EPIC_IMAGE_BASE + '/' + year + '/' + month + '/' + day + '/png/' + image.image + '.png';
-
-      var html = '<div class="text-center">';
-      html += '<h4 style="color: var(--nasa-red);">' + image.caption + '</h4>';
-      html += '<p class="text-muted mb-3">' + new Date(image.date).toLocaleString() + '</p>';
-      html += '<img src="' + imageUrl + '" class="img-fluid rounded shadow" style="max-height: 500px;" alt="' + image.caption + '">';
-      html += '<div class="mt-3">';
-      html += '<button class="btn btn-danger-neon me-2" id="prevEarth">Anterior</button>';
-      html += '<button class="btn btn-danger-neon" id="nextEarth">Siguiente</button>';
-      html += '</div>';
-      html += '</div>';
-
-      $('#earthContent').html(html).show();
-      $('#earthLoading').hide();
-
-      // Navegación de imágenes
-      $('#prevEarth').on('click', function () {
-        currentEpicIndex = (currentEpicIndex - 1 + epicImages.length) % epicImages.length;
-        displayEarth();
-      });
-
-      $('#nextEarth').on('click', function () {
-        currentEpicIndex = (currentEpicIndex + 1) % epicImages.length;
-        displayEarth();
-      });
-    }
-
-    // 🌍 Cargar imágenes EPIC de NASA (con respaldo local si falla)
-    function loadEarthBackup() {
-      // 1️⃣ Formamos la URL con la clave API
-      const url = CONFIG.NASA_EPIC_URL + '?api_key=' + CONFIG.NASA_API_KEY;
-
-      // 2️⃣ Mostramos el spinner de carga
-      $('#earthLoading').show();
-      $('#earthContent').hide();
-
-      // 3️⃣ Intentamos obtener los datos reales de NASA
-      fetch(url)
-        .then(response => {
-          if (!response.ok) throw new Error('❌ Error en la respuesta de la NASA');
-          return response.json(); // Convertimos el texto a JSON
-        })
-        .then(data => {
-          console.log('✅ Datos reales de NASA EPIC recibidos:', data);
-
-          // Guardamos los datos en variables globales
-          epicImages = data;
-          currentEpicIndex = 0;
-
-          // Llamamos a la función que muestra la imagen
-          displayEarth();
-        })
-        .catch(error => {
-          console.warn('⚠️ Error con NASA API:', error);
-
-          // 4️⃣ Si falla, usamos el respaldo local
-          const backupData = {
-            "apis": [
-              {
-                "id": "epic",
-                "name": "EPIC",
-                "summary": "Earth Polychromatic Imaging Camera",
-                "backup_data": {
-                  "title": "Tierra desde el Espacio - EPIC",
-                  "description": "Earth Polychromatic Imaging Camera desde DSCOVR",
-                  "image_url": "https://epic.gsfc.nasa.gov/archive/natural/2024/01/22/png/epic_1b_20240122003623.png"
-                }
-              }
-            ]
-          };
-
-          const epicBackup = backupData.apis.find(api => api.id === 'epic');
-
-          if (epicBackup && epicBackup.backup_data) {
-            console.log('🩵 Respaldo EPIC cargado correctamente');
-            const fallback = epicBackup.backup_data;
-
-            // Mostramos imagen y descripción del respaldo
-            const html = `
-                            <div class="text-center">
-                                <h4 style="color: var(--nasa-red);">${fallback.title}</h4>
-                                <p>${fallback.description}</p>
-                                <img src="${fallback.image_url}" 
-                                    class="w-75" 
-                                    style="border-radius:15px; box-shadow: 0 0 20px rgba(0,0,0,0.5);" 
-                                    alt="Tierra desde el Espacio (respaldo)">
-                            </div>
-                        `;
-            $('#earthContent').html(html);
-          } else {
-            // Si no hay respaldo, mostramos error
-            $('#earthContent').html('<p>No hay datos disponibles ni respaldo.</p>');
-          }
-
-          $('#earthLoading').hide();
-          $('#earthContent').show();
-        });
-    }
-
-    // Autenticación
-    function setupAuth() {
-      $('#authLink').on('click', function (e) {
-        e.preventDefault();
-        if (currentUser) {
-          if (confirm('¿Cerrar sesión?')) {
-            logout();
-          }
-        } else {
-          new bootstrap.Modal($('#authModal')).show();
-        }
-      });
-
-      $('#showRegister').on('click', function (e) {
-        e.preventDefault();
-        $('#loginForm').addClass('d-none');
-        $('#registerForm').removeClass('d-none');
-        $('#authModalTitle').text('Registrarse');
-      });
-
-      $('#showLogin').on('click', function (e) {
-        e.preventDefault();
-        $('#registerForm').addClass('d-none');
-        $('#loginForm').removeClass('d-none');
-        $('#authModalTitle').text('Iniciar Sesión');
-      });
-
-      $('#loginForm').on('submit', function (e) {
-        e.preventDefault();
-        if (!this.checkValidity()) {
-          e.stopPropagation();
-          $(this).addClass('was-validated');
-          return;
-        }
-        login();
-      });
-
-      $('#registerForm').on('submit', function (e) {
-        e.preventDefault();
-        if (!this.checkValidity()) {
-          e.stopPropagation();
-          $(this).addClass('was-validated');
-          return;
-        }
-
-        var password = $('#registerPassword').val();
-        var confirm = $('#registerPasswordConfirm').val();
-
-        if (password !== confirm) {
-          alert('Las contraseñas no coinciden');
-          return;
-        }
-
-        register();
-      });
-    }
-
-    function login() {
-      var email = $('#loginEmail').val();
-      var password = $('#loginPassword').val();
-
-      var users = JSON.parse(localStorage.getItem('nasa_users_jquery') || '[]');
-      var user = users.find(function (u) {
-        return u.email === email && u.password === btoa(password);
-      });
-
-      if (user) {
-        currentUser = { name: user.name, email: user.email };
-        localStorage.setItem('nasa_session_jquery', JSON.stringify(currentUser));
-        updateAuthUI();
-        bootstrap.Modal.getInstance($('#authModal')[0]).hide();
-        alert('¡Bienvenido!');
-
-        // Actualizar formulario de comentarios
-        renderCommentForm();
-      } else {
-        alert('Credenciales incorrectas');
-      }
-    }
-
-    function register() {
-      var name = $('#registerName').val();
-      var email = $('#registerEmail').val();
-      var password = $('#registerPassword').val();
-
-      var users = JSON.parse(localStorage.getItem('nasa_users_jquery') || '[]');
-
-      if (users.some(function (u) { return u.email === email; })) {
-        alert('El email ya está registrado');
-        return;
-      }
-
-      users.push({
-        id: Date.now(),
-        name: name,
-        email: email,
-        password: btoa(password)
-      });
-
-      localStorage.setItem('nasa_users_jquery', JSON.stringify(users));
-
-      currentUser = { name: name, email: email };
-      localStorage.setItem('nasa_session_jquery', JSON.stringify(currentUser));
-      updateAuthUI();
-      bootstrap.Modal.getInstance($('#authModal')[0]).hide();
-      alert('¡Registro exitoso!');
-
-      // Actualizar formulario de comentarios
-      renderCommentForm();
-    }
-
-    function logout() {
-      currentUser = null;
-      localStorage.removeItem('nasa_session_jquery');
-      updateAuthUI();
-
-      // Actualizar formulario de comentarios
-      renderCommentForm();
-    }
-
-    function loadSession() {
-      var session = localStorage.getItem('nasa_session_jquery');
-      return session ? JSON.parse(session) : null;
-    }
-
-    function updateAuthUI() {
-      if (currentUser) {
-        $('#authLink').html('<i class="bi bi-person-check-fill"></i> ' + currentUser.name);
-      } else {
-        $('#authLink').html('<i class="bi bi-person-circle"></i> Login');
-      }
-    }
-
-    // ========== COMENTARIOS EYES TOOLS ==========
-    function renderComments() {
-      var comments = JSON.parse(localStorage.getItem('jsoares_eyes_comments') || '[]');
-      var html = '';
-      if (comments.length === 0) {
-        html = '<p class="text-muted">No hay comentarios aún.</p>';
-      } else {
-        $.each(comments, function (i, c) {
-          html += '<div class="comment-item">';
-          html += '<strong style="color:var(--nasa-red);">' + c.user + '</strong> ';
-          html += '<span class="star-rating">' + '★'.repeat(c.rating) + '☆'.repeat(5 - c.rating) + '</span>';
-          html += '<p style="margin:0.5rem 0;">' + c.text + '</p>';
-          html += '<small class="text-secondary">' + c.date + '</small>';
-          html += '</div>';
-        });
-      }
-      $('#commentsSection').html(html);
-    }
-
-    function renderCommentForm() {
-      var user = currentUser;
-      if (!user) {
-        $('#commentFormContainer').html('<div class="alert alert-warning mt-3">Debes iniciar sesión para comentar.</div>');
-        return;
-      }
-      var starsHtml = '';
-      for (var i = 1; i <= 5; i++) {
-        starsHtml += '<i class="bi bi-star' + (i === 1 ? '' : '-fill') + '" data-value="' + i + '" style="cursor:pointer;font-size:1.3rem;color:gold;"></i>';
-      }
-      var formHtml = '<form id="commentForm" class="mt-3">';
-      formHtml += '<div class="mb-2"><label class="form-label">Tu comentario</label>';
-      formHtml += '<textarea class="form-control" id="commentText" rows="2" maxlength="300" required></textarea></div>';
-      formHtml += '<div class="mb-2"><label class="form-label">Valoración:</label> <span id="ratingStars">' + starsHtml + '</span>';
-      formHtml += '<input type="hidden" id="commentRating" value="5"></div>';
-      formHtml += '<button type="submit" class="btn btn-danger-neon">Enviar</button></form>';
-      $('#commentFormContainer').html(formHtml);
-      // Estrellas
-      $('#ratingStars i').on('click', function () {
-        var val = $(this).data('value');
-        $('#commentRating').val(val);
-        $('#ratingStars i').each(function (idx) {
-          $(this).attr('class', 'bi ' + (idx < val ? 'bi-star-fill' : 'bi-star'));
-        });
-      });
-      // Envío
-      $('#commentForm').on('submit', function (e) {
-        e.preventDefault();
-        var text = $('#commentText').val().trim();
-        var rating = parseInt($('#commentRating').val());
-        if (!text) return;
-        var comments = JSON.parse(localStorage.getItem('jsoares_eyes_comments') || '[]');
-        comments.unshift({
-          user: user.name,
-          text: text,
-          rating: rating,
-          date: new Date().toLocaleString()
-        });
-        localStorage.setItem('jsoares_eyes_comments', JSON.stringify(comments));
-        renderComments();
-        renderCommentForm();
-      });
-    }
-  </script>
-  <!-- Al final del body, antes del cierre </body> -->
+  <!--
+    Configuración y lógica principal de la app:
+    - config.js: contiene las claves y URLs de la NASA, y parámetros globales
+    - api.js: toda la lógica de la app (navegación, carga de datos, autenticación, comentarios)
+    Ambos archivos son esenciales para el funcionamiento.
+  -->
   <script src="js/config.js"></script>
   <script src="js/api.js"></script>
 </body>
