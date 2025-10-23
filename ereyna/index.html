@@ -6,10 +6,34 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <link rel="stylesheet" href="style.css" />
     <link rel="icon" type="image/x-icon" href="img/tiempo.png">
+    <style>
+      .error-message {
+        background-color: #ff4444;
+        color: white;
+        padding: 10px;
+        border-radius: 5px;
+        margin: 10px 0;
+        display: none;
+        animation: fadeIn 0.3s ease-in;
+      }
+      
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      
+      .error-message.show {
+        display: block;
+      }
+    </style>
   </head>
   <body>
     <div class="container">
       <h1>🌤️ Mi App del Clima</h1>
+      
+      <div id="errorContainer">
+        <div id="errorMessage" class="error-message"></div>
+      </div>
       
       <div id="search" class="button-group">
         <input type="text" id="cityInput" placeholder="Ingresa una ciudad..." />
@@ -49,8 +73,8 @@
           this.currentLon = null;
           this.map = null;
           this.marker = null;
-          this.lastCity = null; // nombre de ciudad si se buscó
-          this.lastCoords = null; // {lat, lon} si se usa ubicación
+          this.lastCity = null;
+          this.lastCoords = null;
 
           this.weatherIcons = {
             "01d": "☀️",
@@ -74,6 +98,24 @@
           };
 
           this.init();
+        }
+
+        showError(message) {
+          const errorEl = document.getElementById("errorMessage");
+          if (errorEl) {
+            errorEl.textContent = message;
+            errorEl.classList.add("show");
+            setTimeout(() => {
+              errorEl.classList.remove("show");
+            }, 5000);
+          }
+        }
+
+        clearError() {
+          const errorEl = document.getElementById("errorMessage");
+          if (errorEl) {
+            errorEl.classList.remove("show");
+          }
         }
 
         init() {
@@ -106,16 +148,15 @@
               // Validación con regex: solo letras, espacios, guiones o comillas simples
               const cityRegex = /^[a-zA-ZÀ-ÿ\s',-]+$/;
               if (!city) {
-                alert("Ingresa una ciudad");
+                this.showError("Ingresa una ciudad");
                 return;
               }
               if (!cityRegex.test(city)) {
-                alert(
-                  "Nombre de ciudad inválido. Solo letras y espacios permitidos."
-                );
+                this.showError("Nombre de ciudad inválido. Solo letras y espacios permitidos.");
                 return;
               }
 
+              this.clearError();
               this.loadWeatherByCity(city);
             };
           }
@@ -153,7 +194,7 @@
             // Inicializar/actualizar mapa
             this.initMap();
           } catch (error) {
-            alert(error.message);
+            this.showError(error.message);
             console.error(error);
           }
         }
@@ -180,7 +221,7 @@
             this.initMap();
           } catch (error) {
             console.error(error);
-            alert(error.message);
+            this.showError(error.message);
           }
         }
 
@@ -210,7 +251,7 @@
             this.initMap();
           } catch (error) {
             console.error("Error al cargar el clima:", error);
-            alert("Error al cargar el clima");
+            this.showError("Error al cargar el clima");
           }
         }
 
