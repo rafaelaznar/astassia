@@ -17,6 +17,7 @@ const app = (() => {
     resultsContainer: getElementById("results"),
     statusContainer: getElementById("status"),
     searchButton: getElementById("searchBtn"),
+    filtersSearchButton: getElementById("filtersSearchBtn"),
     prevPageButton: getElementById("prevPage"),
     nextPageButton: getElementById("nextPage"),
     pageIndicator: getElementById("pageIndicator"),
@@ -48,10 +49,35 @@ const app = (() => {
     "flowers",
   ];
 
-  const sanitizeHtml = (text = "") =>
-    String(text).replace(/[&<>"']/g, (match) => (
-      { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[match]
-    ));
+  // normalizar y estandarizar nombres de colores
+  const normalizeColorFilter = (rawValue = "") => {
+    const trimmed = rawValue.trim();
+    if (!trimmed) return "";
+    const lowerCased = trimmed.toLowerCase();
+    const normalized = typeof lowerCased.normalize === "function"
+      ? lowerCased.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+      : lowerCased;
+    const colorMap = {
+      rojo: "red",
+      naranja: "orange",
+      amarillo: "yellow",
+      verde: "green",
+      azul: "blue",
+      turquesa: "turquoise",
+      morado: "purple",
+      violeta: "purple",
+      rosa: "pink",
+      marron: "brown",
+      negro: "black",
+      gris: "gray",
+      blanco: "white",
+      dorado: "gold",
+    };
+    if (colorMap[normalized]) return colorMap[normalized];
+    const hexMatch = normalized.match(/^#?([0-9a-f]{6})$/i);
+    if (hexMatch) return hexMatch[1].toLowerCase();
+    return normalized;
+  };
 
   // muestra mensajes de feedback en la barra de estado
   const setStatus = (text, kind = "secondary") => {
@@ -84,7 +110,8 @@ const app = (() => {
 
     if (type === "photo") {
       if (uiElements.photoOrientationSelect.value) params.set("orientation", uiElements.photoOrientationSelect.value);
-      if (uiElements.photoColorInput.value) params.set("color", uiElements.photoColorInput.value.trim());
+      const normalizedColor = normalizeColorFilter(uiElements.photoColorInput.value || "");
+      if (normalizedColor) params.set("color", normalizedColor);
       const minWidth = Number(uiElements.photoMinWidthInput.value || 0);
       const minHeight = Number(uiElements.photoMinHeightInput.value || 0);
       if (minWidth > 0) params.set("min_width", String(minWidth));
@@ -198,6 +225,7 @@ const app = (() => {
     uiElements.resultsContainer.innerHTML = "";
     setStatus(`Buscando «${query}»…`);
     uiElements.searchButton.disabled = true;
+    if (uiElements.filtersSearchButton) uiElements.filtersSearchButton.disabled = true;
     if (uiElements.paginationBar) {
       if (skipPaginationBar) {
         uiElements.paginationBar.classList.add('d-none');
@@ -222,17 +250,22 @@ const app = (() => {
       setStatus(error.message || "Error al cargar.", "danger");
     } finally {
       uiElements.searchButton.disabled = false;
+      if (uiElements.filtersSearchButton) uiElements.filtersSearchButton.disabled = false;
     }
   };
 
-  const handleSearchSubmit = async (event) => {
-    event.preventDefault();
+  const runSearchFromQuery = async () => {
     currentPage = 1;
     const query = (uiElements.queryInput.value || "").trim();
     if (query && uiElements.welcomeTopicLabel) {
       uiElements.welcomeTopicLabel.textContent = query;
     }
     await performSearch();
+  };
+
+  const handleSearchSubmit = async (event) => {
+    if (event) event.preventDefault();
+    await runSearchFromQuery();
   };
 
   const handlePageChange = async (direction) => {
@@ -285,6 +318,11 @@ const app = (() => {
   const initializeApp = () => {
     const searchFormElement = document.getElementById("searchForm");
     if (searchFormElement) searchFormElement.addEventListener("submit", handleSearchSubmit);
+    if (uiElements.filtersSearchButton) {
+      uiElements.filtersSearchButton.addEventListener("click", () => {
+        void runSearchFromQuery();
+      });
+    }
     uiElements.typeSelect.addEventListener("change", toggleSections);
     uiElements.prevPageButton.addEventListener("click", () => handlePageChange(-1));
     uiElements.nextPageButton.addEventListener("click", () => handlePageChange(1));
