@@ -1,0 +1,197 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radar de Noticias Espaciales - jQuery SPA</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <main class="app-shell">
+        <header class="app-header">
+            <div class="header-content">
+                <span class="header-eyebrow">Spaceflight News API</span>
+                <h1>Radar de Noticias Espaciales</h1>
+                <p class="tagline">
+                    SPA desarrollada con jQuery que consume Spaceflight News API para monitorizar lanzamientos, misiones y novedades del sector aeroespacial.
+                </p>
+                <div class="header-meta">
+                    <div class="meta-chip">
+                        <span class="meta-chip__label">Entorno</span>
+                        <span class="meta-chip__value">Cliente</span>
+                    </div>
+                    <div class="meta-chip">
+                        <span class="meta-chip__label">Stack</span>
+                        <span class="meta-chip__value">HTML + CSS + jQuery</span>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <a class="cta" href="../index.html">Volver al listado general</a>
+                </div>
+            </div>
+            <div class="header-visual" aria-hidden="true">
+                <div class="orbit">
+                    <span class="orbit__planet"></span>
+                    <span class="orbit__ring orbit__ring--one"></span>
+                    <span class="orbit__ring orbit__ring--two"></span>
+                </div>
+            </div>
+        </header>
+
+        <section class="info-strip">
+            <article class="info-card">
+                <span class="info-card__eyebrow">API</span>
+                <h3 class="info-card__title">Spaceflight News v4</h3>
+                <p class="info-card__copy">Articulos, misiones y eventos espaciales en tiempo real.</p>
+                <a class="info-card__link" href="https://api.spaceflightnewsapi.net" target="_blank" rel="noopener">
+                    Ver documentacion
+                </a>
+            </article>
+            <article class="info-card">
+                <span class="info-card__eyebrow">Requerimientos</span>
+                <h3 class="info-card__title">Cliente avanzado</h3>
+                <p class="info-card__copy">DOM, eventos, asincronia y persistencia local.</p>
+            </article>
+            <article class="info-card">
+                <span class="info-card__eyebrow">Tecnologia</span>
+                <h3 class="info-card__title">jQuery 3.7</h3>
+                <p class="info-card__copy">Interfaz reactiva y filtros en vivo.</p>
+            </article>
+        </section>
+
+        <section class="card filters-card">
+            <div class="filters-card__header">
+                <div>
+                    <span class="filters-card__eyebrow">Centro de control</span>
+                    <h2>Filtra las noticias</h2>
+                    <p class="filters-card__description">Ajusta filtros para centrarte en las misiones y medios que sigues de cerca.</p>
+                </div>
+            </div>
+            <form id="filter-form" class="filter-form">
+                <div class="filter-columns">
+                    <div class="filter-column">
+                        <div class="field-group">
+                            <label for="search-input">Buscar</label>
+                            <input id="search-input" type="search" placeholder="Artemis, SpaceX, ESA..." autocomplete="off">
+                        </div>
+                        <div class="field-group">
+                            <label for="source-select">Medio</label>
+                            <select id="source-select">
+                                <option value="all">Todos</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="filter-column">
+                        <div class="field-group">
+                            <label for="age-range">Antiguedad (dias)</label>
+                            <div class="range-wrapper">
+                                <input id="age-range" type="range" min="1" max="90" value="30" step="1">
+                                <span id="age-value">30</span>
+                            </div>
+                        </div>
+                        <div class="field-inline">
+                            <div class="field-group">
+                                <label for="featured-select">Destacados</label>
+                                <select id="featured-select">
+                                    <option value="all">Todos</option>
+                                    <option value="featured">Solo destacados</option>
+                                    <option value="regular">Solo habituales</option>
+                                </select>
+                            </div>
+                            <div class="field-group">
+                                <label for="sort-select">Ordenar</label>
+                                <select id="sort-select">
+                                    <option value="recent">Mas recientes</option>
+                                    <option value="oldest">Mas antiguas</option>
+                                    <option value="featured">Destacadas primero</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="filter-actions">
+                    <span id="favorites-count" class="favorites-count">Favoritos: 0</span>
+                    <button id="favorites-toggle" type="button" class="btn-ghost">
+                        Mostrar solo favoritos
+                    </button>
+                    <button id="reset-btn" type="reset" class="btn-secondary">Limpiar</button>
+                </div>
+            </form>
+            <p id="match-counter" class="match-counter">Noticias encontradas: 0</p>
+        </section>
+
+        <section class="insights-grid">
+            <article class="insight-card">
+                <span class="insight-label">Visibles</span>
+                <span id="insight-visible" class="insight-value">0</span>
+            </article>
+            <article class="insight-card">
+                <span class="insight-label">Destacadas</span>
+                <span id="insight-featured" class="insight-value">0</span>
+            </article>
+            <article class="insight-card">
+                <span class="insight-label">Fuentes unicas</span>
+                <span id="insight-sources" class="insight-value">0</span>
+            </article>
+            <article class="insight-card">
+                <span class="insight-label">Guardadas</span>
+                <span id="insight-favorites" class="insight-value">0</span>
+            </article>
+        </section>
+
+        <section class="layout-grid">
+            <section class="card results">
+                <div class="results-header">
+                    <h2>Noticias coincidentes</h2>
+                    <button id="reload-btn" class="btn-primary" type="button">Recargar datos</button>
+                </div>
+                <div id="feedback" class="feedback"></div>
+                <div id="article-list" class="article-list" role="list"></div>
+            </section>
+
+            <aside id="detail-panel" class="card detail-panel" aria-live="polite">
+                <h2>Detalle de la noticia</h2>
+                <p class="detail-placeholder">
+                    Selecciona una noticia para ver el resumen completo, la fuente y los enlaces de referencia.
+                </p>
+                <div class="detail-content hidden">
+                    <div id="detail-image" class="detail-image" role="presentation"></div>
+                    <h3 id="detail-title"></h3>
+                    <p id="detail-meta" class="detail-meta"></p>
+                    <p id="detail-summary" class="detail-summary"></p>
+                    <ul id="detail-authors" class="detail-authors"></ul>
+                    <dl class="detail-extra">
+                        <div>
+                            <dt>Fuente</dt>
+                            <dd id="detail-source"></dd>
+                        </div>
+                        <div>
+                            <dt>Publicado</dt>
+                            <dd id="detail-date"></dd>
+                        </div>
+                        <div>
+                            <dt>Destacado</dt>
+                            <dd id="detail-featured"></dd>
+                        </div>
+                    </dl>
+                    <a id="detail-link" class="btn-link" href="#" target="_blank" rel="noopener">
+                        Leer noticia completa
+                    </a>
+                    <button id="detail-fav-btn" class="btn-favorite" type="button">
+                        Guardar en favoritos
+                    </button>
+                </div>
+            </aside>
+        </section>
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
+
+
