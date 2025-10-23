@@ -139,7 +139,7 @@ $(document).ready(function(){
     showDetailModal(id);
   });
 
-  // 🧠 Cargar razas usando async/await (con jQuery)
+  //Cargar razas
   async function loadBreeds() {
     try {
       const data = await $.ajax({
