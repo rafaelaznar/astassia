@@ -1,0 +1,47 @@
+{
+  "apis": [
+    {
+      "id": "apod",
+      "name": "APOD",
+      "summary": "Astronomy Picture of the Day",
+      "backup_data": {
+        "title": "Galaxia Andrómeda - NASA APOD",
+        "explanation": "La galaxia de Andrómeda, también conocida como M31, es la galaxia espiral más cercana a la Vía Láctea y es visible a simple vista desde la Tierra bajo cielos oscuros.",
+        "url": "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=800&h=600&fit=crop",
+        "copyright": "NASA/Unsplash",
+        "media_type": "image",
+        "date": "2024-10-21"
+      }
+    },
+    {
+      "id": "neows", 
+      "name": "Asteroids NeoWs",
+      "summary": "Near Earth Object Web Service",
+      "backup_data": {
+        "total": 146,
+        "dangerous": 3,
+        "message": "Datos de asteroides simulados - NASA NeoWs API",
+        "max_velocity": 116905,
+        "closest_moons": 0.28
+      }
+    },
+    {
+      "id": "epic",
+      "name": "EPIC",
+      "summary": "Earth Polychromatic Imaging Camera", 
+      "backup_data": {
+        "title": "La Tierra desde el Espacio",
+        "description": "Vista espectacular de nuestro planeta capturada desde el satélite DSCOVR",
+        "image_url": "https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?w=800&h=600&fit=crop",
+        "date": "2024-10-21 12:00:00",
+        "caption": "Planeta Tierra - Vista desde el espacio"
+      }
+    }
+  ],
+  "metadata": {
+    "version": "1.0",
+    "last_updated": "2024-10-21",
+    "total_apis": 3,
+    "description": "Backup data para APIs de NASA utilizadas en Monitor de Asteroides NEO"
+  }
+}
