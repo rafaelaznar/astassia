@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Treatz (jQuery)</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Selector tema -->
+  <div class="theme-switcher">
+    <select id="theme">
+      <option value="pastel">🌸</option>
+      <option value="forest">🌿</option>
+      <option value="ocean">🌊</option>
+    </select>
+  </div>
+
+  <!-- Frutas fondo -->
+<div class="frutas-fondo" id="frutas-fondo"></div>
+
+  <div class="container">
+    <h1>🍑 TREATZ 🍋</h1>
+
+    <!-- 🌸 FORMULARIO DE BIENVENIDA -->
+    <form id="player-form">
+      <label for="player-name">Tu nombre:</label>
+      <input type="text" id="player-name" placeholder="Ej: Ana 🍓" required>
+
+      <label for="difficulty">Dificultad:</label>
+      <select id="difficulty" required>
+        <option value="facil">🍬 Fácil</option>
+        <option value="media">🍋 Media</option>
+        <option value="dificil">🌶️ Difícil</option>
+      </select>
+
+      <button type="submit">🎮 Empezar</button>
+      <p id="form-msg"></p>
+    </form>
+
+    <!-- INFO Y TABLERO -->
+    <div class="info" style="display:none;">
+      <button id="start-btn" class="btn-juego">Comenzar juego</button>
+      <div class="timer">⏱️ Tiempo: <span id="time">0.0</span>s</div>
+    </div>
+
+    <div class="game-board" id="game-board"></div>
+
+    <div class="ranking">
+      <h2>🏆 Ranking de Tiempos </h2>
+
+      <div id="ranking-list">
+        <div class="ranking-section" id="ranking-facil">
+          <h3>🍬 Fácil</h3>
+          <ul></ul>
+        </div>
+        <div class="ranking-section" id="ranking-media">
+          <h3>🍋 Media</h3>
+          <ul></ul>
+        </div>
+        <div class="ranking-section" id="ranking-dificil">
+          <h3>🌶️ Difícil</h3>
+          <ul></ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="volver-inicio" style="display:none;">
+      <button id="back-btn" class="btn-juego">↩️ Volver al inicio</button>
+    </div>
+
+    <footer class="footer">
+      <p>BY <strong>ANA SILVESTRE</strong> 💖</p>
+    </footer>
+
+  </div>
+
+  <!-- Librerías -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
+
+

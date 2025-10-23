@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO + accesibilidad -->
+  <meta name="description" content="Treatz 🍓 — Juego divertido para atrapar frutas y conseguir la mejor puntuación.">
+  <meta name="theme-color" content="#ffb6c1">
+
+  <title>Treatz 🍓</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+
+  <!-- Fuentes + estilos -->
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="theme-pastel">
+  <!-- ☁️ Fondo animado ☁️ -->
+  <div class="clouds" aria-hidden="true">
+    <div class="cloud"></div>
+    <div class="cloud"></div>
+    <div class="cloud"></div>
+    <div class="cloud"></div>
+  </div>
+
+  <!-- Selector de temas -->
+  <div class="theme-switcher" aria-label="Selector de tema">
+    <select id="theme-selector" title="Cambiar tema">
+      <option value="pastel">🍓 Pastel</option>
+      <option value="forest">🌿 Bosque</option>
+      <option value="ocean">🌊 Océano</option>
+    </select>
+  </div>
+
+  <!-- Contenedor principal -->
+  <main class="container" role="main">
+    <h1>🍒 Treatz 🍒</h1>
+    <p>¡Atrapa las frutas que caen y consigue la mejor puntuación!</p>
+
+    <!-- Formulario jugador -->
+    <form id="player-form" aria-label="Formulario del jugador" autocomplete="off">
+      <div class="avatar-container">
+        <img 
+          id="player-avatar" 
+          src="https://api.dicebear.com/7.x/pixel-art/svg?seed=default" 
+          alt="Avatar del jugador" 
+          loading="lazy">
+      </div>
+
+      <label for="avatar-style">Estilo de avatar:</label>
+      <select id="avatar-style" title="Selecciona un estilo de avatar">
+        <option value="pixel-art">🧱 Pixel Art</option>
+        <option value="adventurer">🏕️ Aventurero</option>
+        <option value="avataaars">😎 Avataaars</option>
+        <option value="bottts">🤖 Bottts</option>
+      </select>
+
+      <label for="player-name">Tu nombre:</label>
+      <input 
+        type="text" 
+        id="player-name" 
+        placeholder="Escribe tu nombre aquí..."
+        aria-required="true">
+      <p id="form-msg" class="error-msg"></p>
+
+
+      <!-- SELECTOR DE DIFICULTAD -->
+      <label for="difficulty">Nivel de dificultad:</label>
+      <select id="difficulty" title="Selecciona un nivel de dificultad">
+        <option value="easy">🍏 Fácil</option>
+        <option value="medium" selected>🍊 Medio</option>
+        <option value="hard">🌶️ Difícil</option>
+        <option value="insane">💀 Locura</option>
+      </select>
+
+      <button type="submit">🎮 Comenzar Juego</button>
+      <p id="form-msg" aria-live="polite"></p>
+    </form>
+
+    <!-- Info del jugador -->
+    <div class="info" role="status" aria-live="polite">
+      <div id="player-info">
+        <img id="player-avatar-game" alt="Avatar en partida" loading="lazy" />
+        <span id="player-display"></span>
+      </div>
+
+      <div class="game-stats" aria-hidden="false">
+        <span>⏱️ Tiempo: <span id="time">30</span>s</span>
+        <span>🍓 Puntuación: <span id="score">0</span></span>
+        <!-- 🆕 Contador de frutas perdidas -->
+        <span class="missed">❌ Perdidas: <span id="missed">0</span></span>
+      </div>
+    </div>
+
+    <!-- Área de juego -->
+    <section id="game-area" aria-label="Zona de juego">
+      <div id="basket" aria-label="Cesta">🧺</div>
+    </section>
+
+    <!-- Panel de penalizaciones lateral -->
+    <aside id="penalties" aria-label="Penalizaciones y reglas" role="region">
+      <h3>⚠️ Penalizaciones</h3>
+      <ul>
+        <li>💩 <strong>Contaminación</strong> = −2 s</li>
+        <li>☣️ <strong>Biohazard</strong> = −3 s</li>
+        <li>💣 <strong>Explosivo</strong> = −4 s</li>
+        <li>☠️ <strong>Muerte</strong> = Fin de partida</li>
+        <li>❌ <strong>10 frutas perdidas</strong> = Fin de partida</li>
+      </ul>
+    </aside>
+
+    <!-- Ranking -->
+    <section id="ranking" aria-label="Ranking de jugadores">
+      <h2>🏅 Mejores Jugadores </h2>
+
+      <!-- Aquí se mostrará el ranking separado por dificultad -->
+      <div id="ranking-list" aria-live="polite"></div>
+
+      <button id="restart-btn" type="button">🔁 Volver a jugar</button>
+    </section>
+
+    <footer class="footer">
+      <p>BY <strong>ANA SILVESTRE</strong> 💖</p>
+    </footer>
+
+  </main>
+
+  
+  <!-- Pantalla de muerte -->
+  <div id="death-overlay" aria-hidden="true">💀 GAME OVER 💀</div>
+
+  <!-- Script  -->
+  <script type="module" src="script.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
