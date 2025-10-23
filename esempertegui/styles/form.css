@@ -1,0 +1,56 @@
+    body {
+      background: linear-gradient(135deg, #74ABE2, #5563DE);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Arial, sans-serif;
+    }
+
+    nav {
+      display: flex;
+    }
+    nav a {
+      margin: 0 10px;
+      color: lime;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .card {
+      border: none;
+      border-radius: 1rem;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      background-color: #fff;
+    }
+
+    .form-label {
+      font-weight: 600;
+      color: #333;
+    }
+
+    .btn-primary {
+      background: #5563DE;
+      border: none;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      background: #3742fa;
+      transform: translateY(-2px);
+    }
+
+    h1 {
+      font-weight: 700;
+      color: #343a40;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .form-check-label {
+      font-size: 0.95rem;
+    }
+
+    .valid-feedback, .invalid-feedback {
+      font-size: 0.9rem;
+    }
