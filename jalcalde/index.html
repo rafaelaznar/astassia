@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Instrucciones - Minireproductor Spotify</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/player.css">
+  <meta name="theme-color" content="#1DB954">
+  <style>
+    .instruction-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 1rem;
+    }
+    .instruction-screen {
+      max-width: 600px;
+      width: 100%;
+      margin: auto;
+      text-align: center;
+      background: rgba(255,255,255,0.02);
+      backdrop-filter: blur(10px);
+      padding: 2rem;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.03);
+      box-shadow: 0 8px 24px rgba(2,6,23,0.6);
+    }
+    .instruction-screen h1 {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 1.4rem;
+      margin: 0 0 1.8rem;
+      color: var(--accent);
+      text-shadow: 0 0 10px rgba(0,209,255,0.3);
+      line-height: 1.4;
+    }
+    .spotify-icon {
+      font-size: 3rem;
+      color: #1DB954;
+      margin-bottom: 1rem;
+      display: block;
+    }
+    .step {
+      background: rgba(255,255,255,0.03);
+      padding: 1.5rem;
+      margin: 1rem 0;
+      border-radius: 10px;
+      border-left: 4px solid var(--accent);
+      text-align: left;
+    }
+    .step h3 {
+      color: var(--accent);
+      margin: 0 0 0.5rem;
+      font-size: 1.1rem;
+    }
+    .step p {
+      color: var(--muted);
+      margin: 0.5rem 0;
+      line-height: 1.6;
+    }
+    .step code {
+      background: rgba(0,0,0,0.3);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      color: #00d1ff;
+      font-family: 'Courier New', monospace;
+    }
+    .warning {
+      background: rgba(217,83,79,0.1);
+      border: 1px solid rgba(217,83,79,0.3);
+      padding: 1rem;
+      border-radius: 8px;
+      margin: 1.5rem 0;
+    }
+    .warning strong {
+      color: #d9534f;
+    }
+    .actions {
+      margin-top: 2rem;
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn-spotify {
+      background: linear-gradient(90deg, #1DB954, #1ed760);
+      color: white;
+      padding: 0.8rem 2rem;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s;
+    }
+    .btn-spotify:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(29,185,84,0.3);
+    }
+    .highlight {
+      color: #1DB954;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="instruction-container">
+    <div class="instruction-screen">
+      <div class="spotify-icon">🎵</div>
+      <h1>Instrucciones del Minireproductor</h1>
+      <p style="color: var(--muted); margin-bottom: 2rem;">
+        Sigue estos pasos para usar correctamente el minireproductor de Spotify
+      </p>
+
+      <div class="step">
+        <h3>1. NODE JS</h3>
+        <p>Instala Node.js en tu sistema si aún no lo has hecho. Puedes descargarlo desde <a href="https://nodejs.org/" target="_blank">nodejs.org</a>.</p>
+        <p>Una vez instalado, asituate en la carpeta jalcalde y abre un terminal</p>
+        <p>Ejecuta el comando "npm install"</p>
+        <p>Cuando se hayan instalado las dependencias, ejecuta el comando "npm start"</p>
+        
+      </div>
+
+      <div class="step">
+        <h3>2. Abre Spotify</h3>
+        <p>Inicia la aplicación de <span class="highlight">Spotify</span> en tu dispositivo (escritorio o móvil) y asegúrate de estar conectado a tu cuenta.</p>
+      </div>
+
+      <div class="step">
+        <h3>3. Reproduce cualquier canción</h3>
+        <p>Selecciona y reproduce <strong>cualquier canción</strong> en Spotify. No importa cuál elijas, solo necesitas que esté sonando.</p>
+      </div>
+
+      <div class="step">
+        <h3>4. Usa el minireproductor</h3>
+        <p>Una vez que Spotify esté reproduciendo música, podrás usar este minireproductor para:</p>
+        <ul style="text-align: left; color: var(--muted); margin-top: 0.5rem;">
+          <li>▶️ Pausar/Reproducir</li>
+          <li>⏭️ Siguiente canción</li>
+          <li>⏮️ Canción anterior</li>
+          <li>🔀 Activar/desactivar aleatorio</li>
+          <li>🔁 Cambiar modo de repetición</li>
+        </ul>
+      </div>
+
+      <div class="warning">
+        <strong>⚠️ Importante:</strong> Este minireproductor <strong>NO funciona</strong> si Spotify no está abierto y reproduciendo música. Asegúrate de seguir los pasos anteriores.
+      </div>
+
+      <div class="step">
+        <h3>5. Problemas comunes</h3>
+        <p>Si el minireproductor no funciona:</p>
+        <ul style="text-align: left; color: var(--muted); margin-top: 0.5rem;">
+          <li>✅ Verifica que Spotify esté abierto</li>
+          <li>✅ Asegúrate de que hay una canción reproduciéndose</li>
+          <li>✅ Recarga esta página web</li>
+          <li>✅ Comprueba que tienes una cuenta Premium de Spotify</li>
+        </ul>
+      </div>
+
+      <div class="actions">
+        <a href="inicio.html" class="btn-spotify">
+          🎵 Ir al Reproductor
+        </a>
+        <button onclick="window.close()" class="help-button">
+          ❌ Cerrar
+        </button>
+      </div>
+
+      <p style="color: var(--muted); font-size: 0.9rem; margin-top: 2rem;">
+        💡 <strong>Consejo:</strong> Mantén Spotify abierto en segundo plano mientras usas el minireproductor para la mejor experiencia.
+      </p>
+    </div>
+  </div>
+</body>
+</html>
