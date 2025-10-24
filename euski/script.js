@@ -79,6 +79,11 @@ const app = (() => {
     return normalized;
   };
 
+  const sanitizeHtml = (text = "") =>
+    String(text).replace(/[&<>"']/g, (match) => (
+      { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[match]
+  ));
+
   // muestra mensajes de feedback en la barra de estado
   const setStatus = (text, kind = "secondary") => {
     uiElements.statusContainer.innerHTML = `<div class="alert alert-${kind} py-2 mb-0">${sanitizeHtml(text)}</div>`;
