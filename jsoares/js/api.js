@@ -14,103 +14,32 @@ $(document).ready(function(){
   // api.js
   // Control del módulo de asteroides: obtiene y muestra información desde la NASA NEO API
 
-  const API_KEY = typeof NASA_API_KEY !== "undefined" ? NASA_API_KEY : "DEMO_KEY";
-  const API_URL = `https://api.nasa.gov/neo/rest/v1/feed?api_key=${API_KEY}`;
+  // Yo: intento obtener la clave desde la configuración global `APP_CONFIG` si existe.
+  const API_KEY = (typeof APP_CONFIG !== 'undefined' && APP_CONFIG.NASA_API_KEY)
+    ? APP_CONFIG.NASA_API_KEY
+    : (typeof NASA_API_KEY !== "undefined" ? NASA_API_KEY : "DEMO_KEY");
 
-  /**
-   * Carga los asteroides cercanos desde la API de la NASA
-   */
-  async function loadAsteroids() {
-    const listContainer = document.getElementById("asteroidsList");
-    const statusText = document.getElementById("loadingText");
-    const totalCount = document.getElementById("totalCount");
-    const dangerousCount = document.getElementById("dangerousCount");
-    const safeCount = document.getElementById("safeCount");
+  // Yo: la API NEOWS necesita al menos start_date; construyo un rango de 7 días
+  // (start_date .. end_date) para obtener resultados útiles.
+  const today = new Date();
+  const endDate = today.toISOString().slice(0,10);
+  const startDateObj = new Date(today);
+  startDateObj.setDate(startDateObj.getDate() - 7);
+  const startDate = startDateObj.toISOString().slice(0,10);
 
-    if (!listContainer) {
-      console.error("❌ No se encontró el contenedor #asteroidsList");
-      return;
-    }
+  const API_BASE = (typeof APP_CONFIG !== 'undefined' && APP_CONFIG.NASA_NEOWS_URL)
+    ? APP_CONFIG.NASA_NEOWS_URL
+    : 'https://api.nasa.gov/neo/rest/v1/feed';
 
-    // Mensaje inicial de carga
-    listContainer.innerHTML = "";
-    if (statusText) statusText.textContent = "Rastreando asteroides cercanos...";
+  const API_URL = `${API_BASE}?start_date=${startDate}&end_date=${endDate}&api_key=${API_KEY}`;
 
-    try {
-      const response = await fetch(API_URL);
-      if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
-
-      const data = await response.json();
-
-      // Combinar asteroides de todos los días disponibles
-      const allAsteroids = [];
-      Object.keys(data.near_earth_objects).forEach(date => {
-        data.near_earth_objects[date].forEach(neo => {
-          const approach = neo.close_approach_data?.[0];
-          if (!approach) return;
-
-          allAsteroids.push({
-            id: neo.id,
-            name: neo.name,
-            date: approach.close_approach_date_full || approach.close_approach_date,
-            diameter: neo.estimated_diameter?.meters?.estimated_diameter_max || 0,
-            distance: parseFloat(approach.miss_distance?.kilometers || 0),
-            velocity: parseFloat(approach.relative_velocity?.kilometers_per_hour || 0),
-            dangerous: !!neo.is_potentially_hazardous_asteroid
-          });
-        });
-      });
-
-      // Calcular estadísticas
-      const dangerous = allAsteroids.filter(a => a.dangerous);
-      const safe = allAsteroids.filter(a => !a.dangerous);
-
-      if (totalCount) totalCount.textContent = allAsteroids.length;
-      if (dangerousCount) dangerousCount.textContent = dangerous.length;
-      if (safeCount) safeCount.textContent = safe.length;
-
-      // Renderizar lista de asteroides
-      renderAsteroids(allAsteroids);
-
-      if (statusText) statusText.textContent = "";
-    } catch (error) {
-      console.error("❌ Error cargando asteroides:", error);
-      if (statusText)
-        statusText.textContent = "❌ No se pudo obtener información de la NASA.";
-    }
-  }
-
-  /**
-   * Renderiza los asteroides en el DOM
-   * @param {Array} asteroids
-   */
-  function renderAsteroids(asteroids) {
-    const listContainer = document.getElementById("asteroidsList");
-    if (!listContainer) return;
-
-    if (asteroids.length === 0) {
-      listContainer.innerHTML =
-        "<p>No se detectaron asteroides cercanos en esta fecha.</p>";
-      return;
-    }
-
-    let html = "";
-
-    asteroids.forEach(a => {
-      html += `
-        <div class="asteroid-item ${a.dangerous ? "dangerous" : "safe"}">
-          <h4>${a.name}</h4>
-          <p><strong>Fecha:</strong> ${a.date}</p>
-          <p><strong>Distancia:</strong> ${a.distance.toLocaleString()} km</p>
-          <p><strong>Velocidad:</strong> ${a.velocity.toLocaleString()} km/h</p>
-          <p><strong>Diámetro estimado:</strong> ${a.diameter.toFixed(2)} m</p>
-          <p><strong>Peligroso:</strong> ${a.dangerous ? "Sí ⚠️" : "No ✅"}</p>
-        </div>
-      `;
-    });
-
-    listContainer.innerHTML = html;
-  }
+  // Nota: He eliminado la versión simple y duplicada de `loadAsteroids` y `renderAsteroids`
+  // que usaba `fetch` y retornaba una lista. Aquí dejo una nota en primera persona para
+  // un principiante:
+  // Yo: originalmente tenía una versión pequeña arriba que usaba fetch. Más abajo en
+  // este archivo hay una implementación completa y más robusta que usa jQuery AJAX,
+  // procesa los datos y actualiza muchas partes de la interfaz. Para evitar confusiones
+  // y errores por duplicidad, mantengo sólo la implementación completa que está más abajo.
 
   // Ejecutar automáticamente al cargar la página
   document.addEventListener("DOMContentLoaded", loadAsteroids);
@@ -377,6 +306,8 @@ $(document).ready(function(){
 
   // ========== ANIMACIÓN DEL SISTEMA SOLAR (FONDO) ==========
   function initEarthSystem() {
+  // Yo: creo estrellas y elementos visuales del fondo para que la página se vea dinámica.
+  // No afecta a la lógica de la API, solo al aspecto visual.
     const $container = $('#earth-system-container');
     
     if ($container.length === 0) {
@@ -408,6 +339,8 @@ $(document).ready(function(){
     };
 
     function animate() {
+    // Yo: función principal que arranca la aplicación. La llamo al final para
+    // inicializar todo lo necesario (animaciones, navegación, carga de datos).
       if (!isPaused) {
         angles.sun += 0.3 * animationSpeed;
         const sunRadius = 200;

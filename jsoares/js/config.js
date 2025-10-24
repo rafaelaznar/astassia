@@ -15,29 +15,32 @@
 
 
 const CONFIG = {
-    // API Key de NASA (pon aquí tu clave personal)
-    // Esta clave es pública y sirve para hacer pruebas. Si usas la app mucho, pon tu propia clave.
+    // Yo: aquí guardo la API Key de la NASA para que la use la aplicación.
+    // Si eres principiante, piensa: esto es como mi tarjeta de acceso para pedir datos a la NASA.
+    // Nota: en proyectos reales no se suben claves secretas al repositorio.
     NASA_API_KEY: 'x7y7fDZraWoSIDUSZiy2khtqQQeMpgMLWiSrcPUo',
 
-    // URLs de las APIs principales
-    // Aquí se definen las URLs de las APIs que la app utiliza para obtener datos.
+    // Yo: estas son las direcciones web (endpoints) que usaré para pedir información.
     NASA_APOD_URL: 'https://api.nasa.gov/planetary/apod',
     NASA_NEOWS_URL: 'https://api.nasa.gov/neo/rest/v1/feed',
     NASA_MARS_URL: 'https://api.nasa.gov/mars-photos/api/v1/rovers',
     NASA_EPIC_URL: 'https://api.nasa.gov/EPIC/api/natural',
     EPIC_IMAGE_BASE: 'https://epic.gsfc.nasa.gov/archive/natural',
 
-    // Parámetros de lógica de la app
-    // Aquí se definen los parámetros que afectan el comportamiento de la app.
-    DANGER_THRESHOLD: 5000000, // Distancia (km) para considerar un asteroide peligroso
-    MOON_DISTANCE: 384400,     // Distancia media Tierra-Luna (km)
-    API_TIMEOUT: 15000,        // Tiempo máximo de espera para peticiones (ms)
-    // Opciones de desarrollo
+    // Yo: parámetros que controlan el comportamiento de la app.
+    DANGER_THRESHOLD: 5000000, // km - cuando un asteroide está más cerca que esto lo considero peligroso
+    MOON_DISTANCE: 384400,     // km - distancia media Tierra-Luna (para comparar)
+    API_TIMEOUT: 15000,        // ms - tiempo máximo que espero por una respuesta
     DEBUG_MODE: false,
     USE_BACKUP: false
 };
 
-// Hacemos la configuración accesible globalmente para otros scripts
+// Yo: hago la configuración accesible desde cualquier script que cargue la página.
+// Algunas partes del código usan `APP_CONFIG`, otras usan `NASA_API_KEY`. Me aseguro
+// de exponer ambos para compatibilidad.
 if (typeof window !== 'undefined') {
     window.APP_CONFIG = CONFIG;
+    if (typeof window.NASA_API_KEY === 'undefined') {
+        window.NASA_API_KEY = CONFIG.NASA_API_KEY;
+    }
 }
