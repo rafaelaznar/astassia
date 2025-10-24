@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>¡Se busca!</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+  <script type="module" src="game.js" defer></script>
+</head>
+<body>
+  <h1>¡Se busca!</h1>
+
+  <div id="targetBox">
+    <div>Atrapa a:</div>
+    <img id="targetImg" src="" alt="Objetivo">
+    <div id="targetName"></div>
+  </div>
+
+  <p>Puntos: <span id="puntos">0</span></p>
+
+  <!-- Control de sonido -->
+  <div id="soundControls">
+    <button id="soundToggle" type="button">Música</button>
+  </div>
+
+  <div id="tablero"></div>
+
+  <button><a href="../index.html">Volver a index</a></button>
+
+  <!-- Iframe de YouTube oculto (se usará para reproducir en background) -->
+  <iframe id="ytPlayer" src="" allow="autoplay" sandbox="allow-same-origin allow-scripts allow-forms" style="display:none;width:0;height:0;border:0;"></iframe>
+</body>
+</html>

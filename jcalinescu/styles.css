@@ -1,0 +1,328 @@
+/* ==========================
+  Pantalla de introducción emotiva
+  - Cubre toda la ventana
+  - Fondo negro con transición de opacidad
+  - Tipografías y animaciones de líneas
+  ========================== */
+#introduccion {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+#introduccion::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  opacity: 1;
+  transition: opacity 12s ease-in-out;
+  z-index: -1;
+}
+
+#textoIntroduccion {
+  text-align: center;
+  color: white;
+  font-family: "Poppins", sans-serif;
+  max-width: 80%;
+}
+
+.linea-texto {
+  font-size: 2.8rem;
+  font-weight: 300;
+  margin: 25px 0;
+  opacity: 0;
+  transform: translateY(50px) scale(0.9);
+  transition: all 2s ease;
+  line-height: 1.3;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+.linea-texto.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Responsive para móviles (introducción) */
+@media (max-width: 768px) {
+  .linea-texto {
+    font-size: 1.8rem;
+  }
+  
+  #textoIntroduccion {
+    max-width: 90%;
+  }
+}
+
+/* ==========================
+/* ==========================
+  Navegación - Botón volver al índice principal (FIJO)
+  ========================== */
+.header-navigation-fixed {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999; /* Por encima de todo */
+  display: none; /* Oculto inicialmente, se muestra después de la introducción */
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.header-navigation-fixed.visible {
+  display: block;
+  opacity: 1;
+}
+
+.btn-volver-indice {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  text-decoration: none;
+  padding: 12px 20px;
+  border-radius: 25px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  backdrop-filter: blur(10px);
+}
+
+.btn-volver-indice:hover {
+  background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  color: white;
+  text-decoration: none;
+}
+
+.btn-volver-indice:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
+}
+
+/* Responsive para móviles */
+@media (max-width: 768px) {
+  .btn-volver-indice {
+    font-size: 0.8rem;
+    padding: 10px 16px;
+  }
+  
+  .header-navigation-fixed {
+    top: 15px;
+    right: 15px;
+  }
+}
+
+/* ==========================
+  Estilos base del documento
+  - Tipografía general
+  - Fondo con gradiente y transición
+  - Centrado del contenedor principal
+  ========================== */
+body {
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(120deg, #dfe6e9, #2589b4);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background 1s ease;
+  margin: 0;
+}
+
+/* ==========================
+  Pantalla de experiencia inmersiva
+  - Cubre viewport
+  - Transiciones de fondo
+  - Oculta inicialmente
+  ========================== */
+#pantallaExperiencia {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  transition: background 1.2s ease, background-color 1.2s ease;
+  display: none; /* estaba inline en index.html */
+}
+
+/* Overlay para transiciones de fondo (fade in/out) */
+#bgOverlay {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+  z-index: 0;
+}
+
+/* Asegurar que el contenido quede sobre el overlay */
+#contenedorFrases {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  width: 100%;
+  text-align: center;
+  padding: 0 20px;
+}
+
+/* Frase principal de la experiencia */
+#fraseAutomatica {
+  font-family: "DM Serif Text", serif;
+  font-size: 2.5rem; /* desde inline */
+  font-weight: 300;   /* desde inline */
+  color: #ffffff;     /* desde inline */
+  text-shadow: 0 0 20px rgba(255,255,255,0.3); /* desde inline */
+  max-width: 80%;     /* desde inline */
+  line-height: 1.4;   /* desde inline */
+  margin: 0;          /* desde inline */
+  transition: all 1s ease; /* unifica con inline */
+}
+
+/* Estados iniciales ocultos que estaban inline */
+#contenedor { display: none; }
+
+/* Estilos trasladados desde inline */
+#exitHint {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(255,255,255,0.9);
+  font-size: 0.95rem;
+  padding: 8px 14px;
+  border-radius: 12px;
+  background: rgba(0,0,0,0.25);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+  z-index: 1000;
+  display: none;
+}
+
+/* Botón de volver (esquina superior derecha) */
+#btnVolver {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: rgba(255,255,255,0.2);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.35);
+  border-radius: 25px;
+  padding: 10px 18px;
+  cursor: pointer;
+  font-size: 0.85em;
+  font-weight: 600;
+  box-shadow: 0 6px 25px rgba(0,0,0,0.25);
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+#contenedor {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 0 25px rgba(0,0,0,0.15);
+  text-align: center;
+  width: 380px;
+  backdrop-filter: blur(10px);
+  position: relative;
+}
+
+h1 {
+  color: #6c5ce7;
+}
+
+input, select {
+  width: 85%;
+  padding: 8px;
+  margin: 5px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+
+button {
+  background-color: #6c5ce7;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.3s ease;
+  margin: 5px;
+}
+
+button:hover {
+  background-color: #a29bfe;
+  transform: scale(1.05);
+}
+
+/* Control de espaciado dinámico para el formulario */
+.form-section {
+  margin-bottom: 15px;
+  transition: all 0.3s ease;
+}
+
+/* Estilos para el botón volver mejorado */
+#btnVolver:hover {
+  background: #357abd !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(74, 144, 226, 0.6) !important;
+}
+
+#btnVolver:active {
+  transform: translateY(0) !important;
+  box-shadow: 0 4px 15px rgba(74, 144, 226, 0.4) !important;
+}
+
+/* 🚪 Estilos para el botón de cerrar sesión */
+.btn-cerrar-sesion {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+  display: block;
+  margin: 0 auto;
+  text-align: center;
+  min-width: 160px;
+}
+
+.btn-cerrar-sesion:hover {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+}
+
+.btn-cerrar-sesion:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 10px rgba(239, 68, 68, 0.3);
+}
+
+/* Ajuste del espaciado cuando hay sesión activa */
+.form-section:has(.btn-cerrar-sesion) {
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+

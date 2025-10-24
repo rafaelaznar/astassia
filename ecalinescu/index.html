@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎵 Explorador Musical - iTunes API</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <h1 class="logo">
+                <i class="fas fa-music"></i>
+                Explorador Musical
+            </h1>
+            <div class="header-actions">
+                <a href="../index.html" id="btnVolverIndice" class="auth-btn" aria-label="Volver al índice principal">
+                    <i class="fas fa-home"></i>
+                    Inicio
+                </a>
+                <button class="auth-btn" id="authBtn" aria-label="Iniciar sesión">
+                    <i class="fas fa-user"></i>
+                    Acceder
+                </button>
+                <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Authentication Modal -->
+    <div class="modal-overlay" id="authModal">
+        <div class="modal-content auth-modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-user-circle"></i> Acceso a Explorador Musical</h3>
+                <button class="modal-close" id="authModalClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="auth-form" id="authForm" novalidate>
+                    <div class="form-group">
+                        <label for="userName" class="form-label">
+                            <i class="fas fa-user"></i>
+                            Nombre completo *
+                        </label>
+                        <input 
+                            type="text" 
+                            id="userName" 
+                            name="userName"
+                            class="form-input" 
+                            placeholder="Ej: Juan Pérez"
+                            required
+                            minlength="2"
+                            maxlength="50"
+                        >
+                        <div class="form-error" id="userNameError"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="userEmail" class="form-label">
+                            <i class="fas fa-envelope"></i>
+                            Email *
+                        </label>
+                        <input 
+                            type="email" 
+                            id="userEmail" 
+                            name="userEmail"
+                            class="form-input" 
+                            placeholder="tu.email@ejemplo.com"
+                            required
+                        >
+                        <div class="form-error" id="userEmailError"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="favoriteArtist" class="form-label">
+                            <i class="fas fa-heart"></i>
+                            Artista favorito (Opcional)
+                        </label>
+                        <input 
+                            type="text" 
+                            id="favoriteArtist" 
+                            name="favoriteArtist"
+                            class="form-input" 
+                            placeholder="Ej: Taylor Swift, Beatles, Ed Sheeran..."
+                            minlength="2"
+                            maxlength="100"
+                        >
+                        <div class="form-error" id="favoriteArtistError"></div>
+                        <div class="form-help">
+                            <i class="fas fa-info-circle"></i>
+                            Opcional: si lo indicas, se buscará automáticamente y se añadirán canciones a favoritos
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" id="cancelAuth">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn-primary" id="submitAuth">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Acceder
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <!-- Search Section -->
+            <section class="search-section">
+                <h2>Buscar Música</h2>
+                <form class="search-form" id="searchForm">
+                    <div class="search-input-wrapper">
+                        <input 
+                            type="text" 
+                            id="searchInput" 
+                            class="search-input" 
+                            placeholder="Busca artistas, canciones, álbumes..."
+                            autocomplete="off"
+                            required
+                        >
+                        <button type="submit" class="search-btn" id="searchBtn">
+                            <i class="fas fa-search"></i>
+                            Buscar
+                        </button>
+                    </div>
+                    <div class="search-filters">
+                        <select id="entityFilter" class="filter-select">
+                            <option value="musicTrack">Canciones</option>
+                            <option value="album">Álbumes</option>
+                            <option value="musicArtist">Artistas</option>
+                        </select>
+                        <select id="limitFilter" class="filter-select">
+                            <option value="20">20 resultados</option>
+                            <option value="50">50 resultados</option>
+                            <option value="100">100 resultados</option>
+                        </select>
+                    </div>
+                    <div class="error-message" id="errorMessage"></div>
+                </form>
+            </section>
+
+            <!-- Tab Navigation -->
+            <nav class="tabs">
+                <button class="tab active" data-tab="results">
+                    <i class="fas fa-search"></i>
+                    Resultados
+                    <span class="tab-counter" id="resultsCounter">0</span>
+                </button>
+                <button class="tab" data-tab="favorites">
+                    <i class="fas fa-heart"></i>
+                    Favoritos
+                    <span class="tab-counter" id="favoritesCounter">0</span>
+                </button>
+            </nav>
+
+            <!-- Loading Indicator -->
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Buscando música...</p>
+            </div>
+
+            <!-- Results Section -->
+            <section class="content-section active" id="resultsSection">
+                <div class="section-header">
+                    <h3>Resultados de búsqueda</h3>
+                    <div class="sort-controls">
+                        <select id="sortSelect" class="sort-select">
+                            <option value="trackName">Ordenar por canción</option>
+                            <option value="artistName">Ordenar por artista</option>
+                            <option value="releaseDate">Ordenar por fecha</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="songs-grid" id="resultsGrid">
+                    <div class="empty-state">
+                        <i class="fas fa-music"></i>
+                        <h3>¡Busca tu música favorita!</h3>
+                        <p>Usa el buscador para encontrar canciones, artistas y álbumes.</p>
+                    </div>
+                </div>
+                <button class="load-more" id="loadMoreBtn" style="display: none;">
+                    Cargar más resultados
+                </button>
+            </section>
+
+            <!-- Favorites Section -->
+            <section class="content-section" id="favoritesSection">
+                <div class="section-header">
+                    <h3>Mis Favoritos</h3>
+                    <button class="clear-favorites" id="clearFavorites">
+                        <i class="fas fa-trash"></i>
+                        Limpiar favoritos
+                    </button>
+                </div>
+                <div class="songs-grid" id="favoritesGrid">
+                    <div class="empty-state">
+                        <i class="fas fa-heart-broken"></i>
+                        <h3>Sin favoritos aún</h3>
+                        <p>Las canciones que marques como favoritas aparecerán aquí.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Audio Player -->
+    <div class="audio-player" id="audioPlayer">
+        <div class="player-info">
+            <img class="player-artwork" id="playerArtwork" src="" alt="Portada">
+            <div class="player-details">
+                <h4 class="player-title" id="playerTitle">Selecciona una canción</h4>
+                <p class="player-artist" id="playerArtist">...</p>
+            </div>
+        </div>
+        <div class="player-controls">
+            <button class="control-btn" id="prevBtn">
+                <i class="fas fa-step-backward"></i>
+            </button>
+            <button class="control-btn play-pause" id="playPauseBtn">
+                <i class="fas fa-play"></i>
+            </button>
+            <button class="control-btn" id="nextBtn">
+                <i class="fas fa-step-forward"></i>
+            </button>
+        </div>
+        <div class="player-progress">
+            <span class="time-current" id="currentTime">0:00</span>
+            <div class="progress-bar" id="progressBar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <span class="time-total" id="totalTime">0:30</span>
+        </div>
+        <audio id="audioElement" preload="metadata"></audio>
+        <button class="player-close" id="playerClose">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <!-- Logout Confirmation Modal -->
+    <div class="logout-modal" id="logoutModal">
+        <div class="logout-modal-content">
+            <div class="logout-header">
+                <i class="fas fa-sign-out-alt"></i>
+                <h3>Cerrar Sesión</h3>
+            </div>
+            <div class="logout-body">
+                <div class="user-info">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="logoutUserName">Usuario</span>
+                </div>
+                <div class="logout-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p><strong>¡Atención!</strong> Todos tus favoritos se borrarán al cerrar sesión.</p>
+                </div>
+                <p class="logout-question">¿Estás seguro de que quieres continuar?</p>
+            </div>
+            <div class="logout-actions">
+                <button class="btn-cancel" id="cancelLogout">
+                    <i class="fas fa-times"></i>
+                    Cancelar
+                </button>
+                <button class="btn-confirm" id="confirmLogout">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Cerrar Sesión
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Scripts - Modular Architecture -->
+    <!-- Configuration -->
+    <script src="js/config.js"></script>
+    
+    <!-- Models -->
+    <script src="js/models/song.js"></script>
+    
+    <!-- Services -->
+    <script src="js/services/storage.js"></script>
+    <script src="js/services/api.js"></script>
+    <script src="js/services/audiodb.js"></script>
+    <script src="js/services/audio.js"></script>
+    
+    <!-- Managers -->
+    <script src="js/managers/notifications.js"></script>
+    <script src="js/managers/theme.js"></script>
+    <script src="js/managers/auth.js"></script>
+    
+    <!-- Main Application -->
+    <script src="js/app.js"></script>
+    
+    <!-- Initialization -->
+    <script src="js/init.js"></script>
+</body>
+</html>

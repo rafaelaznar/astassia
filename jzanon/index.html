@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Personajes</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+</head>
+<body>
+    <h1>LISTA DE PERSONAJES DE STAR WARS</h1>
+    
+    <h2>Buscar PERSONAJE: <input type="text" id="buscador" placeholder="Introduce el nombre de un personaje"></h2>
+
+    <h2>Buscar PERSONAJES por su ESPECIE: <input type="text" id="filtroEspecie" placeholder="Introduce una especie"></h2>
+
+    <h2>Buscar PERSONAJES por su PLANETA: <input type="text" id="filtroPlaneta" placeholder="Introduce un planeta"></h2>
+
+    <div id="personajes"></div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+
+            const url = "https://rawcdn.githack.com/akabab/starwars-api/0.2.1/api/all.json";
+
+            let personajes = []; // Aquí se almacenan los personajes
+
+            function mostrarPersonajes(lista) {
+                $("#personajes").empty(); // Limpiamos antes de mostrar
+
+                if (lista.length === 0) {
+                    $("#personajes").append(`<p>No hay personajes disponibles</p>`)
+                    return;
+                }
+
+                lista.forEach(personaje => {
+                    const tarjeta = `
+                        <div class="personaje">
+                            <img src="${personaje.image}" alt="${personaje.name}">
+                            <h2>
+                                Nombre: ${personaje.name}<br>
+                                Especie: ${personaje.species || "desconocida"}<br>
+                                Planeta: ${personaje.homeworld || "desconocido"}<br>
+                            </h2>
+                        </div>
+                    `;
+
+                    // Seleccionamos el elemento del DOM de los personajes, e insertamos la plantilla HTML
+                    $("#personajes").append(tarjeta);
+                });
+            }
+
+            function normalizar(valor) {
+                
+                // Convierte el valor a string.
+                // Quita espacios, pasa a minúsculas y elimina acentos diacríticos
+                const s = String(valor || "").trim().toLowerCase();
+                
+                return s.normalize ? s.normalize("NFD").replace(/[\u0300-\u036f]/g, "") : s;
+            }
+
+            // Cargamos los datos de la API
+            $.getJSON(url)
+            .done(function(data) {
+                personajes = data;
+                mostrarPersonajes(personajes); // Muestra todos los personajes al arrancar la página
+            })
+            .fail(function() {
+                $("#personajes").empty().append(`<p>Se ha producido un error al cargar los datos</p>`);
+            });
+
+            let buscadorActivo = null; // No hay ningún buscador activo al arrancar la página
+
+            function actualizarFiltros(e) {
+                const id = e.target.id; // Averigua qué input disparó el evento
+
+                const texto = normalizar($("#buscador").val());
+                const especie = normalizar($("#filtroEspecie").val());
+                const planeta = normalizar($("#filtroPlaneta").val());
+
+                // Determina qué buscador es el que activó el usuario
+                if (!buscadorActivo) {
+
+                    // Si ninguno está activo, y el usuario empieza a escribir en uno, se marca ese
+                    if (texto !== "") {
+                        buscadorActivo = "buscador";
+                    } else if (especie !== "") {
+                        buscadorActivo = "filtroEspecie";
+                    } else if (planeta !== "") {
+                        buscadorActivo = "filtroPlaneta";
+                    }
+                }
+
+                // Se controla la habilitación según el buscador activo
+                if (buscadorActivo === "buscador") {
+                    $("#filtroEspecie, #filtroPlaneta").prop("disabled", true);
+                } else if (buscadorActivo === "filtroEspecie") {
+                    $("#buscador, #filtroPlaneta").prop("disabled", true);
+                } else if (buscadorActivo === "filtroPlaneta") {
+                    $("#buscador, #filtroEspecie").prop("disabled", true);
+                }
+
+                // Si todos los buscadores están vacíos, se reactivan
+                if (texto === "" && especie === "" && planeta === "") {
+                    buscadorActivo = null;
+                    $("#buscador, #filtroEspecie, #filtroPlaneta").prop("disabled", false);
+                    mostrarPersonajes(personajes);
+                    return;
+                }
+
+                let filtrados = personajes;
+
+                if (buscadorActivo === "buscador" && texto !== "") {
+                    filtrados = personajes.filter(p => normalizar(p.name).includes(texto));
+                } else if (buscadorActivo === "filtroEspecie" && especie !== "") {
+                    filtrados = personajes.filter(p => normalizar(p.species).includes(especie));
+                } else if (buscadorActivo === "filtroPlaneta" && planeta !== "") {
+                    filtrados = personajes.filter(p => normalizar(p.homeworld).includes(planeta));
+                }
+
+                mostrarPersonajes(filtrados);
+            }
+
+            $("#buscador, #filtroEspecie, #filtroPlaneta").on("input", actualizarFiltros);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,222 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radar Espacial - ES6 SPA</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <main class="app">
+        <header class="app__header">
+            <div class="header-content">
+                <span class="header-eyebrow">Spaceflight News API</span>
+                <h1>Radar Espacial</h1>
+                <p class="subtitle">
+                    SPA construida con JavaScript moderno (ES6+) que consume Spaceflight News API v4 para seguir la actualidad aeroespacial.
+                </p>
+                <div class="header-meta">
+                    <div class="meta-chip">
+                        <span class="meta-chip__label">Entorno</span>
+                        <span class="meta-chip__value">Cliente</span>
+                    </div>
+                    <div class="meta-chip">
+                        <span class="meta-chip__label">Stack</span>
+                        <span class="meta-chip__value">HTML + CSS + ES Modules</span>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <a class="link-back" href="../index.html">Volver al listado general</a>
+                </div>
+            </div>
+            <div class="header-visual" aria-hidden="true">
+                <div class="orbit">
+                    <span class="orbit__planet"></span>
+                    <span class="orbit__ring orbit__ring--one"></span>
+                    <span class="orbit__ring orbit__ring--two"></span>
+                </div>
+            </div>
+        </header>
+
+        <section class="info-strip info-strip--compact">
+            <article class="info-card">
+                <span class="info-card__eyebrow">API</span>
+                <h3 class="info-card__title">Spaceflight News v4</h3>
+                <p class="info-card__copy">Actualizaciones en tiempo real sobre lanzamientos, misiones y analisis del sector.</p>
+                <a class="info-card__link" href="https://api.spaceflightnewsapi.net" target="_blank" rel="noopener">
+                    Ver documentacion
+                </a>
+            </article>
+            <article class="info-card">
+                <span class="info-card__eyebrow">Patrones</span>
+                <h3 class="info-card__title">Modulos y estado</h3>
+                <p class="info-card__copy">Arquitectura modular con clases, EventTarget y persistencia de favoritos.</p>
+            </article>
+            <article class="info-card">
+                <span class="info-card__eyebrow">Objetivo</span>
+                <h3 class="info-card__title">UX interactiva</h3>
+                <p class="info-card__copy">Filtros reactivos, metricas en vivo y sincronizacion con almacenamiento local.</p>
+            </article>
+        </section>
+
+        <section class="layout">
+            <section class="panel panel--filters">
+                <div class="filters-panel__header">
+                    <div>
+                        <span class="filters-panel__eyebrow">Centro de control</span>
+                        <h2>Filtros dinamicos</h2>
+                        <p class="filters-panel__description">
+                            Combina busqueda, fuentes, antiguedad y estado destacado para priorizar las noticias mas relevantes.
+                        </p>
+                    </div>
+                    <div class="filters-panel__actions">
+                        <button id="refresh-btn" class="btn btn--primary" type="button">Recargar</button>
+                    </div>
+                </div>
+                <form id="filters" class="filters-form">
+                    <div class="filters-columns">
+                        <div class="filters-column">
+                            <label class="field">
+                                <span>Titular o resumen</span>
+                                <input id="filter-search" type="search" placeholder="Starship, Artemis, ESA..." autocomplete="off">
+                            </label>
+                            <label class="field">
+                                <span>Medio</span>
+                                <select id="filter-source">
+                                    <option value="all">Todos</option>
+                                </select>
+                            </label>
+                        </div>
+                        <div class="filters-column">
+                            <label class="field">
+                                <span>Antiguedad (dias)</span>
+                                <div class="range-field">
+                                    <input id="filter-age" type="range" min="1" max="90" step="1" value="30">
+                                    <output id="filter-age-output" for="filter-age">30</output>
+                                </div>
+                            </label>
+                            <div class="field-inline">
+                                <label class="field">
+                                    <span>Destacados</span>
+                                    <select id="filter-featured">
+                                        <option value="all">Todos</option>
+                                        <option value="featured">Solo destacados</option>
+                                        <option value="regular">Solo habituales</option>
+                                    </select>
+                                </label>
+                                <label class="field">
+                                    <span>Ordenar</span>
+                                    <select id="filter-sort">
+                                        <option value="recent">Mas recientes</option>
+                                        <option value="oldest">Mas antiguas</option>
+                                        <option value="featured">Destacadas primero</option>
+                                    </select>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="filters-actions">
+                        <span id="favorites-count" class="favorites-count">Favoritos: 0</span>
+                        <button id="filter-favorites" class="btn btn--ghost" type="button">
+                            Mostrar solo favoritos
+                        </button>
+                        <button class="btn btn--ghost" type="reset">Limpiar filtros</button>
+                    </div>
+                </form>
+                <dl class="stats">
+                    <div>
+                        <dt>Total filtrado</dt>
+                        <dd id="stat-count">0</dd>
+                    </div>
+                    <div>
+                        <dt>Destacadas</dt>
+                        <dd id="stat-featured">0</dd>
+                    </div>
+                    <div>
+                        <dt>Fuentes unicas</dt>
+                        <dd id="stat-sources">0</dd>
+                    </div>
+                    <div>
+                        <dt>Favoritos visibles</dt>
+                        <dd id="stat-favorites">0</dd>
+                    </div>
+                    <div>
+                        <dt>Edad media (dias)</dt>
+                        <dd id="stat-avg-age">0</dd>
+                    </div>
+                </dl>
+                <p id="status" role="status" class="status"></p>
+            </section>
+
+            <section class="panel panel--list">
+                <header class="panel__header">
+                    <h2>Noticias</h2>
+                    <span id="list-feedback" class="list-feedback"></span>
+                </header>
+                <div id="article-list" class="article-grid" role="list"></div>
+            </section>
+
+            <aside id="detail" class="panel panel--detail" aria-live="polite">
+                <div class="detail__empty">
+                    Selecciona una noticia para ver su ficha tAcnica.
+                </div>
+                <article class="detail__card hidden">
+                    <header>
+                        <h3 id="detail-title"></h3>
+                    <p id="detail-meta" class="detail__meta"></p>
+                </header>
+                <div id="detail-image" class="detail__image" role="presentation"></div>
+                <p id="detail-summary" class="detail__description"></p>
+                <ul id="detail-authors" class="detail__authors"></ul>
+                    <ul class="detail__facts">
+                        <li>
+                            <span>Fuente</span>
+                            <strong id="detail-source"></strong>
+                        </li>
+                        <li>
+                            <span>Publicado</span>
+                            <strong id="detail-date"></strong>
+                        </li>
+                        <li>
+                            <span>Destacado</span>
+                            <strong id="detail-featured"></strong>
+                        </li>
+                    </ul>
+                    <a id="detail-link" class="btn btn--link" href="#" target="_blank" rel="noopener">
+                        Leer noticia completa
+                    </a>
+                    <button id="detail-favorite" class="btn btn--favorite" type="button">
+                        Guardar en favoritos
+                    </button>
+                </article>
+            </aside>
+        </section>
+    </main>
+
+    <template id="article-card-template">
+        <article class="article-card" role="listitem" tabindex="0">
+            <header>
+                <div class="article-card__favorite" data-favorite-wrapper>
+                    <button type="button" data-favorite-btn aria-label="Guardar en favoritos">&#9734;</button>
+                </div>
+                <div data-thumb class="article-card__thumb"></div>
+                <span data-source class="article-card__source"></span>
+                <h3 data-title></h3>
+            </header>
+            <p data-summary class="article-card__summary"></p>
+            <span data-time class="article-card__time"></span>
+            <span data-featured class="article-card__flag"></span>
+        </article>
+    </template>
+
+    <script type="module" src="./js/main.js"></script>
+</body>
+</html>
+
+
+
+
+

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Votador de Canciones - Kanye West</title>
+    <link rel="icon" type="image/jpeg" href="prelo.jpg">
+    <link rel="stylesheet" href="indexform.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🎵 ¿Te gusta esta cancion? 🎵</h1>
+        <p class="subtitle">Vota</p>
+        <a href="index.html" class="back-btn">⬅ Volver a Index</a>
+
+        <div class="loader" id="loader">Obteniendo cancion</div>
+        <div class="message" id="message"></div>
+
+        <div id="form-container" style="display: none;">
+            <div class="song-info">
+                <div class="song-title" id="songTitle">Cancion</div>
+                <div class="song-artist" id="songArtist">Artista</div>
+                <div class="song-album" id="songAlbum">Album</div>
+            </div>
+
+            <form id="voteForm">
+                <div class="form-group">
+                    <label>¿Te gusta esta cancion?</label>
+                    <div class="vote-options">
+                        <button type="button" class="vote-btn yes" data-vote="si">Si</button>
+                        <button type="button" class="vote-btn no" data-vote="no">No</button>
+                    </div>
+                </div>
+
+                <input type="hidden" id="voteInput" value="">
+
+                <button type="submit" class="submit-btn" id="submitBtn">Enviar voto</button>
+            </form>
+
+            <div class="stats" id="stats">
+                <h3>Tus votos: </h3>
+                <p>Votos totales: <strong id="votos_Totales">0</strong></p>
+                <p>Me gusta :D : <strong id="votos_Buenos">0</strong></p>
+                <p>No me gusta D: : <strong id="votos_Malos">0</strong></p>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        // VARIABLES VOTACION (GLOBALES)
+        var voto_Elegido = null;
+        var votos = {
+            si: 0,
+            no: 0
+        };
+
+        // CUANDO ESTE LISTA
+        $(document).ready(function() {
+            obtenerCancion();
+            
+            // Seleccionar voto
+            $('.vote-btn').click(function() {
+                elegirVoto($(this));
+            });
+
+            // Mandar voto a formulario
+            $('#voteForm').submit(function(e) {
+                e.preventDefault();
+                enviarVoto();
+            });
+        });
+
+        // CONSEGUIR UNA CANCION
+        function obtenerCancion() {
+            $('#loader').show();
+            $('#form-container').hide();
+
+            obtenerCancionDeKanye() // Promesa si funciona
+                .then(function(cancion) {
+                    console.log('Canción obtenida:', cancion);
+                    mostrarCancion(cancion);
+                    $('#loader').hide();
+                    $('#form-container').show();
+                })
+                .catch(function(error) { // Si falla
+                    console.error('Error:', error);
+                    mostrarMensaje('Error al obtener la canción', 'error');
+                    $('#loader').hide();
+                });
+        }
+
+        //CONSEGUIR TODAS LAS CANCIONES
+        function obtenerCancionDeKanye() {
+            return new Promise(function(resolve, reject) {
+
+                $.ajax({
+                    url: 'https://itunes.apple.com/search?term=kanye+west&entity=song&limit=100',
+                    type: 'GET',
+                    dataType: 'json',
+                    // En caso de que esto funcione a la primera
+                    success: function(data) {
+                        if (data.results && data.results.length > 0) {
+                            // Coger cancion random
+                            var cancionAleatoria = data.results[Math.floor(Math.random() * data.results.length)];
+                            resolve(cancionAleatoria);
+                        } else {
+                            reject('No se encontraron canciones'); // si no las coge o no quedan
+
+                        }
+                    },
+                    error: function() {
+                        reject('Error en la conexión');
+                    }
+                });
+            });
+        }
+
+        // MOSTRAR CANCION
+        function mostrarCancion(cancion) {
+            $('#songTitle').text(cancion.trackName || 'Canción desconocida');
+            $('#songArtist').text(cancion.artistName || 'Artista desconocido');
+            $('#songAlbum').text(cancion.collectionName || 'Álbum desconocido');
+            
+            // Quitar elegido
+            voto_Elegido = null;
+            $('#voteInput').val('');
+            $('.vote-btn').removeClass('selected');
+        }
+
+        // ELEGIR VOTO
+        function elegirVoto(boton) {
+            // Quitar seleccionado por si acaso otra vez
+            $('.vote-btn').removeClass('selected');
+            
+            // Aplicar seleccionado
+            boton.addClass('selected');
+            
+            // Guardar el voto
+            voto_Elegido = boton.data('vote');
+            $('#voteInput').val(voto_Elegido);
+            
+            console.log('Voto seleccionado:', voto_Elegido);
+        }
+
+        //ENVIAR VOTO
+        function enviarVoto() {
+            if (!voto_Elegido) {
+                mostrarMensaje('Por favor, selecciona un voto', 'error');
+                return;
+            }
+
+            // Evitar doble voto antes de que cambie de cancion
+            $('#submitBtn').prop('disabled', true);
+
+            guardarVoto(voto_Elegido)
+                .then(function(respuesta) {
+                    console.log('Voto guardado:', respuesta);
+                    
+                    // Actualizar contador
+                    if (voto_Elegido === 'si') {
+                        votos.si++;
+                    } else {
+                        votos.no++;
+                    }
+
+                    // Mensaje de exito
+                    mostrarMensaje('Voto enviado', 'success');
+                    
+                    // Actualizar estadísticas
+                    actualizarStats();
+                    
+                    // Cargar cancion cada 2s
+                    setTimeout(function() {
+                        obtenerCancion();
+                    }, 2000);
+                    
+                    $('#submitBtn').prop('disabled', false);
+                })
+                .catch(function(error) {
+                    console.error('Error al guardar:', error);
+                    mostrarMensaje('Error al registrar el voto', 'error');
+                    $('#submitBtn').prop('disabled', false);
+                });
+        }
+
+        function guardarVoto(voto) {
+            return new Promise(function(resolve, reject) {
+                setTimeout(function() {
+                    resolve({
+                        mensaje: 'Voto guardado correctamente',
+                        voto: voto,
+                        timestamp: new Date().toLocaleString()
+                    });
+                }, 1000);
+            });
+        }
+
+        // MENSAJES
+        function mostrarMensaje(texto, tipo) {
+            $('#message')
+                .removeClass('success error')
+                .addClass(tipo)
+                .text(texto);
+
+            setTimeout(function() {
+                $('#message').removeClass('success error');
+            }, 3000);
+        }
+
+        // ACTUALIZAR TODAS LAS ESTADISTICAS
+        function actualizarStats() {
+            var total = votos.si + votos.no;
+            $('#votos_Totales').text(total);
+            $('#votos_Buenos').text(votos.si);
+            $('#votos_Malos').text(votos.no);
+            $('#stats').show();
+        }
+    </script>
+</body>
+</html>

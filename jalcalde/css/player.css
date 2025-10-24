@@ -1,0 +1,144 @@
+.spotify-mini-player {
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    height: 100%;
+    justify-content: space-between;
+}
+
+.track-info {
+    display: flex;
+    align-items: center;
+    width: 30%;
+}
+
+.cover {
+    width: 56px;
+    height: 56px;
+    border-radius: 4px;
+    margin-right: 16px;
+}
+
+.details {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.title {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.artist {
+    font-size: 12px;
+    color: var(--gray-color);
+}
+
+.controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.control-btn {
+    background: none;
+    border: none;
+    color: var(--light-color);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin: 0 8px;
+}
+
+.control-btn.play {
+    background-color: var(--light-color);
+    color: var(--dark-color);
+    width: 40px;
+    height: 40px;
+}
+
+.progress-container {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 4px;
+    background-color: #535353;
+    border-radius: 2px;
+    margin-bottom: 6px;
+    cursor: pointer;
+}
+
+.progress {
+    height: 100%;
+    background-color: var(--primary-color);
+    border-radius: 2px;
+    width: 0%;
+    position: relative;
+}
+
+.progress::after {
+    content: '';
+    position: absolute;
+    right: -6px;
+    top: -4px;
+    width: 12px;
+    height: 12px;
+    background-color: var(--light-color);
+    border-radius: 50%;
+    display: none;
+}
+
+.progress-bar:hover .progress::after {
+    display: block;
+}
+
+.time {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--gray-color);
+}
+
+@media (max-width: 992px) {
+    .progress-container {
+        width: 40%;
+    }
+    
+    .track-info {
+        width: 30%;
+    }
+}
+
+@media (max-width: 768px) {
+    .spotify-mini-player {
+        flex-wrap: wrap;
+        padding: 10px;
+    }
+    
+    .track-info {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    .controls {
+        order: 3;
+        width: 100%;
+        justify-content: center;
+        margin-top: 10px;
+    }
+    
+    .progress-container {
+        width: 100%;
+        order: 2;
+    }
+}

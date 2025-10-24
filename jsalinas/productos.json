@@ -1,0 +1,90 @@
+[
+  {
+    "id": 1,
+    "nombre": "Nintendo Switch 2",
+    "descripcion": "La nueva consola portátil y de sobremesa de Nintendo.",
+    "precio": 480.00,
+    "imagen": "imgSalinas/switch2.jpg"
+  },
+  {
+    "id": 2,
+    "nombre": "PlayStation 5",
+    "descripcion": "La consola más potente del mercado.",
+    "precio": 550.00,
+    "imagen": "imgSalinas/ps5.jpg"
+  },
+
+  {
+    "id": 3,
+    "nombre": "Xbox Series X",
+    "descripcion": "La consola de última generación de Microsoft.",
+    "precio": 500.00,
+    "imagen": "imgSalinas/xboxseriesx.jpg"
+  },
+
+  {
+    "id": 4,
+    "nombre": "Nintendo Switch Lite",
+    "descripcion": "Versión portátil y ligera de la Nintendo Switch.",
+    "precio": 220.00,
+    "imagen": "imgSalinas/switchlite.jpg"
+  },
+  {
+    "id": 5,
+    "nombre": "PlayStation 4 Pro",
+    "descripcion": "Consola de PlayStation con gráficos mejorados.",
+    "precio": 350.00,
+    "imagen": "imgSalinas/ps4pro.jpg"
+  },
+  {
+    "id": 6,
+    "nombre": "Xbox Series S",
+    "descripcion": "Versión más compacta y económica de la Xbox Series X.",
+    "precio": 300.00,
+    "imagen": "imgSalinas/xboxseriess.jpg"
+  },
+    {
+    "id": 7,
+    "nombre": "Steam Deck",
+    "descripcion": "Consola portátil de Valve que permite jugar títulos de PC en cualquier lugar.",
+    "precio": 600.00,
+    "imagen": "imgSalinas/steamdeck.jpg"
+  },
+  {
+    "id": 8,
+    "nombre": "ASUS ROG Ally",
+    "descripcion": "Consola portátil con Windows 11 y potencia de gaming de PC.",
+    "precio": 700.00,
+    "imagen": "imgSalinas/rogally.jpg"
+  },
+  {
+    "id": 9,
+    "nombre": "PlayStation Portal",
+    "descripcion": "Dispositivo portátil para jugar a juegos de PS5 mediante streaming.",
+    "precio": 250.00,
+    "imagen": "imgSalinas/psportal.jpg"
+  },
+  {
+    "id": 10,
+    "nombre": "Nintendo 3DS XL",
+    "descripcion": "Consola portátil con pantalla 3D sin gafas.",
+    "precio": 180.00,
+    "imagen": "imgSalinas/3dsxl.jpg"
+  },
+  {
+    "id": 11,
+    "nombre": "PlayStation Vita",
+    "descripcion": "Consola portátil de Sony con pantalla OLED y gran catálogo de juegos.",
+    "precio": 200.00,
+    "imagen": "imgSalinas/psvita.jpg"
+  },
+  {
+    "id": 12,
+    "nombre": "Xbox One X",
+    "descripcion": "Consola de Microsoft con soporte 4K y alto rendimiento.",
+    "precio": 400.00,
+    "imagen": "imgSalinas/xboxonex.jpg"
+  }
+
+
+]

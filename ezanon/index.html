@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test de Historia</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+</head>
+<body>
+    <div id="encabezado">
+        <h1>HISTORY TEST</h1>
+    </div>
+
+    <div id="contenido">
+        <div id="subtitulo">
+            <p>¿Se te da bien la historia?</p>
+            <p>¡Haz este test y compruébalo!</p>
+        </div>
+
+        <div id="contenedorStart">
+            <button id="start">¡Comenzar el test!</button>
+        </div>
+
+        <div id="resultado"></div>
+
+        <div id="pregunta"></div>
+
+        <div id="opciones"></div>
+
+        <div id="navegacion">
+            <button id="anterior"> Volver a la pregunta anterior</button>
+            <button id="siguiente">Siguiente pregunta</button>
+        </div>
+
+        <p id="progreso">Pregunta 1 / 10</p>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+
+            const url = "https://opentdb.com/api.php?amount=50&category=23&difficulty=medium&type=multiple&encode=url3986";
+
+            let preguntas = [];
+
+            let respuestas = [];
+            
+            let indice = 0;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const preguntasSeleccionadas = preguntasAleatorias(data.results, 10);
+
+                    preguntas = preguntasSeleccionadas.map(p => new Pregunta (
+                        decodeText(p.question),
+                        mezclarPreguntas([...p.incorrect_answers.map(op => decodeText(op)), decodeText(p.correct_answer)]),
+                        decodeText(p.correct_answer)
+                    ));
+                });
+            
+            // Recibe un texto codificado en URL, lo decodifica y devuelve el texto normal
+            function decodeText(text) {
+                return decodeURIComponent(text);
+            }
+
+            // Baraja aleatoriamente los elementos del array de respuestas
+            function mezclarPreguntas(array) {
+
+                // El método .sort recibe una función de comparación (Math.random()) que determina el orden del array.
+                // Math.random() genera un número aleatorio entre 0 y 1. Si restamos 0.5, obtenemos valores entre -0.5 y 0.5.
+                // Al devolver un número positivo o negativo aleatoriamente, .sort() mezcla los elementos del array de manera
+                // aleatoria
+                return array.sort(() => Math.random() - 0.5);
+            }
+
+            class Pregunta {
+                constructor(texto, opciones, correcta) {
+                    this.texto = texto;
+                    this.opciones = opciones;
+                    this.correcta = correcta;
+                }
+            }
+
+            function preguntasAleatorias(preguntas, numeroPreguntas = 10) {
+                
+                // Copiamos el array de preguntas original, para no modificar el original
+                const preguntas2 = [...preguntas];
+
+                // Barajamos usando sort
+                preguntas2.sort(() => Math.random() - 0.5);
+
+                // Entonces, cogemos los primeros 10 elementos
+                return preguntas2.slice(0, numeroPreguntas);
+            }
+
+            function mostrarPregunta(i) {
+                const pregunta = preguntas[i];
+
+                // Mostrar la pregunta
+                const contenedorPregunta = document.getElementById("pregunta");
+                contenedorPregunta.innerHTML = `<h2>${pregunta.texto}</h2>`;
+
+                // Mostrar las opciones
+                const contenedorOpciones = document.getElementById("opciones");
+                contenedorOpciones.innerHTML = pregunta.opciones
+                    .map(op => {
+                        let seleccionado = respuestas[i] === op ? "selected" : "";
+                        return `<button class="opcion ${seleccionado}">${op}</button>`;
+                    })
+                    .join("");
+
+                // Añadir eventos a los botones
+                document.querySelectorAll(".opcion").forEach(boton => {
+                    boton.addEventListener("click", () => {
+                        respuestas[i] = boton.textContent; // Se guarda la respuesta
+                        document.querySelectorAll(".opcion").forEach(b => b.classList.remove("selected"));
+                        boton.classList.add("selected");
+                    });
+                });
+
+                // Actualizar los botones de navegación
+                document.getElementById("anterior").disable = (i === 0);
+                document.getElementById("siguiente").textContent = (i === preguntas.length -1) ? "Acabar test" : "Siguiente pregunta"
+            }
+
+            document.getElementById("start").addEventListener("click", () => {
+                document.getElementById("subtitulo").style.display = "none";
+                document.getElementById("start").style.display = "none";
+
+                document.getElementById("pregunta").style.display = "block";
+                document.getElementById("navegacion").style.display = "block";
+                document.getElementById("progreso").style.display = "block";
+
+                mostrarPregunta(indice); // Muestra la primera pregunta
+            });
+
+            document.getElementById("siguiente").addEventListener("click", () => {
+                if (indice < preguntas.length - 1) {
+                    indice++;
+
+                    document.getElementById("progreso").textContent = `Pregunta ${indice + 1} / ${preguntas.length}`;
+
+                    mostrarPregunta(indice);
+                } else {
+                    document.getElementById("resultado").innerHTML = `<h2>🎉 ¡Enhorabuena! ¡Has acabado el test!</h2>`;
+                    mostrarResumen();
+
+                    document.getElementById("pregunta").style.display = "none";
+                    document.getElementById("opciones").style.display = "none";
+                    document.getElementById("navegacion").style.display = "none";
+                    document.getElementById("progreso").style.display = "none";
+
+                    document.getElementById("reiniciar").style.display = "block";
+                }
+            });
+
+            document.getElementById("anterior").addEventListener("click", () => {
+                if (indice > 0) {
+                    indice--;
+                    mostrarPregunta(indice)
+                }
+            });
+
+            function mostrarResumen() {
+                const contenedorPregunta = document.getElementById("pregunta");
+                const contenedorOpciones = document.getElementById("opciones");
+
+                // Calcular puntuación
+                let aciertos = 0;
+
+                preguntas.forEach((pregunta, i) => {
+                    if (respuestas[i] === pregunta.correcta) {
+                        aciertos++;
+                    }
+                });
+
+                let tabla = `
+                    <h2>Resultados</h2>
+                    <p>Puntuación: <strong>${aciertos}</strong> / <strong>${preguntas.length}</strong></p>
+                    <table>
+                        <tr>
+                            <th>Nº de Pregunta</th>
+                            <th>Mi Respuesta</th>
+                            <th>Respuesta Correcta</th>
+                            <th>Resultado</th> 
+                        </tr>
+                `;
+
+                preguntas.forEach((pregunta, i) => {
+                    const respuestaUsuario = respuestas[i] || "(sin responder)";
+                    const respuestaCorrecta = pregunta.correcta;
+                    const esCorrecta = respuestaUsuario === respuestaCorrecta;
+
+                    tabla += `
+                        <tr>
+                            <td>${i + 1}</td>
+                            <td>${respuestaUsuario}</td>
+                            <td>${respuestaCorrecta}</td>
+                            <td>${esCorrecta ? '✅' : '❌'}</td>    
+                        </tr>
+                    `;
+                });
+
+                tabla += `</table>`;
+
+                document.getElementById("resultado").innerHTML = ""; // Limpiamos antes de mostrar la tabla
+
+                document.getElementById("resultado").innerHTML = tabla;
+            }
+        });
+    </script>
+</body>
+</html>

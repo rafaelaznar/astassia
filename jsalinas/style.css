@@ -1,0 +1,54 @@
+body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f7f8fa;
+    }
+    .navbar {
+      background: linear-gradient(90deg, #ff002b, #ff7b00);
+    }
+    .navbar-brand {
+      font-weight: 700;
+      color: #fff !important;
+    }
+    .card {
+      border: none;
+      border-radius: 15px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 100%;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+      
+    }
+    .card img {
+      border-top-left-radius: 15px;
+      border-top-right-radius: 15px;
+      width: 100%;         
+      height: 400px; 
+      object-fit: cover;
+    }
+    .card-body {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      flex: 1;
+    }
+    
+    .btn-primary {
+      background: #ff002b;
+      border: none;
+    }
+    .btn-primary:hover {
+      background: #e00025;
+    }
+    .carrito-container {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      padding: 20px;
+      margin-top: 20px;
+    }

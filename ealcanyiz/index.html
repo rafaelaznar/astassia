@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Document</title>
+    <!-- estilos en línea movidos a css/style.css -->
+</head>
+<body>
+    <main>
+        <div id="formularioDificultad">
+            <div>
+                <p>Bienvenido!!</p>
+                <form id="formDificultadForm">
+                    <label for="nombre">Tu nombre:</label>
+                    <input type="text" id="nombre" name="nombre" required>
+                    <label>Dificultad:</label>
+                    <div class="radio-row">
+                        <label class="radio-label"><input type="radio" name="dificultad" value="facil" checked> Fácil (10 intentos)</label>
+                        <label class="radio-label"><input type="radio" name="dificultad" value="medio"> Medio (8 intentos)</label>
+                        <label class="radio-label"><input type="radio" name="dificultad" value="dificil"> Difícil (6 intentos)</label>
+                    </div>
+                    <button type="submit">Comenzar Juego</button>
+                    <p id="formCargando"></p>
+                </form>
+            </div>
+        </div>
+        <!-- panel que saltará en caso de perder -->
+        <div id="panelFracaso">
+            <div>
+                <p>Has fallado!!</p>
+                <p id="palabraFinal"></p>
+                <button onclick="startNewGame()">Reiniciar</button>
+            </div>
+        </div>
+        <!-- panel que saltará en caso de ganar -->
+        <div id="panelVictoria">
+            <div>
+                <p>Has ganado!!</p>
+                <button onclick="startNewGame()">Reiniciar</button>
+            </div>
+        </div>
+        <!-- html que muestra el estado del juego -->
+        <div>
+            <p id="letrasContenidas"></p>
+            <p id="resultado">Cargando Palabra...</p>
+            <p id="palabra"></p>
+            <form id="miFormulario">
+                <input type="text" name="intento" id="intento">
+                <input type="submit" value="Enviar">
+            </form>
+            <div class="bottom-controls" style="display: flex; align-items: flex-start; width: 100%;">
+                <a class="indice-link" href="../index.html"><button class="indice-btn" style="border: 1px solid white; background: rgb(216, 84, 84);">Indice</button></a>
+            </div>
+        </div>
+    </main>
+     <script>
+        //objeto de palabra
+        class Palabra {
+            constructor(word) {
+                this.word = word;
+                this.length = word.length;
+            }
+        }
+
+        // variables globales de configuración por partida
+        let maxIntentos = 10;
+        let playerName = "";
+
+        // funcion que inicia una nueva partida mostrando el formulario
+        function startNewGame() {
+            // ocultar paneles de fin si estaban visibles
+            document.getElementById('panelFracaso').style.display = 'none';
+            document.getElementById('panelVictoria').style.display = 'none';
+            document.getElementById('formCargando').innerText = '';
+            // limpiar estado visible
+            document.getElementById('resultado').innerText = 'Cargando...';
+            document.getElementById('letrasContenidas').innerText = '';
+            document.getElementById('palabra').innerText = '';
+            // mostrar formulario de dificultad/nombre
+            document.getElementById('formularioDificultad').style.display = 'flex';
+            // reiniciar campos del formulario
+            const formD = document.getElementById('formDificultadForm');
+            formD.reset();
+            document.getElementById('intento').value = '';
+        }
+
+        //funcion principal del juego
+        function juegoPalabra(palabraObj) {
+            let contadorIntentos = 0;
+            let intentoAntiguo = "";
+            let letrasContenidas = [];
+            let letraValida = null;
+            //nos imprime la longitud de la palabra y prepara el input
+            document.getElementById("resultado").innerHTML = "Palabra de " + palabraObj.length + " letras, tienes " + maxIntentos + " intentos.";
+            //aplica un maximo en el input de la palabra la longitud de la palabra
+            document.querySelector("#intento").setAttribute("maxlength", palabraObj.length);
+            const form = document.getElementById('miFormulario');
+            // eliminar listeners previos reemplazando el nodo
+            const newForm = form.cloneNode(true);
+            form.parentNode.replaceChild(newForm, form);
+
+            newForm.addEventListener('submit', function(event){
+                //no recarga la página al enviar el formulario
+                event.preventDefault();
+                //guarda lo escrito en el input
+                const intento = newForm.intento.value.trim();
+                //si es mayor que 0 enviará el resultado
+                if(intento.length > 0 && contadorIntentos < maxIntentos){
+                    contadorIntentos++;
+                    letraValida = false;
+                    //si haces maxIntentos intentos muestra el panel de fracaso
+                    if(contadorIntentos >= maxIntentos){
+                        document.getElementById('panelFracaso').style.display = 'flex';
+                        document.getElementById('palabraFinal').innerText = "La palabra era: " + palabraObj.word;
+                    }
+
+                    //separa la palabra y tu palabra en un array para compararlas
+                    intentoArray = intento.split("");
+                    palabraArray = palabraObj.word.split("");
+                    palabraEncriptada = "";
+                    //comprueba las letras contenidas y las aciertas
+                    for (let i = 0; i < intentoArray.length; i++) {
+                        //si la palabra tiene la letra que está comprobando y no está en la variable letrasContenidas ya guardado le guarda ahí
+                        if(palabraArray.includes(intentoArray[i]) && !letrasContenidas.includes(intentoArray[i])){
+                            letrasContenidas.push(intentoArray[i]);
+                        }
+                    }
+                    //compara las letras de la palabra y tu intento para mostrar las aciertas
+                    //va guardando en palabra encriptada las letras acertadas y _ las que no
+                    for (let i = 0; i < palabraArray.length; i++) {
+                        if(intentoArray[i] === palabraArray[i]){
+                            palabraEncriptada = palabraEncriptada + " " +intentoArray[i];
+                        }
+                        else{
+                            palabraEncriptada = palabraEncriptada + " " + "_";
+                        }
+                    }//por si la palabra es más larga que tu intento añade ... (no debería poder serlo)
+                        if(intentoArray.length > palabraArray.length){
+                                palabraEncriptada = palabraEncriptada + "...";
+                        }
+                    //añade el intento a la variable intentoAntiguo para así disponer de todos los intentos
+                    if (contadorIntentos==1){
+                        intentoAntiguo = palabraEncriptada;
+                    }else{
+                        intentoAntiguo = intentoAntiguo + "<br>" + palabraEncriptada;
+                    }
+                    //imprime en pantalla lo hacertado de la palabra hasta ahora
+                    document.getElementById("resultado").innerHTML = intentoAntiguo;
+                    //si las palabras son iguales ganas!!
+                    if(intento === palabraObj.word){
+                        document.getElementById("panelVictoria").style.display = 'flex';
+                    }
+                    //imprime las letras que has escrito y están en la palabra
+                    document.getElementById("letrasContenidas").innerHTML = "Letras contenidas: " + letrasContenidas.join(", ");
+                }
+
+            })
+        }
+
+        // hasta que el html y css no esté pintado no podrá ejecutarse en js del interior
+        document.addEventListener('DOMContentLoaded', function() {
+            // mostrar formulario al cargar
+            document.getElementById('formularioDificultad').style.display = 'flex';
+
+            // manejar envío del formulario de dificultad
+            const fd = document.getElementById('formDificultadForm');
+            fd.addEventListener('submit', function(e){
+                e.preventDefault();
+                // capturar nombre y dificultad
+                
+                playerName = fd.nombre.value.trim() || 'Jugador';
+                const dificultad = fd.dificultad.value;
+                if(dificultad === 'facil') maxIntentos = 10;
+                else if(dificultad === 'medio') maxIntentos = 8;
+                else if(dificultad === 'dificil') maxIntentos = 6;
+                document.getElementById('formCargando').innerText = `Bienvenido ${playerName}, cargando palabra...`;
+
+                // ocultar formulario
+                document.getElementById('formularioDificultad').style.display = 'none';
+
+                // mostrar bienvenida
+                document.getElementById('resultado').innerText = `Hola ${playerName}! Preparando partida...`;
+
+                // iniciar búsqueda de palabra y partida
+                buscarPalabraValida();
+            });
+
+            //funcion que busca palabra válida
+            function buscarPalabraValida() {
+                // muestra el formulario mientras carga (por si lo llamamos manualmente)
+                document.getElementById('formularioDificultad').style.display = 'flex';
+                // espera 200ms para que el formulario aparezca y el usuario vea que carga
+                setTimeout(() => {
+                    //hacemos un fetch a la api para obtener la palabra
+                    fetch('https://rae-api.com/api/random')
+                        //comprobará si la respuesta es correcta y la parseará a json
+                        .then(response => {
+                            if (!response.ok) throw new Error('Network response was not ok');
+                            return response.json();
+                        })
+                        .then(palabra => {
+                            // ocultar el formulario una vez tengamos palabra y hayamos mostrado bienvenida
+                            document.getElementById('formularioDificultad').style.display = 'none';
+                            //obtendremos la palabra del json
+                            let palabraWordle = palabra.data.word;
+                            //comprobamos que la palabra tenga 8 letras o menos para que no complique el juego
+                            if(palabraWordle.length > 8){
+                                console.log(`Palabra "${palabraWordle}" demasiado larga (${palabraWordle.length} letras), buscando otra...`);
+                                //si tiene más de 8 letras vuelve a llamar a la función
+                                buscarPalabraValida(); 
+                                return; 
+                            }
+                            //Creamos un objeto de la palabra para usar su información
+                            const palabraObj = new Palabra(palabraWordle);
+                            juegoPalabra(palabraObj);
+                        })
+                        //si hay algún error en el fetch o en la respuesta lo capturará aquí
+                        .catch(error => {
+                            console.error('Error fetching the file:', error);
+                            setTimeout(buscarPalabraValida, 1000);
+                        });
+                }, 300);
+            }
+
+            // el codigo empezará aqui llamando a la función que muestra el formulario (no carga palabra hasta completar formulario)
+            // startNewGame mostrará el formulario ya al cargar
+            startNewGame();
+        });
+
+
+    </script>
+</body>
+</html>

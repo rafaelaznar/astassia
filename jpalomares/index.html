@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apple Worm - Juego Snake</title>
+    <link rel="stylesheet" href="gusano.css">
+    <!-- CDN de jQuery 3.7.1 para manipulación DOM -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<body>
+    <!-- Contenedor principal -->
+    <div class="container">
+        <!-- Cabecera del juego -->
+        <header class="header">
+            <h1>🐍 Apple Worm</h1>
+            <p>Desarrollado por Ian Palomares un estudiante de 2º DAW</p>
+        </header>
+
+        <!-- Formulario de configuración del usuario -->
+        <div class="user-form-container" id="userForm">
+            <div class="form-card">
+                <h2>¡Bienvenido!</h2>
+                <form id="playerForm">
+                    <!-- Grupo de entrada de nombre con validación HTML5 -->
+                    <div class="input-group">
+                        <label for="username">Nombre de usuario:</label>
+                        <div class="input-with-button">
+                            <!-- Input con validaciones nativas -->
+                            <input type="text" id="username" required maxlength="20" placeholder="Introduce tu nombre">
+                            <!-- Botón para generar nombre aleatorio con API -->
+                            <button type="button" id="randomNameBtn" class="random-name-btn" title="Generar nombre aleatorio">
+                                🎲
+                            </button>
+                        </div>
+                    </div>
+                    <button type="submit" class="start-btn">Comenzar Juego</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Pantalla del juego -->
+        <div class="game-container" id="gameContainer" style="display: none;">
+            <div class="game-info">
+                <div class="player-info">
+                    <span>Jugador: <strong id="currentPlayer"></strong></span>
+                </div>
+                <div class="score-info">
+                    <span>Puntuación: <strong id="currentScore">0</strong></span>
+                </div>
+                <div class="high-score">
+                    <span>Récord: <strong id="highScore">0</strong></span>
+                </div>
+            </div>
+
+            <div class="canvas-container">
+                <canvas id="gameCanvas" width="400" height="400"></canvas>
+                <div class="game-overlay" id="gameOverlay">
+                    <div class="overlay-content">
+                        <h3 id="overlayMessage">¡Preparado!</h3>
+                        <button id="startGameBtn" class="game-btn">Iniciar</button>
+                        <button id="restartBtn" class="game-btn" style="display: none;">Reiniciar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <h4>Controles:</h4>
+                <div class="control-keys">
+                    <div class="key-row">
+                        <span class="key">↑</span>
+                    </div>
+                    <div class="key-row">
+                        <span class="key">←</span>
+                        <span class="key">↓</span>
+                        <span class="key">→</span>
+                    </div>
+                </div>
+                <p>Usa las flechas del teclado para moverte</p>
+            </div>
+        </div>
+
+        <!-- Tabla de puntuaciones -->
+        <div class="leaderboard-container" id="leaderboard" style="display: none;">
+            <div class="leaderboard-card">
+                <h2>🏆 Ranking de Puntuaciones</h2>
+                <div class="scores-list" id="scoresList">
+                    <!-- Las puntuaciones se cargarán aquí dinámicamente -->
+                </div>
+                <div class="leaderboard-actions">
+                    <button id="newGameBtn" class="new-game-btn">Nueva Partida</button>
+                    <button id="clearScoresBtn" class="clear-scores-btn">🗑️ Borrar Ranking</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="gusano.js"></script>
+</body>
+</html>

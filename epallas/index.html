@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carreras F1</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  </link>
+  <!-- Fuente de Google -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+
+  <style>
+    /* Imagen de fondo */
+    body {
+      background-image: url('pexels-jonathanborba-31331382.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+
+    }
+
+    /* Overlay para mejorar legibilidad del contenido */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: -1;
+    }
+
+    /* Estilo del contenido */
+    body {
+      font-family: 'Roboto', sans-serif;
+
+    }
+
+    .race-card {
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+      margin-bottom: 1rem;
+      background-color: rgba(255, 255, 255, 0.1);
+      transition: transform 0.2s ease;
+    }
+
+    .race-card:hover {
+      transform: scale(1.02);
+    }
+
+    /* Estilo a la tabla  */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 0.5s forwards;
+    }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    /* Manejo de botones */
+    .btn:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    /* Estilo del titulo */
+    h1 {
+      background: linear-gradient(90deg, #65af04, #178c94, #65af04);
+      background-size: 200% auto;
+      /* para animar el gradiente */
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientShift 3s linear infinite;
+    }
+
+    @keyframes gradientShift {
+      0% {
+        background-position: 0%
+      }
+
+      100% {
+        background-position: 200%
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Overlay -->
+  <div class="overlay"></div>
+
+  <!-- Contenido principal -->
+  <div class="container my-5" id="principal">
+    <h1 class="text-center mb-4 text-danger fw-bold">Resultados de Fórmula 1</h1>
+
+    <div class="card p-4 shadow-sm">
+      <div class="row g-3 align-items-center">
+        <div class="col-md-6">
+          <label for="yearSelect" class="form-label fw-semibold">Selecciona un año:</label>
+          <select id="yearSelect" class="form-select">
+            <!-- Aquí se llenarán los años con JavaScript -->
+          </select>
+        </div>
+
+        <div class="col-md-6 d-flex justify-content-end gap-2">
+          <button id="buscarBtn" class="btn btn-danger btn-lg">
+            🔍 Buscar Resultados
+          </button>
+          <button id="borrarBtn" class="btn btn-dark btn-lg">
+            🗑️ Borrar
+          </button>
+
+        </div>
+        <form id="formFavorita" class="mb-3">
+          <label for="favorita" class="form-label text-black fw-semibold">¿Cuál es tu temporada favorita?</label>
+          <div class="mb-2 d-flex gap-2">
+            <input type="text" id="favorita" class="form-control" placeholder="Ejemplo: 2012" required>
+            <button id="enviarBtn" class="btn btn-danger btn-lg">📤 Enviar</button>
+            <small id="errorFavorita" class="text-danger"></small>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <hr class="my-4">
+
+    <div id="resultados" class="mt-4 text-white">
+      <p class="text-center text-light">Selecciona un año para ver las 2 primeras carreras 🏁</p>
+    </div>
+
+<div class="d-flex justify-content-center mt-4">
+  <button class="btn btn-danger btn-lg">
+    <a href="../index.html" class="text-white text-decoration-none">Volver al menú principal</a>
+  </button>
+</div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+  </script>
+  <script src="ecmaS.js"></script>
+</body>
+
+</html>

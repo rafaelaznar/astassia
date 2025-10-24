@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor de libros</title>
+
+     <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+ <div class="container">
+    <h1 class="text-center mb-4">Buscador de Películas</h1>
+
+    <!-- Formulario de búsqueda -->
+    <form id="formBusqueda" class="mb-4">
+      <div class="input-group">
+        <input type="text" id="titulo" class="form-control" placeholder="Escribe el título de la película o serie" required>
+        <select id="tipo" class="form-select" style="max-width: 180px;">
+          <option value="">Todas</option>
+          <option value="movie">Películas</option>
+          <option value="series">Series</option>
+        </select>
+        <button type="submit" class="btn btn-primary">Buscar</button>
+      </div>
+    </form>
+
+    <div id="mensaje" class="alert" style="display:none;"></div>
+
+    <!-- Contenedor de resultados -->
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" id="resultados"></div>
+
+    <!-- Total de películas encontradas -->
+    <p><strong>Total de resultados:</strong> <span id="total">0</span></p>
+  </div>
+
+  <script>
+    // Clase Pelicula
+    class Pelicula {
+      constructor({ Title, Year, Poster, Type, imdbID }) {
+        this.titulo = Title;
+        this.anio = Year;
+        this.poster = Poster !== "N/A" ? Poster : "https://via.placeholder.com/300x450?text=Sin+Imagen";
+        this.tipo = Type;
+        this.id = imdbID;
+      }
+    }
+
+    // Clase BuscadorPeliculas
+    class BuscadorPeliculas {
+      constructor(apiKey) {
+        this.apiKey = apiKey;
+        this.peliculas = [];
+      }
+
+      // Uso del fetch y async/await
+      async buscar(titulo, tipo = '') {
+        try {
+          let url = `https://www.omdbapi.com/?apikey=${this.apiKey}&s=${encodeURIComponent(titulo)}`;
+          if (tipo) url += `&type=${tipo}`; // Si el usuario selecciona un tipo, lo añadimos
+          
+          const res = await fetch(url);
+          const data = await res.json();
+
+          if (data.Response === "False") {
+            this.peliculas = [];
+            return data.Error;
+          }
+
+          this.peliculas = data.Search.map(p => new Pelicula(p));
+          return null;
+        } catch (error) {
+          console.error(error);
+          return "Error al conectar con la API";
+        }
+      }
+
+      // Obtener detalles de una película por ID
+      async obtenerDetalles(id) {
+        try {
+          const res = await fetch(`https://www.omdbapi.com/?apikey=${this.apiKey}&i=${id}`);
+          const data = await res.json();
+          if (data.Response === "True") {
+            return data;
+          } else {
+            return { Plot: "No hay descripción disponible." };
+          }
+        } catch (error) {
+          console.error(error);
+          return { Plot: "Error al obtener los detalles de la película." };
+        }
+      }
+
+      renderizar() {
+        const contenedor = document.getElementById('resultados');
+        contenedor.innerHTML = '';
+
+        if (this.peliculas.length === 0) {
+          document.getElementById('total').textContent = 0;
+          return;
+        }
+
+        this.peliculas.map(p => {
+          const div = document.createElement('div');
+          div.classList.add('col-md-4');
+          div.innerHTML = `
+            <div class="card p-3 shadow-sm">
+              <img src="${p.poster}" class="card-img-top" alt="${p.titulo}">
+              <h5 class="mt-2">${p.titulo}</h5>
+              <p><strong>Año:</strong> ${p.anio}</p>
+              <p><strong>Tipo:</strong> ${p.tipo}</p>
+              <button class="btn btn-outline-primary btn-sm verDescripcion" data-id="${p.id}">
+                Ver descripción
+              </button>
+            </div>
+          `;
+          contenedor.appendChild(div);
+        });
+
+        document.getElementById('total').textContent = this.peliculas.length;
+      }
+    }
+
+    const buscador = new BuscadorPeliculas("25c733c6");
+    const form = document.getElementById('formBusqueda');
+    const mensaje = document.getElementById('mensaje');
+
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      const titulo = document.getElementById('titulo').value.trim();
+      const tipo = document.getElementById('tipo').value; // tipo elegido (película, serie o todas)
+
+      if (!titulo) {
+        mostrarMensaje("Por favor ingresa un título válido", "warning");
+        return;
+      }
+
+      mostrarMensaje("Buscando...", "info");
+      const error = await buscador.buscar(titulo, tipo);
+
+      if (error) {
+        mostrarMensaje(error, "danger");
+      } else {
+        mensaje.style.display = "none";
+        buscador.renderizar();
+      }
+    });
+
+    // Para poder ver la descripcion de una pelicula, solo esta en inglés
+    document.getElementById('resultados').addEventListener('click', async e => {
+      if (e.target.classList.contains('verDescripcion')) {
+        const id = e.target.dataset.id;
+        mostrarMensaje("Cargando descripción...", "info");
+        const detalles = await buscador.obtenerDetalles(id);
+        mostrarMensaje(detalles.Plot, "secondary");
+      }
+    });
+
+    // Función para mostrar mensajes dinámicos
+    const mostrarMensaje = (texto, tipo) => {
+      mensaje.textContent = texto;
+      mensaje.className = `alert alert-${tipo}`;
+      mensaje.style.display = "block";
+    };
+  </script>
+</body>
+</html>

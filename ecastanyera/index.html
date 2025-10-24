@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="imagenes/icono.jpeg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adivina las Canciones de Taylor Swift</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>¿Conoces las Canciones de Taylor Swift?</h1>
+        
+        <!-- pantalla de carga -->
+        <div id="loading" class="loading">
+            Cargando canciones...
+        </div>
+
+        <!-- seccion principal del juego -->
+        <div id="gameSection" class="game-section hidden">
+            <div class="album-header">
+                <img id="albumImage" class="album-image" src="" alt="">
+                <div class="album-info">
+                    <h2 id="albumName"></h2>
+                    <div class="instructions">
+                        <p><strong>Instrucciones:</strong></p>
+                        <p>Selecciona las canciones que crees que pertenecen a este álbum.</p>
+                        <p>Pulsa el botón de finalizar cuando las hayas elegido.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- aqui van las canciones -->
+            <div id="songsGrid" class="songs-grid">
+                
+            </div>
+            
+            <div class="controls">
+                <button id="finishBtn" class="btn-finish">Finalizar</button>
+            </div>
+        </div>
+
+        <!-- pantalla de resultados -->
+        <div id="results" class="results">
+            <h2>Resultados</h2>
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="correctCount">0</div>
+                    <div class="stat-label">Aciertos</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="incorrectCount">0</div>
+                    <div class="stat-label">Errores</div>
+                </div>
+            </div> 
+            <div class="score" id="finalScore">0%</div>
+            <p id="scoreMessage" style="font-size: 1.3rem; color: #666; margin: 20px 0;"></p>
+            <div class="controls">
+                <button id="newGameBtn" class="btn-new-game">volver a jugar</button>
+                <!-- Botón añadido para volver al index principal del proyecto -->
+                <a href="../index.html" class="btn btn-return-home" title="Volver al inicio">Volver al inicio</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
