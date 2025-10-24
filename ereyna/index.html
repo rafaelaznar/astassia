@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Weather App</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" type="image/x-icon" href="img/tiempo.png">
+    <style>
+      .error-message {
+        background-color: #ff4444;
+        color: white;
+        padding: 10px;
+        border-radius: 5px;
+        margin: 10px 0;
+        display: none;
+        animation: fadeIn 0.3s ease-in;
+      }
+      
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      
+      .error-message.show {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🌤️ Mi App del Clima</h1>
+      
+      <div id="errorContainer">
+        <div id="errorMessage" class="error-message"></div>
+      </div>
+      
+      <div id="search" class="button-group">
+        <input type="text" id="cityInput" placeholder="Ingresa una ciudad..." />
+        <button id="searchBtn">🔍 Buscar</button>
+      </div>
+
+      <div id="weather">
+        <div id="cityName">Ciudad, País</div>
+        <div id="weatherIcon">🌤️</div>
+        <div id="temperature">--<span id="tempUnit">°C</span></div>
+        <div id="description">Descripción del clima</div>
+        <div style="margin-top: 15px;">Humedad: <span id="humidity">--%</span></div>
+      </div>
+
+      <div class="button-group">
+        <button id="celsiusBtn">°C</button>
+        <button id="fahrenheitBtn">°F</button>
+        <button class="refresh-btn">📍 Mi ubicación</button>
+      </div>
+
+      <div id="map"></div>
+      
+      <div id="forecast">
+        <h2>Pronóstico 5 días</h2>
+        <div id="forecastContainer"></div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+      class WeatherApp {
+        constructor() {
+          this.API_KEY = "c01d7f30a5cd71c1026d4eed08c7b944";
+          this.BASE_URL = "https://api.openweathermap.org/data/2.5";
+          this.currentUnit = "metric";
+          this.currentLat = null;
+          this.currentLon = null;
+          this.map = null;
+          this.marker = null;
+          this.lastCity = null;
+          this.lastCoords = null;
+
+          this.weatherIcons = {
+            "01d": "☀️",
+            "01n": "🌙",
+            "02d": "⛅",
+            "02n": "☁️",
+            "03d": "☁️",
+            "03n": "☁️",
+            "04d": "☁️",
+            "04n": "☁️",
+            "09d": "🌧️",
+            "09n": "🌧️",
+            "10d": "🌦️",
+            "10n": "🌧️",
+            "11d": "⛈️",
+            "11n": "⛈️",
+            "13d": "❄️",
+            "13n": "❄️",
+            "50d": "🌫️",
+            "50n": "🌫️",
+          };
+
+          this.init();
+        }
+
+        showError(message) {
+          const errorEl = document.getElementById("errorMessage");
+          if (errorEl) {
+            errorEl.textContent = message;
+            errorEl.classList.add("show");
+            setTimeout(() => {
+              errorEl.classList.remove("show");
+            }, 5000);
+          }
+        }
+
+        clearError() {
+          const errorEl = document.getElementById("errorMessage");
+          if (errorEl) {
+            errorEl.classList.remove("show");
+          }
+        }
+
+        init() {
+          this.getUserLocation();
+
+          const celsiusBtn = document.getElementById("celsiusBtn");
+          const fahrenheitBtn = document.getElementById("fahrenheitBtn");
+          const refreshBtn = document.querySelector(".refresh-btn");
+          const searchBtn = document.getElementById("searchBtn");
+          const cityInput = document.getElementById("cityInput");
+
+          if (celsiusBtn) celsiusBtn.onclick = () => this.setUnit("metric");
+          if (fahrenheitBtn)
+            fahrenheitBtn.onclick = () => this.setUnit("imperial");
+
+          if (refreshBtn) {
+            console.log("Refresh button found, binding event");
+            refreshBtn.onclick = () => {
+              console.log("Refresh button clicked!");
+              this.refreshWeather();
+            };
+          } else {
+            console.log("Refresh button NOT found");
+          }
+
+          if (searchBtn && cityInput) {
+            searchBtn.onclick = () => {
+              const city = cityInput.value.trim();
+
+              // Validación con regex: solo letras, espacios, guiones o comillas simples
+              const cityRegex = /^[a-zA-ZÀ-ÿ\s',-]+$/;
+              if (!city) {
+                this.showError("Ingresa una ciudad");
+                return;
+              }
+              if (!cityRegex.test(city)) {
+                this.showError("Nombre de ciudad inválido. Solo letras y espacios permitidos.");
+                return;
+              }
+
+              this.clearError();
+              this.loadWeatherByCity(city);
+            };
+          }
+        }
+
+        // Nuevo método para buscar por ciudad
+        async loadWeatherByCity(city) {
+          this.lastCity = city;
+          this.lastCoords = null;
+
+          const url = `${this.BASE_URL}/forecast?q=${encodeURIComponent(
+            city
+          )}&appid=${this.API_KEY}&units=${this.currentUnit}&lang=es`;
+
+          try {
+            const res = await fetch(url);
+            if (!res.ok) throw new Error("Ciudad no encontrada");
+            const data = await res.json();
+
+            // Coordenadas de la ciudad para el mapa
+            this.currentLat = data.city.coord.lat;
+            this.currentLon = data.city.coord.lon;
+
+            // Clima actual: primer elemento de la lista
+            this.displayWeather(
+              data.list[0],
+              data.city.name,
+              data.city.country
+            );
+
+            // Pronóstico: tomar los primeros 5 elementos
+            const forecastData = data.list.slice(0, 5);
+            this.displayForecast(forecastData);
+
+            // Inicializar/actualizar mapa
+            this.initMap();
+          } catch (error) {
+            this.showError(error.message);
+            console.error(error);
+          }
+        }
+
+        async loadForecastByCoords(lat, lon) {
+          const url = `${this.BASE_URL}/forecast?lat=${lat}&lon=${lon}&appid=${this.API_KEY}&units=${this.currentUnit}&lang=es`;
+          try {
+            const res = await fetch(url);
+            if (!res.ok) throw new Error("Error al cargar el pronóstico");
+            const data = await res.json();
+
+            // Clima actual: primer elemento
+            this.displayWeather(data.list[0], data.city.name, data.city.country);
+
+            // Filtrar pronóstico diario a las 12:00 y tomar los próximos 5 días
+            const dailyForecast = data.list
+              .filter((item) => item.dt_txt.includes("12:00"))
+              .slice(0, 5);
+            this.displayForecast(dailyForecast);
+
+            // Coordenadas para el mapa
+            this.currentLat = lat;
+            this.currentLon = lon;
+            this.initMap();
+          } catch (error) {
+            console.error(error);
+            this.showError(error.message);
+          }
+        }
+
+        getUserLocation() {
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+              (pos) => {
+                this.currentLat = pos.coords.latitude;
+                this.currentLon = pos.coords.longitude;
+                this.loadForecastByCoords(this.currentLat, this.currentLon);
+              },
+              (err) => {
+                console.log("Error geolocalización:", err);
+              }
+            );
+          }
+        }
+
+        async loadWeatherData() {
+          this.lastCoords = { lat: this.currentLat, lon: this.currentLon };
+          const url = `${this.BASE_URL}/weather?lat=${this.currentLat}&lon=${this.currentLon}&appid=${this.API_KEY}&units=${this.currentUnit}&lang=es`;
+          try {
+            const res = await fetch(url);
+            if (!res.ok) throw new Error("Error en la respuesta de la API");
+            const data = await res.json();
+            this.displayWeather(data);
+            this.initMap();
+          } catch (error) {
+            console.error("Error al cargar el clima:", error);
+            this.showError("Error al cargar el clima");
+          }
+        }
+
+        displayWeather(data, city = null, country = null) {
+          const cityNameEl = document.getElementById("cityName");
+          const temperatureEl = document.getElementById("temperature");
+          const tempUnitEl = document.getElementById("tempUnit");
+          const weatherIconEl = document.getElementById("weatherIcon");
+          const humidityEl = document.getElementById("humidity");
+          const descriptionEl = document.getElementById("description");
+
+          // Usa los valores pasados o los que vienen en data (para /weather)
+          const cityName = city || data.name || "Ciudad desconocida";
+          const countryName = country || data.sys?.country || "";
+          const temp = data.main.temp;
+          const humidity = data.main.humidity;
+          const icon = data.weather[0].icon;
+          const description = data.weather[0].description;
+
+          if (cityNameEl)
+            cityNameEl.textContent = `${cityName}${countryName ? ', ' + countryName : ''}`;
+          if (temperatureEl) temperatureEl.textContent = Math.round(temp);
+          if (tempUnitEl)
+            tempUnitEl.textContent =
+              this.currentUnit === "metric" ? "°C" : "°F";
+          if (weatherIconEl)
+            weatherIconEl.textContent = this.weatherIcons[icon] || "🌤️";
+          if (humidityEl) humidityEl.textContent = `${humidity}%`;
+          if (descriptionEl) descriptionEl.textContent = description;
+        }
+
+        displayForecast(forecastArray) {
+          const container = document.getElementById("forecastContainer");
+          if (!container) return;
+
+          container.innerHTML = "";
+
+          forecastArray.map((day) => {
+            const {
+              dt_txt,
+              main: { temp, humidity },
+              weather: [{ icon }],
+            } = day;
+            const date = new Date(dt_txt).toLocaleDateString("es-ES", {
+              weekday: "short",
+              day: "numeric",
+              month: "short",
+            });
+
+            const div = document.createElement("div");
+            div.classList.add("forecast-day");
+            div.innerHTML = `
+        <strong>${date}</strong><br>
+        <span>${this.weatherIcons[icon] || "🌤️"}</span><br>
+        ${Math.round(temp)}° ${this.currentUnit === "metric" ? "C" : "F"}<br>
+        Humedad: ${humidity}%
+      `;
+            container.appendChild(div);
+          });
+        }
+        setUnit(unit) {
+          this.currentUnit = unit;
+          if (this.lastCity) {
+            this.loadWeatherByCity(this.lastCity);
+          } else {
+            this.loadForecastByCoords(this.currentLat, this.currentLon);
+          }
+        }
+
+        refreshWeather() {
+          this.lastCity = null;
+          this.getUserLocation();
+        }
+
+        initMap() {
+          const mapEl = document.getElementById("map");
+          if (!mapEl) return;
+
+          if (this.map) {
+            this.map.setView([this.currentLat, this.currentLon], 12);
+            if (this.marker)
+              this.marker.setLatLng([this.currentLat, this.currentLon]);
+          } else {
+            this.map = L.map("map").setView(
+              [this.currentLat, this.currentLon],
+              12
+            );
+            L.tileLayer(
+              "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            ).addTo(this.map);
+            this.marker = L.marker([this.currentLat, this.currentLon])
+              .addTo(this.map)
+              .bindPopup("📍 Ubicación actual")
+              .openPopup();
+          }
+        }
+      }
+      let weatherApp; // variable global
+
+      // Inicializar cuando el DOM esté listo
+
+      document.addEventListener("DOMContentLoaded", () => {
+        weatherApp = new WeatherApp();
+      });
+    </script>
+  </body>
+</html>

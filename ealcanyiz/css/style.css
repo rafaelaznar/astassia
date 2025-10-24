@@ -1,0 +1,432 @@
+:root {
+    --granate-oscuro: #722F37;
+    --granate-medio: #8B1538;
+    --granate-claro: #A0293D;
+    --granate-suave: #B83E56;
+    --granate-muy-claro: #D4949C;
+    --blanco-roto: #FDF8F8;
+    --gris-claro: #F5F0F0;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, var(--granate-oscuro), var(--granate-medio));
+    min-height: 100vh;
+    color: var(--blanco-roto);
+}
+
+main{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+
+main > div:last-child {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 40px;
+    border: 2px solid var(--granate-suave);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    max-width: 500px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+#palabra {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--granate-muy-claro);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    margin-bottom: 30px;
+    letter-spacing: 3px;
+}
+
+
+#miFormulario {
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#intento {
+    background: var(--blanco-roto);
+    border: 2px solid var(--granate-suave);
+    border-radius: 10px;
+    padding: 15px 20px;
+    font-size: 1.2rem;
+    color: var(--granate-oscuro);
+    width: 100%;
+    max-width: 300px;
+    margin-bottom: 15px;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+#intento:focus {
+    outline: none;
+    border-color: var(--granate-claro);
+    box-shadow: 0 0 10px rgba(184, 62, 86, 0.3);
+    transform: translateY(-2px);
+}
+
+input[type="submit"], button {
+    background: linear-gradient(45deg, var(--granate-medio), var(--granate-claro));
+    color: var(--blanco-roto);
+    border: none;
+    border-radius: 10px;
+    padding: 15px 30px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+input[type="submit"]:hover {
+    background: linear-gradient(45deg, var(--granate-claro), var(--granate-suave));
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+input[type="submit"]:active {
+    transform: translateY(0);
+}
+
+
+#resultado {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 20px;
+    border: 1px solid var(--granate-suave);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    min-height: 60px;
+    color: var(--gris-claro);
+}
+
+#panelFracaso {
+    background: rgba(114, 47, 55, 0.9);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+}
+
+#panelFracaso > div {
+    background: var(--granate-medio);
+    padding: 40px;
+    border-radius: 15px;
+    border: 3px solid var(--granate-suave);
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+#panelFracaso p {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--blanco-roto);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+#panelVictoria {
+    background: rgba(114, 47, 55, 0.9);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10;
+}
+
+#panelVictoria > div {
+    background: var(--granate-medio);
+    padding: 40px;
+    border-radius: 15px;
+    border: 3px solid var(--granate-suave);
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+#panelVictoria p {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--blanco-roto);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Estilos para los botones de reiniciar */
+#panelFracaso button,
+#panelVictoria button {
+    background: linear-gradient(45deg, var(--blanco-roto), var(--gris-claro));
+    color: var(--granate-oscuro);
+    border: 2px solid var(--granate-suave);
+    border-radius: 12px;
+    padding: 15px 35px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 25px;
+    transition: all 0.4s ease;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+#panelFracaso button:hover,
+#panelVictoria button:hover {
+    background: linear-gradient(45deg, var(--granate-suave), var(--granate-claro));
+    color: var(--blanco-roto);
+    border-color: var(--blanco-roto);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+#panelFracaso button:active,
+#panelVictoria button:active {
+    transform: translateY(-1px) scale(1.02);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Efecto de brillo al hacer hover */
+#panelFracaso button::before,
+#panelVictoria button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.6s ease;
+}
+
+#panelFracaso button:hover::before,
+#panelVictoria button:hover::before {
+    left: 100%;
+}
+
+/* Estilos específicos para el panel de fracaso */
+#panelFracaso button {
+    border-color: #ff6b6b;
+}
+
+#panelFracaso button:hover {
+    background: linear-gradient(45deg, #ff6b6b, #ff5252);
+    border-color: var(--blanco-roto);
+}
+
+/* Estilos específicos para el panel de victoria */
+#panelVictoria button {
+    border-color: #4caf50;
+}
+
+#panelVictoria button:hover {
+    background: linear-gradient(45deg, #4caf50, #66bb6a);
+    border-color: var(--blanco-roto);
+}
+
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+#palabra:hover {
+    animation: pulse 1s ease-in-out;
+}
+
+
+@media (max-width: 600px) {
+    main > div:last-child {
+        padding: 20px;
+        margin: 10px;
+    }
+    
+    #palabra {
+        font-size: 2rem;
+    }
+    
+    #intento {
+        font-size: 1rem;
+        padding: 12px 15px;
+    }
+    
+    input[type="submit"] {
+        padding: 12px 25px;
+        font-size: 1rem;
+    }
+    
+    /* Botones de reiniciar responsivos */
+    #panelFracaso button,
+    #panelVictoria button {
+        padding: 12px 25px;
+        font-size: 1rem;
+        letter-spacing: 1px;
+    }
+    
+    #panelFracaso > div,
+    #panelVictoria > div {
+        padding: 30px 20px;
+    }
+    
+    #panelFracaso p,
+    #panelVictoria p {
+        font-size: 1.5rem;
+        margin-bottom: 15px;
+    }
+}
+
+/* Overlay and form styles moved from inline index.html */
+/* Estilos del overlay y formulario movidos desde index.html */
+#formularioDificultad {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.45);
+    z-index: 9999;
+}
+#formularioDificultad > div {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    color: var(--granate-oscuro);
+}
+#formularioDificultad input[type="text"],
+#formularioDificultad input[type="radio"] {
+    margin: 8px 0 12px 0;
+}
+#formularioDificultad button {
+    display: block;
+    margin-top: 10px;
+    width: 100%;
+}
+
+/* Estilos detallados para el formulario de inicio (overlay) */
+#formularioDificultad > div p:first-child {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--granate-oscuro);
+    text-align: center;
+}
+#formDificultadForm {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 6px;
+}
+#formDificultadForm label {
+    font-weight: 600;
+    color: var(--granate-oscuro);
+    margin-top: 6px;
+}
+#formDificultadForm input[type="text"] {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 2px solid rgba(160,41,61,0.12);
+    font-size: 1rem;
+    color: var(--granate-oscuro);
+}
+#formDificultadForm input[type="text"]:focus {
+    outline: none;
+    border-color: var(--granate-claro);
+    box-shadow: 0 6px 18px rgba(160,41,61,0.08);
+}
+/* Agrupar radios en una fila clara */
+#formDificultadForm .radio-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 6px;
+}
+#formDificultadForm input[type="radio"] {
+    accent-color: var(--granate-claro);
+    transform: scale(1.05);
+    margin-right: 6px;
+}
+#formDificultadForm .radio-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--granate-oscuro);
+    background: rgba(160,41,61,0.03);
+    padding: 6px 8px;
+    border-radius: 8px;
+    font-weight: 600;
+}
+#formDificultadForm button[type="submit"] {
+    background: linear-gradient(45deg, var(--granate-medio), var(--granate-claro));
+    color: var(--blanco-roto);
+    border: none;
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 8px;
+}
+#formDificultadForm button[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(136,0,26,0.12);
+}
+/* Mensaje de ayuda / subtítulo opcional */
+#formularioDificultad .subtitulo {
+    font-size: 0.95rem;
+    color: rgba(114,47,55,0.9);
+    margin-top: 6px;
+    text-align: center;
+}
+
+@media (max-width: 420px) {
+    #formularioDificultad > div {
+        padding: 16px;
+    }
+    #formularioDificultad > div p:first-child {
+        font-size: 1.25rem;
+    }
+    #formDificultadForm .radio-label {
+        font-size: 0.95rem;
+        padding: 6px 6px;
+    }
+    #formDificultadForm input[type="text"] {
+        padding: 9px 10px;
+        font-size: 0.95rem;
+    }
+}

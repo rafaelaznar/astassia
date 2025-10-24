@@ -1,0 +1,11 @@
+{
+  "server": {
+    "host": "127.0.0.1",
+    "port": 5500
+  },
+  "spotify": {
+    "clientId": "77f18f8e2d84455e948c2a4a28f76b3a",
+    "clientSecret": "2ebef2de34f749edad2b730618af3acd",
+    "redirectUri": "http://127.0.0.1:5500/callback"
+  }
+}

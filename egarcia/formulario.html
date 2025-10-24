@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valoración</title>
+    <link rel="icon" type="image/png" href="imagenes/favicon.png">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css"
+        rel="stylesheet">
+    <link href="estilos.css" rel="stylesheet">
+</head>
+
+<body>
+    <button class="btn-menu" onclick="volverMenu()">
+        <i class="bi bi-house-fill"></i>
+    </button>
+
+    <div class="contenedor-juego">
+        <div class="encabezado">
+            <h1 class="titulo-juego">
+                <i class="bi bi-star-fill me-2"></i>
+                VALORACIÓN DEL JUEGO
+                <i class="bi bi-star-fill me-2"></i>
+            </h1>
+        </div>
+
+        <div class="valoracion-container">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-star-fill me-2"></i>
+                        Valora tu experiencia
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form id="formValoracion">
+                        <div class="mb-3">
+                            <label for="nombre" class="form-label">Nombre <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="nombre" name="nombre" required>
+                            <div class="invalid-feedback" id="errorNombre"></div>
+                            <small class="form-text text-muted">Solo letras (mínimo 3 caracteres)</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                            <div class="invalid-feedback" id="errorEmail"></div>
+                            <small class="form-text text-muted">ejemplo@correo.com</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="edad" class="form-label">Edad <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="edad" name="edad" required>
+                            <div class="invalid-feedback" id="errorEdad"></div>
+                            <small class="form-text text-muted">Solo numeros</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="puntuacion" class="form-label">Puntuación <span
+                                    class="text-danger">*</span></label>
+                            <select class="form-select" id="puntuacion" name="puntuacion" required>
+                                <option value="">Selecciona...</option>
+                                <option value="5">⭐⭐⭐⭐⭐</option>
+                                <option value="4">⭐⭐⭐⭐</option>
+                                <option value="3">⭐⭐⭐</option>
+                                <option value="2">⭐⭐</option>
+                                <option value="1">⭐</option>
+                            </select>
+                            <div class="invalid-feedback" id="errorPuntuacion"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="comentario" class="form-label">Comentario</label>
+                            <textarea class="form-control" id="comentario" name="comentario" rows="3"
+                                maxlength="200"></textarea>
+                            <div class="invalid-feedback" id="errorComentario"></div>
+                            <small class="form-text text-muted">Máximo 200 caracteres (opcional)</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="telefono" class="form-label">Teléfono (opcional)</label>
+                            <input type="text" class="form-control" id="telefono" name="telefono">
+                            <div class="invalid-feedback" id="errorTelefono"></div>
+                            <small class="form-text text-muted">Formato: 623456789 o +34623456789</small>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-send-fill me-2"></i>
+                                Enviar Valoración
+                            </button>
+                            <button type="reset" class="btn btn-outline-secondary">
+                                <i class="bi bi-x-circle me-2"></i>
+                                Limpiar
+                            </button>
+                        </div>
+                    </form>
+
+                    <div id="mensajeExito" class="alert alert-success mt-3" style="display: none;">
+                        <i class="bi bi-check-circle-fill me-2"></i>
+                        ¡Gracias por tu valoración!
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="formulario.js"></script>
+    <script>
+        function volverMenu() {
+            if (confirm("¿Deseas volver al menú principal?")) {
+                window.location.href = "index.html";
+            }
+        }
+    </script>
+</body>
+
+</html>

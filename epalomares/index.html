@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rompe Bloques - Breakout Game</title>
+    <link rel="stylesheet" href="rompe.css">
+</head>
+<body>
+    <!-- Contenedor principal -->
+    <div class="container">
+        <!-- Cabecera del juego -->
+        <header class="header">
+            <h1>🧱 Rompe Bloques</h1>
+            <p>Desarrollado por Ian Palomares - 2º DAW (ES6)</p>
+        </header>
+
+        <!-- Formulario de configuración del usuario -->
+        <section class="user-form-container" id="userForm">
+            <div class="form-card">
+                <h2>¡Bienvenido al Breakout!</h2>
+                <form id="playerForm">
+                    <!-- Grupo de entrada de nombre -->
+                    <div class="input-group">
+                        <label for="username">Nombre de jugador:</label>
+                        <div class="input-with-button">
+                            <!-- Input con validación HTML5 -->
+                            <input type="text" id="username" name="username" required maxlength="20" placeholder="Introduce tu nombre" autocomplete="name">
+                            <!-- Botón de API para generar nombre aleatorio -->
+                            <button type="button" id="randomNameBtn" class="random-name-btn" title="Generar nombre aleatorio">
+                                🎲
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Selector de dificultad con radio buttons -->
+                    <div class="difficulty-selector">
+                        <label>Dificultad:</label>
+                        <div class="difficulty-options">
+                            <input type="radio" id="easy" name="difficulty" value="easy" checked>
+                            <label for="easy" class="difficulty-label">Fácil</label>
+                            
+                            <input type="radio" id="normal" name="difficulty" value="normal">
+                            <label for="normal" class="difficulty-label">Normal</label>
+                            
+                            <input type="radio" id="hard" name="difficulty" value="hard">
+                            <label for="hard" class="difficulty-label">Difícil</label>
+                        </div>
+                    </div>
+                    <button type="submit" class="start-btn">Comenzar Juego</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Pantalla del juego -->
+        <section class="game-container" id="gameContainer" style="display: none;">
+            <div class="game-header">
+                <div class="game-info">
+                    <div class="player-stats">
+                        <span class="stat">Jugador: <strong id="currentPlayer"></strong></span>
+                        <span class="stat">Puntuación: <strong id="currentScore">0</strong></span>
+                        <span class="stat">Vidas: <strong id="currentLives">3</strong></span>
+                        <span class="stat">Nivel: <strong id="currentLevel">1</strong></span>
+                    </div>
+                    <div class="game-controls">
+                        <!-- Controles adicionales si los necesitas -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="canvas-container">
+                <canvas id="gameCanvas" width="800" height="600"></canvas>
+                <div class="game-overlay" id="gameOverlay">
+                    <div class="overlay-content">
+                        <h3 id="overlayTitle">¡Preparado!</h3>
+                        <p id="overlayMessage">Usa las flechas ← → o el ratón para mover la pala</p>
+                        <div class="overlay-buttons">
+                            <button id="startGameBtn" class="game-btn primary">🚀 Iniciar</button>
+                            <button id="restartBtn" class="game-btn secondary" style="display: none;">🔄 Reiniciar</button>
+                            <button id="nextLevelBtn" class="game-btn success" style="display: none;">➡️ Siguiente Nivel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="controls-info">
+                <div class="control-section">
+                    <h4>🎮 Controles:</h4>
+                    <div class="control-methods">
+                        <div class="control-method">
+                            <span class="control-icon">⌨️</span>
+                            <span>Flechas ← →</span>
+                        </div>
+                        <div class="control-method">
+                            <span class="control-icon">🖱️</span>
+                            <span>Ratón</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="power-ups-info">
+                    <h4>🎁 Power-ups:</h4>
+                    <div class="power-up-list">
+                        <span class="power-up">🔵 Pala más grande</span>
+                        <span class="power-up">🟡 Pelota más lenta</span>
+                        <span class="power-up">🟢 Vida extra</span>
+                        <span class="power-up">🔴 Multi-pelota</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tabla de puntuaciones -->
+        <section class="leaderboard-container" id="leaderboard" style="display: none;">
+            <div class="leaderboard-card">
+                <h2>🏆 Hall of Fame</h2>
+                <div class="filter-controls">
+                    <button class="filter-btn active" data-difficulty="all">Todos</button>
+                    <button class="filter-btn" data-difficulty="easy">Fácil</button>
+                    <button class="filter-btn" data-difficulty="normal">Normal</button>
+                    <button class="filter-btn" data-difficulty="hard">Difícil</button>
+                </div>
+                <div class="scores-container">
+                    <div class="scores-list" id="scoresList">
+                        <!-- Las puntuaciones se cargarán aquí dinámicamente -->
+                    </div>
+                </div>
+                <div class="leaderboard-actions">
+                    <button id="newGameBtn" class="new-game-btn">🎮 Nueva Partida</button>
+                    <button id="clearScoresBtn" class="clear-btn">🗑️ Limpiar Scores</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Efectos de sonido (opcional) -->
+    <div class="audio-elements" style="display: none;">
+        <audio id="paddleHitSound" preload="auto">
+            <!-- Se puede añadir un archivo de sonido aquí -->
+        </audio>
+        <audio id="blockHitSound" preload="auto">
+            <!-- Se puede añadir un archivo de sonido aquí -->
+        </audio>
+        <audio id="powerUpSound" preload="auto">
+            <!-- Se puede añadir un archivo de sonido aquí -->
+        </audio>
+    </div>
+
+    <script type="module" src="rompe.js"></script>
+</body>
+</html>

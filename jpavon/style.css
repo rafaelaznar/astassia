@@ -1,0 +1,28 @@
+body {
+  font-family: Arial;
+  margin: 2rem;
+  
+}
+input {
+  margin: 5px 0;
+  padding: 8px;
+}
+#mensaje {
+  color: red;
+  font-weight: bold;
+}
+
+#searchForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+p, h1, h2{
+  text-align: center;
+}
+
+#resultsTable{
+  margin: auto;
+  text-align: center;
+}

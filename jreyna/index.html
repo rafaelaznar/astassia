@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Walking Dead Fanpage</title>
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" type="image/x-icon" href="img/zombi.png">
+  </head>
+
+  <body class="bg-dark text-white">
+    <div class="container mt-4">
+      <h1 class="text-center mb-4">The Walking Dead Fanpage</h1>
+
+      <!-- 🧠 Buscador y Filtro -->
+      <div class="mb-5 text-center">
+        <form id="formBusqueda">
+          <div class="row justify-content-center g-2 mb-3">
+            <div class="col-md-5">
+              <input
+                type="text"
+                id="inputBusqueda"
+                class="form-control"
+                placeholder="Buscar una serie relacionada..."
+              />
+            </div>
+            <div class="col-md-3">
+              <select id="filtroAño" class="form-select">
+                <option value="">Filtrar por año</option>
+                <option value="2024">2024</option>
+                <option value="2023">2023</option>
+                <option value="2022">2022</option>
+                <option value="2021">2021</option>
+                <option value="2020">2020</option>
+                <option value="2019">2019</option>
+                <option value="2018">2018</option>
+                <option value="2017">2017</option>
+                <option value="2016">2016</option>
+                <option value="2015">2015</option>
+                <option value="2010">2010</option>
+              </select>
+            </div>
+            <div class="col-md-2">
+              <button type="submit" class="btn btn-warning w-100">🔍 Buscar</button>
+            </div>
+          </div>
+          <div class="row justify-content-center">
+            <div class="col-md-10">
+              <button type="button" id="btnLimpiarFiltros" class="btn btn-outline-light btn-sm me-2">
+                🗑️ Limpiar filtros
+              </button>
+              <small class="text-muted">Puedes buscar por texto y/o filtrar por año</small>
+            </div>
+          </div>
+        </form>
+        
+        <div id="mensajeError" class="text-danger mt-2"></div>
+        <button id="btnVolver" class="btn btn-outline-light mt-3 d-none">
+          🔙 Volver al inicio
+        </button>
+      </div>
+
+      <div class="container mt-4" id="seccionesPrincipales">
+        <h2 class="text-warning mb-3">Series más populares</h2>
+        <div class="row" id="populares"></div>
+
+        <h2 class="text-warning mt-5 mb-3">Universo The Walking Dead</h2>
+        <div class="row" id="spinoffs"></div>
+      </div>
+
+      <div class="container mt-5" id="seccionBusqueda" style="display: none;">
+        <h2 class="text-warning mb-3">Resultados de búsqueda</h2>
+        <div class="row" id="resultadosBusqueda"></div>
+      </div>
+    </div>
+
+    <!-- Modal flotante para detalles de serie -->
+    <div id="cardDetalles" class="modal-overlay" style="display: none;">
+      <div class="modal-content">
+        <span class="modal-close">&times;</span>
+        <div id="contenidoModal">
+          <!-- Contenido dinámico de la serie -->
+        </div>
+      </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+      $(document).ready(function () {
+        
+        /**
+         * ================================
+         * OBJETO PRINCIPAL - PROGRAMACIÓN ORIENTADA A OBJETOS
+         * ================================
+         */
+        var TWDApp = {
+          // Propiedades del obj
+          apiKey: "e9d743406a43758a433b310409a194df",
+          baseUrl: "https://api.themoviedb.org/3",
+          datos: {
+            series: []
+          },
+          
+          // Variable para filtro de año activo
+          añoFiltroActivo: null,
+
+          // Expresiones regulares para validación
+          validaciones: {
+            basico: /^[a-zA-Z0-9\sáéíóúÁÉÍÓÚñÑ]+$/,
+            minimo: /^.{2,}$/,
+            
+            // Función para validar entrada de búsqueda
+            validarTermino: function(termino) {
+              var errores = [];              if (!termino || termino === "") {
+                errores.push("Por favor, escribe algo para buscar.");
+              } else {
+                if (!this.minimo.test(termino)) {
+                  errores.push(" Mínimo 2 caracteres.");
+                }
+                if (!this.basico.test(termino)) {
+                  errores.push(" Solo letras, números y espacios.");
+                }
+              }
+              
+              return { valido: errores.length === 0, errores };
+            },
+
+          },
+
+          /**
+           * Inicialización de la aplicación
+           */
+          init: function() {
+            this.configurarEventos();
+            this.cargarDatosIniciales();
+          },
+
+          /**
+           * MANEJO DE EVENTOS - EVENT HANDLERS Y CALLBACKS
+           */
+          configurarEventos: function() {
+            var self = this;
+            
+            // Event handler para búsqueda
+            $("#formBusqueda").on("submit", function(e) {
+              self.manejarBusqueda(e);
+            });
+            
+            // Event handler para volver
+            $("#btnVolver").on("click", function() {
+              self.volverInicio();
+            });
+
+            // Event handler para filtro por año (dentro del formulario)
+            $("#filtroAño").on("change", function() {
+              self.aplicarFiltroAño();
+            });
+
+            // Event handler para limpiar filtros
+            $("#btnLimpiarFiltros").on("click", function() {
+              self.limpiarTodosFiltros();
+            });
+
+            // Event handler para cards de series (event delegation)
+            $(document).on("click", ".serie-card", function() {
+              self.mostrarDetalles(this);
+            });
+
+            // Event handler para cerrar modal
+            $(document).on("click", ".modal-close, .modal-overlay", function(e) {
+              if (e.target === this) {
+                self.cerrarModal();
+              }
+            });
+
+            // Cerrar modal con ESC
+            $(document).on("keydown", function(e) {
+              if (e.key === "Escape") {
+                self.cerrarModal();
+              }
+            });
+          },
+
+          /**
+           * MANEJO DE ARRAYS Y MATRICES CON ITERACIÓN
+           */
+          procesarSeries: function(resultados, tipo) {
+            var seriesFiltradas = [];
+            
+            // Iteración con diferentes métodos según tipo
+            if (tipo === "spin-offs") {
+              // Usar $.grep para filtrar (programación funcional con jQuery)
+              seriesFiltradas = $.grep(resultados, function(serie) {
+                var nombre = serie.name.toLowerCase();
+                var spinoffs = ["fear", "world beyond", "dead city", "daryl dixon", "origins", "the ones who live"];
+                
+                // Usar some para verificar coincidencias (programación funcional)
+                return spinoffs.some(function(spinoff) {
+                  return nombre.includes(spinoff);
+                });
+              });
+            } else {
+              // Para otras secciones, filtrar series con buena puntuación
+              seriesFiltradas = $.grep(resultados, function(serie) {
+                return serie.vote_average > 5;
+              });
+            }
+            
+            // Ordenar usando sort (control de flujo)
+            seriesFiltradas.sort(function(a, b) {
+              return b.popularity - a.popularity;
+            });
+            
+            return seriesFiltradas;
+          },
+
+          /**
+           * GENERACIÓN DE ELEMENTOS DOM
+           */
+          generarCard: function(serie) {
+            // Variables con valores por defecto
+            var nombre = serie.name || "Sin título";
+            var descripcion = serie.overview || "No hay descripción disponible";
+            var fecha = serie.first_air_date || "N/A";
+            var puntuacion = serie.vote_average ? serie.vote_average.toFixed(1) : "N/A";
+            var popularidad = Math.round(serie.popularity || 0);
+            
+            var posterUrl = serie.poster_path
+              ? "https://image.tmdb.org/t/p/w500" + serie.poster_path
+              : "https://via.placeholder.com/500x750/333/fff?text=Sin+Imagen";
+
+            var descripcionCorta = descripcion.length > 150 
+              ? descripcion.substring(0, 150) + "..."
+              : descripcion;
+
+            // Concatenación de strings clásica
+            return '<div class="col-sm-6 col-md-4 col-lg-3 mb-4">' +
+                   '<div class="card bg-secondary text-white h-100 serie-card" ' +
+                   'style="cursor: pointer; transition: transform 0.2s;" ' +
+                   'data-serie=\'' + JSON.stringify(serie) + '\'>' +
+                   '<img src="' + posterUrl + '" class="card-img-top" alt="' + nombre + '">' +
+                   '<div class="card-body d-flex flex-column">' +
+                   '<h5 class="card-title">' + nombre + '</h5>' +
+                   '<p class="card-text flex-grow-1">' + descripcionCorta + '</p>' +
+                   '<div class="mt-auto">' +
+                   '<small class="text-warning">⭐ ' + puntuacion + '/10</small><br>' +
+                   '<small class="text-muted">📅 ' + fecha + '</small><br>' +
+                   '<small class="text-info">👥 ' + popularidad + '</small>' +
+                   '</div></div></div></div>';
+          },
+
+          /**
+           * COMUNICACIÓN ASÍNCRONA CON CALLBACKS Y MANEJO DE ERRORES
+           */
+          cargarSeries: function(url, destino, tipo) {
+            var self = this;
+            
+            $.ajax({
+              url: url,
+              method: "GET",
+              timeout: 10000,
+              
+              // Callback beforeSend (callback real de jQuery)
+              beforeSend: function() {
+                self.mostrarCargando(destino, tipo);
+              },
+              
+              // Callback de éxito (callback real de jQuery)
+              success: function(data) {
+                self.manejarExito(data, destino, tipo);
+              },
+              
+              // Callback de error (callback real de jQuery)
+              error: function(xhr, status, error) {
+                self.manejarError(destino, tipo, error);
+              }
+            });
+          },
+
+          mostrarCargando: function(destino, tipo) {
+            $(destino).html(
+              '<div class="text-center">' +
+              '<div class="spinner-border text-primary" role="status"></div>' +
+              '<p class="mt-2">Cargando ' + tipo + '...</p>' +
+              '</div>'
+            );
+          },
+
+          manejarExito: function(data, destino, tipo) {
+            var resultados = data.results;
+            
+            if (!resultados || resultados.length === 0) {
+              this.mostrarSinResultados(destino, tipo);
+              return;
+            }
+
+            // Procesar series usando métodos funcionales
+            var seriesProcesadas = this.procesarSeries(resultados, tipo);
+            
+            this.renderizarSeries(seriesProcesadas, destino, tipo);
+          },
+
+          manejarError: function(destino, tipo, error) {
+            $(destino).html(
+              '<p class="text-danger text-center">' +
+              'Error al cargar ' + tipo + '<br>' +
+              '<small>Detalles: ' + error + '</small>' +
+              '</p>'
+            );
+          },
+
+          mostrarSinResultados: function(destino, tipo) {
+            var mensaje;
+            
+            // Control de flujo con switch
+            switch(tipo) {
+              case "spin-offs":
+                mensaje = "No se encontraron spin-offs de The Walking Dead.";
+                break;
+              case "series populares":
+                mensaje = "No se encontraron series populares.";
+                break;
+              default:
+                mensaje = "No se encontraron resultados para tu búsqueda.";
+            }
+            
+            $(destino).html('<p class="text-warning text-center mt-3">' + mensaje + '</p>');
+          },
+
+          renderizarSeries: function(series, destino, tipo) {
+            var contenido = "";
+            var self = this;
+            
+            // Controlar cantidad según tipo
+            var cantidad = tipo === "series populares" ? 6 : series.length;
+            var seriesToShow = series.slice(0, cantidad);
+            
+            // Iteración con $.each (programación funcional con jQuery)
+            $.each(seriesToShow, function(index, serie) {
+              contenido += self.generarCard(serie);
+            });
+            
+            $(destino).html(contenido);
+            
+            // Aplicar filtro de año si hay uno activo (después de renderizar)
+            var añoActivo = $("#filtroAño").val() || this.añoFiltroActivo;
+            if (añoActivo && tipo === "búsqueda") {
+              var self = this;
+              setTimeout(function() {
+                self.aplicarFiltroAño();
+              }, 100);
+            }
+          },
+
+          /**
+           * MANEJO DE FORMULARIOS Y VALIDACIÓN
+           */
+          manejarBusqueda: function(e) {
+            e.preventDefault();
+            
+            var termino = $("#inputBusqueda").val().trim();
+            var añoFiltro = $("#filtroAño").val();
+            
+            // Si solo hay filtro de año sin término, aplicar filtro local
+            if (!termino && añoFiltro) {
+              this.aplicarFiltroAño();
+              return false;
+            }
+            
+            // Validar término de búsqueda
+            if (!termino) {
+              $("#mensajeError").text("  Por favor, escribe algo para buscar.");
+              return false;
+            }
+            
+            var validacion = this.validaciones.validarTermino(termino);
+            
+            if (!validacion.valido) {
+              $("#mensajeError").text(validacion.errores.join(" "));
+              return false;
+            }
+            
+            $("#mensajeError").text("");
+            
+            // Construir URL de búsqueda simple (sin filtro de año en API)
+            var urlBusqueda = this.baseUrl + "/search/tv?api_key=" + this.apiKey + "&query=" + encodeURIComponent(termino) + "&language=es-ES";
+            
+            this.cambiarVista();
+            
+            // Guardar el año para aplicar filtro después de cargar
+            this.añoFiltroActivo = añoFiltro;
+            
+            this.cargarSeries(urlBusqueda, "#resultadosBusqueda", "búsqueda");
+          },
+
+          cambiarVista: function() {
+            $("#seccionesPrincipales").hide();
+            $("#btnVolver").removeClass("d-none");
+            $("#seccionBusqueda").fadeIn();
+          },
+
+          volverInicio: function() {
+            $("#inputBusqueda").val("");
+            $("#filtroAño").val("");
+            $("#mensajeError").text("");
+            $("#resultadosBusqueda").empty();
+            $("#seccionBusqueda").hide();
+            $("#btnVolver").addClass("d-none");
+            $(".mensaje-filtro").remove();
+            $(".serie-card").parent().show();
+            this.añoFiltroActivo = null; // Limpiar año activo
+            $("#seccionesPrincipales").fadeIn();
+          },
+
+          cargarDatosIniciales: function() {
+            var urlBaseTWD = this.baseUrl + "/search/tv?api_key=" + this.apiKey + "&query=The+Walking+Dead&language=es-ES";
+            
+            this.cargarSeries(urlBaseTWD, "#populares", "series populares");
+            this.cargarSeries(urlBaseTWD, "#spinoffs", "spin-offs");
+          },
+
+          /**
+           * FILTRADO POR AÑO DE ESTRENO
+           */
+          aplicarFiltroAño: function() {
+            var añoSeleccionado = $("#filtroAño").val() || this.añoFiltroActivo;
+            
+            if (!añoSeleccionado) {
+              // Si no hay filtro, mostrar todas las series
+              $(".serie-card").parent().show();
+              $(".mensaje-filtro").remove();
+              return;
+            }
+            
+            // Limpiar mensajes previos
+            $(".mensaje-filtro").remove();
+            
+            // Ocultar todas las series primero
+            $(".serie-card").parent().hide();
+            
+            var seriesEncontradas = 0;
+            
+            // Mostrar solo las que coinciden con el año
+            $(".serie-card").each(function() {
+              try {
+                var serieData = JSON.parse($(this).attr("data-serie"));
+                var fechaEstreno = serieData.first_air_date;
+                
+                if (fechaEstreno) {
+                  var añoSerie = new Date(fechaEstreno).getFullYear().toString();
+                  if (añoSerie === añoSeleccionado) {
+                    $(this).parent().fadeIn();
+                    seriesEncontradas++;
+                  }
+                }
+              } catch(e) {
+                // Si hay error al parsear, mostrar la serie
+                $(this).parent().show();
+              }
+            });
+            
+            // Verificar si hay resultados visibles
+            this.verificarResultadosFiltro(añoSeleccionado, seriesEncontradas);
+          },
+
+          verificarResultadosFiltro: function(año, cantidad) {
+            if (cantidad === 0) {
+              var mensaje = '<div class="col-12 mensaje-filtro">' +
+                '<div class="alert alert-warning text-center">' +
+                '<h5>🔍 Sin resultados para ' + año + '</h5>' +
+                '<p>No se encontraron series estrenadas en <strong>' + año + '</strong></p>' +
+                '<button class="btn btn-sm btn-outline-warning" onclick="$(\'#filtroAño\').val(\'\'); TWDApp.aplicarFiltroAño();">Ver todas las series</button>' +
+                '</div>' +
+              '</div>';
+              
+              // Determinar dónde mostrar el mensaje
+              if ($("#seccionBusqueda").is(":visible")) {
+                $("#resultadosBusqueda").append(mensaje);
+              } else {
+                $("#populares").append(mensaje);
+              }
+            }
+          },
+
+          limpiarTodosFiltros: function() {
+            // Limpiar campo de búsqueda y filtro de año
+            $("#inputBusqueda").val("");
+            $("#filtroAño").val("");
+            $("#mensajeError").text("");
+            
+            // Remover mensajes de filtro y mostrar todas las series
+            $(".mensaje-filtro").remove();
+            $(".serie-card").parent().show();
+            
+            // Si estamos en búsqueda, volver al inicio
+            if ($("#seccionBusqueda").is(":visible")) {
+              this.volverInicio();
+            }
+          },
+
+          /**
+           * MODAL DE DETALLES DE SERIE
+           */
+          mostrarDetalles: function(elemento) {
+            // Obtener datos de la serie del elemento
+            var serieData = JSON.parse(elemento.dataset.serie);
+            
+            // Asignación de variables clásica
+            var titulo = serieData.name;
+            var sinopsis = serieData.overview;
+            var estreno = serieData.first_air_date;
+            var puntuacion = serieData.vote_average;
+            var popularidad = serieData.popularity;
+            var poster = serieData.poster_path;
+            var generos = serieData.genre_ids;
+            var paises = serieData.origin_country;
+
+            // Formatear fecha
+            var fechaFormateada = estreno ? new Date(estreno).toLocaleDateString('es-ES', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric'
+            }) : 'No disponible';
+
+            // URL del poster en alta resolución
+            var posterUrl = poster 
+              ? "https://image.tmdb.org/t/p/w780" + poster
+              : 'https://via.placeholder.com/780x1170/333/fff?text=Sin+Imagen';
+
+            // Generar contenido del modal con concatenación clásica
+            var contenidoModal = '<div class="row">' +
+              '<div class="col-md-4">' +
+                '<img src="' + posterUrl + '" class="img-fluid rounded" alt="' + titulo + '">' +
+              '</div>' +
+              '<div class="col-md-8">' +
+                '<h2 class="text-warning mb-3">' + titulo + '</h2>' +
+                '<div class="mb-3">' +
+                  '<h5 class="text-info">📖 Sinopsis:</h5>' +
+                  '<p class="text-light">' + (sinopsis || 'No hay sinopsis disponible.') + '</p>' +
+                '</div>' +
+                '<div class="row mb-3">' +
+                  '<div class="col-sm-6">' +
+                    '<strong class="text-warning">⭐ Puntuación:</strong><br>' +
+                    '<span class="fs-4 ' + this.obtenerColorPuntuacion(puntuacion) + '">' + (puntuacion ? puntuacion.toFixed(1) + '/10' : 'N/A') + '</span>' +
+                  '</div>' +
+                  '<div class="col-sm-6">' +
+                    '<strong class="text-warning">👥 Popularidad:</strong><br>' +
+                    '<span class="fs-5">' + Math.round(popularidad || 0) + '</span>' +
+                  '</div>' +
+                '</div>' +
+                '<div class="mb-3">' +
+                  '<strong class="text-warning">📅 Estreno:</strong><br>' +
+                  '<span>' + fechaFormateada + '</span>' +
+                '</div>' +
+                (paises && paises.length > 0 ? 
+                  '<div class="mb-3">' +
+                    '<strong class="text-warning">🌍 País:</strong><br>' +
+                    '<span>' + paises.join(', ') + '</span>' +
+                  '</div>' : '') +
+              '</div>' +
+            '</div>';
+
+            // Mostrar modal
+            $("#contenidoModal").html(contenidoModal);
+            $("#cardDetalles").fadeIn(300);
+          },
+
+          cerrarModal: function() {
+            $("#cardDetalles").fadeOut(200);
+          },
+
+          // Función auxiliar para color según puntuación
+          obtenerColorPuntuacion: function(puntuacion) {
+            if (puntuacion >= 8) return "text-success";
+            if (puntuacion >= 6) return "text-warning";
+            if (puntuacion >= 4) return "text-info";
+            return "text-danger";
+          },
+
+        };
+
+        /**
+         * INICIALIZACIÓN DE LA APLICACIÓN
+         */
+        TWDApp.init();
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SmartRecipes</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body data-theme="light">
+<header>
+  <h1>🥗 SmartRecipes</h1>
+  <nav>
+    <a href="#home" class="nav-link active">Inicio</a>
+    <a href="#favorites" class="nav-link">Favoritos</a>
+    <a href="#contact" class="nav-link">Contacto</a>
+    <input type="text" id="search-input" placeholder="Buscar comida...">
+    <select id="category-select" style="display:none;">
+      <option value="">Todas las categorías</option>
+    </select>
+    <!-- sort select removed to keep layout consistent and ordered -->
+    <button id="search-btn">Buscar 🔍</button>
+    <button id="theme-toggle">🌙</button>
+  </nav>
+</header>
+
+<main id="app">
+  <div id="recipes-container"></div>
+</main>
+
+<footer>
+  <p>© 2025 SmartRecipes - Proyecto DAW</p>
+</footer>
+
+<div class="toast"></div>
+
+<script type="module" src="js/api.js"></script>
+<script type="module" src="js/storage.js"></script>
+<script type="module" src="js/ui.js"></script>
+<script type="module" src="js/utils.js"></script>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

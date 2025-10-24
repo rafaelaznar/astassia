@@ -1,0 +1,69 @@
+#tablero {
+  display: grid;
+  /* columnas se fijan desde JS para concordar con filas/columnas */
+  gap: 5px;
+  margin-top: 20px;
+  justify-content: center;
+  justify-items: center;
+}
+.celda {
+  background: #ddd;
+  width: 60px;
+  height: 60px;
+  border-radius: 4px;
+  overflow: hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.celda img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.activo {
+  outline: 3px solid lightgreen;
+}
+.celda.wrong {
+  outline: 3px solid crimson;
+  animation: shake .3s;
+}
+@keyframes shake { 0%{transform:translateX(0)} 25%{transform:translateX(-4px)} 75%{transform:translateX(4px)} 100%{transform:translateX(0)} }
+
+body{
+    text-align: center;
+}
+
+/* Recuadro objetivo */
+#targetBox {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  justify-content:center;
+  margin-bottom:12px;
+}
+#targetBox img {
+  width:64px;
+  height:64px;
+  object-fit:cover;
+  border:2px solid #333;
+}
+#targetName {
+  font-weight:600;
+}
+
+/* Nuevos estilos para control de sonido */
+#soundControls {
+  margin: 10px 0;
+}
+#soundToggle {
+  padding: 6px 12px;
+  font-size: 14px;
+  cursor: pointer;
+}
+#ytPlayer.visible {
+  display:block;
+  width:320px;
+  height:180px;
+  border:0;
+}

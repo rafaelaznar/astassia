@@ -1,0 +1,316 @@
+/* reseteo basico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+ 
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /* colores bonitos en rosa */
+    background: linear-gradient(135deg, #fbeff6 0%, #f1dfe9 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+header {
+    text-align: center;
+    color: #3b3b3b;
+    margin-bottom: 40px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    /* imagen de fondo */
+    background-image: url(../img/header-bg.jpg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 20px;
+    position: relative;
+    box-shadow: 0 8px 25px rgba(174, 74, 120, 0.15);
+}
+
+h1 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    /* sombra rosa sutil + contorno blanco para destacar el texto sobre la imagen */
+    text-shadow: 0 0 15px rgba(255,255,255,0.95), 1px 1px 3px rgba(255,111,163,0.08);
+}
+
+.subtitle {
+    font-size: 1.1em;
+    opacity: 0.9;
+}
+
+/* estilos del formulario */
+.formulario-busqueda {
+    background: white;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 15px rgba(174, 74, 120, 0.1);
+}
+
+#form-buscar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: flex-end;
+}
+
+.campo-busqueda,
+.campo-fecha {
+    flex: 1;
+    min-width: 250px;
+}
+
+.campo-busqueda label,
+.campo-fecha label {
+    display: block;
+    margin-bottom: 8px;
+    color: #3b3b3b;
+    font-weight: 600;
+}
+
+.campo-busqueda input,
+.campo-fecha input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ffb6c1;
+    border-radius: 8px;
+    font-size: 1em;
+    transition: border-color 0.3s;
+}
+
+.campo-busqueda input:focus,
+.campo-fecha input:focus {
+    outline: none;
+    border-color: #ff6fa3;
+}
+
+/* mensajes de error */
+.error-mensaje {
+    display: block;
+    color: #c23b5a;
+    font-size: 0.85em;
+    margin-top: 5px;
+    min-height: 20px;
+}
+
+.btn-buscar,
+.btn-limpiar {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: 600;
+}
+
+.btn-buscar {
+    background: linear-gradient(135deg, #ff6fa3 0%, #ffb6c1 100%);
+    color: white;
+}
+
+.btn-buscar:hover {
+    background: linear-gradient(135deg, #ff5a8f 0%, #ff9fb0 100%);
+}
+
+.btn-limpiar {
+    background: #f0f0f0;
+    color: #3b3b3b;
+}
+
+.btn-limpiar:hover {
+    background: #e0e0e0;
+}
+
+/* botones de filtro */
+.filtros {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.btn-filtro {
+    padding: 10px 20px;
+    border: 2px solid #ffb6c1;
+    border-radius: 25px;
+    background: white;
+    color: #3b3b3b;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: 600;
+}
+
+.btn-filtro:hover {
+    background: #fff5f8;
+    transform: translateY(-2px);
+}
+
+.btn-filtro.activo {
+    background: linear-gradient(135deg, #ff6fa3 0%, #ffb6c1 100%);
+    color: white;
+    border-color: #ff6fa3;
+}
+
+.loading {
+    text-align: center;
+    color: #3b3b3b;
+    font-size: 1.2em;
+    padding: 40px;
+}
+
+/* boton volver al inicio */
+.btn-return-home {
+    display: inline-block;
+    padding: 12px 26px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #ff6fa3 0%, #ffb6c1 100%);
+    color: white;
+    text-decoration: none;
+    font-weight: 700;
+    box-shadow: 0 8px 22px rgba(255,111,163,0.18);
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.btn-return-home:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 36px rgba(255,111,163,0.22);
+}
+
+/* espacio de las tarjetas */
+.festividades-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 30px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+/* tarjeta individual */
+.festividad-card {
+    background: #ffffff;
+    padding: 35px;
+    box-shadow: 0 8px 20px rgba(174, 74, 120, 0.08);
+    transition: transform 0.3s ease;
+    transition: box-shadow 0.3s ease;
+    cursor: pointer;
+    position: relative;
+}
+
+.festividad-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+    background: #fffbfd;
+}
+
+/* boton favorito */
+.btn-favorito {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.btn-favorito:hover {
+    transform: scale(1.2);
+}
+
+.fecha {
+    display: inline-block;
+    background: linear-gradient(135deg, #ff6fa3 0%, #ffb6c1 100%);
+    color: white;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 16px;
+    padding-right: 16px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.nombre {
+    font-size: 1.3em;
+    color: #3b3b3b;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+/* nombre en idioma local */
+.nombre-local {
+    font-size: 0.95em;
+    color: #6b6b6b;
+    font-style: italic;
+    margin-bottom: 10px;
+}
+
+.tipo {
+    display: inline-block;
+    padding: 5px 12px;
+    background: #fff5f8;
+    border-radius: 12px;
+    font-size: 0.85em;
+    color: #7a3b4d;
+    margin-top: 5px;
+}
+
+/* si es nacional cambiar color */
+.tipo.nacional {
+    background: #ffe6ec;
+    color: #ff6fa3;
+}
+
+.error {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    color: #c23b5a;
+    font-size: 1.1em;
+}
+
+/* mensaje cuando no hay resultados */
+.sin-resultados {
+    text-align: center;
+    padding: 40px;
+    color: #6b6b6b;
+    font-size: 1.1em;
+}
+
+/* para movil */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2em;
+    }
+    
+    .festividades-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    #form-buscar {
+        flex-direction: column;
+    }
+    
+    .campo-busqueda,
+    .campo-fecha {
+        width: 100%;
+    }
+    
+    .filtros {
+        justify-content: center;
+    }
+}

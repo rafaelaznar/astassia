@@ -1,0 +1,177 @@
+body {
+  background: linear-gradient(135deg, #c9cddf 0%, #9780ac 100%);
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.brand-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  flex-shrink: 0;
+}
+
+.weather-hero {
+  position: relative;
+  padding: clamp(2rem, 4vw, 3.5rem);
+  border-radius: 32px;
+  background: rgba(32, 28, 63, 0.75);
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+  color: #f8f9ff;
+  backdrop-filter: blur(12px);
+}
+
+.weather-hero::after {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  background: radial-gradient(circle at top right, rgba(255, 255, 255, 0.18), transparent 55%),
+              radial-gradient(circle at bottom left, rgba(118, 75, 162, 0.25), transparent 60%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.weather-hero > .row {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-list {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0 0;
+  display: grid;
+  gap: 0.85rem;
+  color: rgba(248, 249, 255, 0.85);
+}
+
+.hero-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1rem;
+}
+
+.hero-list .icon {
+  width: 1.4em;
+  height: 1.4em;
+  color: #ffd166;
+}
+
+.hero-image {
+  width: 100%;
+  height: 100%;
+  max-height: 360px;
+  object-fit: cover;
+  border-radius: 20px;
+  box-shadow: 0 12px 35px rgba(15, 23, 42, 0.45);
+}
+
+.card + .card {
+  margin-top: .5rem;
+}
+
+#alert {
+  border-width: 1px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-body {
+  background: linear-gradient(180deg, #ffffff 0%, #f8f9ff 100%);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-body:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(13, 110, 253, 0.25);
+  background: linear-gradient(180deg, #f9faff 0%, #ddf8f4 100%);
+}
+
+.weather-icon {
+  width: 72px;
+  height: 72px;
+  transition: transform 0.3s ease;
+  z-index: 2;
+  pointer-events: none;
+}
+
+button {
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+.icon {
+  width: 1.1em;
+  height: 1.1em;
+  flex-shrink: 0;
+  fill: currentColor;
+  stroke: currentColor;
+}
+
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+}
+
+.form-control, .form-select {
+  border-radius: 8px;
+  border: 1px solid #ced4da;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 0.25rem rgba(102, 126, 234, 0.25);
+}
+
+.forecast-card {
+  cursor: pointer;
+}
+
+.forecast-card:active {
+  transform: translateY(-2px);
+}
+
+/* ajustes del scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #5a6fd8, #6a4190);
+}

@@ -1,0 +1,170 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: url('cielo_estrellado.png') no-repeat center center fixed;
+    background-size: cover;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.container {
+    background: white;
+    max-width: 600px;
+    width: 100%;
+    padding: 40px;
+}
+
+h1 {
+    text-align: center;
+    color: #667eea;
+    margin-bottom: 10px;
+    font-size: 2.5em;
+}
+
+.subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 30px;
+    font-size: 1.1em;
+}
+
+.score {
+    text-align: center;
+    font-size: 1.3em;
+    color: #764ba2;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.question-container {
+    margin: 30px 0;
+}
+
+.movie-poster {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    display: block;
+    margin: 0 auto 20px;
+}
+
+.question {
+    font-size: 1.3em;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: 500;
+}
+
+.options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.option {
+    padding: 15px 25px;
+    background: #f0f0f0;
+    border: 2px solid #ccc;
+    cursor: pointer;
+    font-size: 1.1em;
+    text-align: center;
+}
+
+.option:hover {
+    background: #e0e0e0;
+}
+
+.option.correct {
+    background: #4caf50;
+    color: white;
+    border-color: #4caf50;
+}
+
+.option.incorrect {
+    background: #f44336;
+    color: white;
+    border-color: #f44336;
+}
+
+.option.disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.btn {
+    padding: 15px 30px;
+    background: #ac7ed1;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1em;
+    margin-top: 20px;
+    width: 100%;
+    font-weight: bold;
+}
+
+.btn:hover {
+    background: #a230ee;
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.loading {
+    text-align: center;
+    color: #a530f3;
+    font-size: 1.2em;
+    padding: 40px;
+}
+
+.result-message {
+    text-align: center;
+    padding: 15px;
+    margin: 20px 0;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.result-message.correct {
+    background: #c8e6c9;
+    color: #2e7d32;
+}
+
+.result-message.incorrect {
+    background: #ffcdd2;
+    color: #c62828;
+}
+
+.final-screen {
+    text-align: center;
+}
+
+.final-score {
+    font-size: 3em;
+    color: #667eea;
+    margin: 20px 0;
+}
+
+.final-message {
+    font-size: 1.3em;
+    color: #000000;
+    margin-bottom: 30px;
+}
+
+.timer {
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 1.1em;
+    color: #333;
+}
