@@ -1,0 +1,682 @@
+/* ========== VARIABLES Y ESTILOS GLOBALES ========== */
+:root {
+  --nasa-blue: #0B3D91;
+  --nasa-red: #FC3D21;
+  --bg-dark: #0a0a0f;
+  --card-bg: rgba(15, 23, 42, 0.85);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: var(--bg-dark);
+  color: #ffffff;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+#starfield {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+/* ========== NAVEGACIÓN ========== */
+.navbar {
+  background: rgba(11, 61, 145, 0.75) !important;
+  backdrop-filter: blur(10px);
+  border-bottom: 2px solid rgba(252, 61, 33, 0.3);
+}
+
+.navbar-brand {
+  font-weight: 700;
+  font-size: 1.3rem;
+}
+
+.navbar-brand img {
+  filter: drop-shadow(0 0 10px rgba(252, 61, 33, 0.5));
+}
+
+.nav-link {
+  color: rgba(255, 255, 255, 0.85) !important;
+  transition: all 0.3s;
+  font-weight: 500;
+  position: relative;
+}
+
+.nav-link:hover, .nav-link.active {
+  color: var(--nasa-red) !important;
+}
+
+.nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--nasa-red);
+}
+
+/* ========== BOTONES ========== */
+.btn-nasa {
+  background: linear-gradient(135deg, var(--nasa-blue), var(--nasa-red));
+  border: none;
+  color: white;
+  font-weight: 600;
+  padding: 10px 24px;
+  border-radius: 25px;
+  transition: all 0.3s;
+  box-shadow: 0 4px 15px rgba(252, 61, 33, 0.3);
+}
+
+.btn-nasa:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 25px rgba(252, 61, 33, 0.5);
+  color: white;
+}
+
+/* ========== SECCIONES Y LAYOUT ========== */
+.section-content {
+  display: none;
+  animation: fadeIn 0.5s;
+}
+
+.section-content.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.section-title {
+  color: var(--nasa-red);
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  text-align: center;
+  text-shadow: 0 0 20px rgba(252, 61, 33, 0.4);
+}
+
+/* ========== HERO SECTION ========== */
+.hero {
+  padding: 4rem 2rem;
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(11, 61, 145, 0.3), rgba(252, 61, 33, 0.2));
+  border: 2px solid rgba(252, 61, 33, 0.3);
+  margin-bottom: 3rem;
+  position: relative;
+  z-index: 2;
+}
+
+.hero h1 {
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, #fff, var(--nasa-red));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ========== ANIMACIONES ========== */
+#particles-animation {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 1;
+}
+
+#particles-animation canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* ========== CARDS GENERALES ========== */
+.card-nasa {
+  background: var(--card-bg);
+  border-radius: 15px;
+  padding: 2rem;
+  border: 1px solid rgba(252, 61, 33, 0.2);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s;
+}
+
+.card-nasa:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(252, 61, 33, 0.3);
+  border-color: rgba(252, 61, 33, 0.5);
+}
+
+/* ========== CARDS DE EXPLORACIÓN GRANDES ========== */
+.explore-card-large {
+  background: var(--card-bg);
+  border-radius: 15px;
+  padding: 2rem;
+  border: 2px solid rgba(252, 61, 33, 0.3);
+  backdrop-filter: blur(10px);
+  transition: all 0.4s;
+  min-height: 600px;
+}
+
+.explore-card-large:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(252, 61, 33, 0.4);
+  border-color: rgba(252, 61, 33, 0.6);
+}
+
+.explore-card-large h3 {
+  color: var(--nasa-red);
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.explore-card-large p {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+}
+
+.explore-card-large .description {
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.7;
+}
+
+.explore-card-large.expanded .description {
+  display: block !important;
+}
+
+.explore-card-large .iframe-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+/* ========== GALERÍA CON EFECTOS HOVER MEJORADOS ========== */
+.gallery-item-hover {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  background: #000;
+  z-index: 1;
+  animation: fadeInUp 0.6s ease-out backwards;
+}
+
+.gallery-img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 15px;
+  filter: brightness(0.9);
+}
+
+.gallery-overlay-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.7), transparent);
+  color: white;
+  padding: 15px;
+  transform: translateY(100%);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+/* GALERÍA CON EFECTO HOVER - Unificado */
+.gallery-item-hover {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  background: #000;
+  z-index: 1;
+  animation: fadeInUp 0.6s ease-out backwards;
+}
+.gallery-item-hover:hover {
+  transform: scale(2) translateY(-10px);
+  z-index: 999;
+  box-shadow: 0 25px 50px rgba(252, 61, 33, 0.4), 0 0 30px rgba(252, 61, 33, 0.3);
+}
+.gallery-item-hover:focus {
+  outline: 3px solid var(--nasa-red);
+  outline-offset: 5px;
+  transform: scale(2) translateY(-10px);
+  z-index: 999;
+}
+.gallery-item-hover:focus-visible {
+  outline: 3px solid var(--nasa-red);
+  outline-offset: 5px;
+}
+.gallery-item-hover:hover .gallery-img,
+.gallery-item-hover:focus .gallery-img {
+  transform: scale(1);
+}
+.gallery-item-hover:hover .gallery-overlay-info,
+.gallery-item-hover:focus .gallery-overlay-info {
+  transform: translateY(0);
+}
+.gallery-item-hover:nth-child(1) { animation-delay: 0.05s; }
+.gallery-item-hover:nth-child(2) { animation-delay: 0.1s; }
+.gallery-item-hover:nth-child(3) { animation-delay: 0.15s; }
+.gallery-item-hover:nth-child(4) { animation-delay: 0.2s; }
+.gallery-item-hover:nth-child(5) { animation-delay: 0.25s; }
+.gallery-item-hover:nth-child(6) { animation-delay: 0.3s; }
+.gallery-item-hover:nth-child(7) { animation-delay: 0.35s; }
+.gallery-item-hover:nth-child(8) { animation-delay: 0.4s; }
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.gallery-img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 15px;
+}
+.gallery-overlay-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.7), transparent);
+  color: white;
+  padding: 15px;
+  transform: translateY(100%);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .gallery-item-hover:hover, .gallery-item-hover:focus {
+    transform: scale(1.5) translateY(-5px);
+  }
+  .gallery-img {
+    height: 200px;
+  }
+}
+@media (max-width: 576px) {
+  .gallery-item-hover:hover, .gallery-item-hover:focus {
+    transform: scale(1.3) translateY(-3px);
+  }
+  .gallery-img {
+    height: 180px;
+  }
+}
+/* Animación suave para el contenedor de galería */
+#galleryContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+#galleryContainer > .col-lg-3,
+#galleryContainer > .col-md-4,
+#galleryContainer > .col-sm-6 {
+  position: relative;
+  z-index: 1;
+}
+#galleryContainer > .col-lg-3:hover,
+#galleryContainer > .col-md-4:hover,
+#galleryContainer > .col-sm-6:hover {
+  z-index: 999;
+}
+/* Botón de toggle galería */
+#toggleGalleryBtn {
+  font-size: 1.1rem;
+  padding: 12px 30px;
+  transition: all 0.3s ease;
+}
+#toggleGalleryBtn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(252, 61, 33, 0.4);
+}
+/* Estilos para el modal del carousel */
+.modal-content {
+  border-radius: 15px;
+  overflow: hidden;
+}
+.carousel-item img {
+  border-radius: 10px;
+}
+.carousel-caption {
+  left: 50%;
+  transform: translateX(-50%);
+  right: auto;
+  max-width: 80%;
+}
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-color: rgba(252, 61, 33, 0.8);
+  border-radius: 50%;
+  padding: 30px;
+}
+.carousel-indicators button {
+  background-color: var(--nasa-red);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin: 0 5px;
+}
+.carousel-indicators button.active {
+  background-color: var(--nasa-blue);
+  transform: scale(1.3);
+}
+.badge {
+  font-size: 0.75rem;
+  padding: 5px 10px;
+  border-radius: 20px;
+}
+.modal.fade .modal-dialog {
+  transition: transform 0.3s ease-out;
+}
+.text-muted {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+.carousel-inner {
+  border-radius: 10px;
+}
+.carousel-caption h5 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+.carousel-caption p {
+  font-size: 1rem;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+
+
+/* Stagger animation para galería */
+.gallery-item-hover:nth-child(1) { animation-delay: 0.05s; }
+.gallery-item-hover:nth-child(2) { animation-delay: 0.1s; }
+.gallery-item-hover:nth-child(3) { animation-delay: 0.15s; }
+.gallery-item-hover:nth-child(4) { animation-delay: 0.2s; }
+.gallery-item-hover:nth-child(5) { animation-delay: 0.25s; }
+.gallery-item-hover:nth-child(6) { animation-delay: 0.3s; }
+.gallery-item-hover:nth-child(7) { animation-delay: 0.35s; }
+.gallery-item-hover:nth-child(8) { animation-delay: 0.4s; }
+
+/* ========== LAYOUT DE GALERÍA ========== */
+#galleryContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+#galleryContainer > .col-lg-3,
+#galleryContainer > .col-md-4,
+#galleryContainer > .col-sm-6 {
+  position: relative;
+  z-index: 1;
+}
+
+#galleryContainer > .col-lg-3:hover,
+#galleryContainer > .col-md-4:hover,
+#galleryContainer > .col-sm-6:hover {
+  z-index: 999;
+}
+
+/* ========== BOTÓN TOGGLE GALERÍA ========== */
+#toggleGalleryBtn {
+  font-size: 1.1rem;
+  padding: 12px 30px;
+  transition: all 0.3s ease;
+}
+
+#toggleGalleryBtn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(252, 61, 33, 0.4);
+}
+
+/* ========== CARRUSEL BOOTSTRAP ========== */
+.carousel-item img {
+  border-radius: 10px;
+}
+
+.carousel-caption {
+  left: 50%;
+  transform: translateX(-50%);
+  right: auto;
+  max-width: 80%;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-color: rgba(252, 61, 33, 0.8);
+  border-radius: 50%;
+  padding: 30px;
+}
+
+.carousel-indicators button {
+  background-color: var(--nasa-red);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin: 0 5px;
+}
+
+.carousel-indicators button.active {
+  background-color: var(--nasa-blue);
+  transform: scale(1.3);
+}
+
+.carousel-caption h5 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.carousel-caption p {
+  font-size: 1rem;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+/* ========== TRANSICIONES SMOOTH ========== */
+.modal.fade .modal-dialog {
+  transition: transform 0.3s ease-out;
+}
+
+/* ========== UTILIDADES ========== */
+.text-muted {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 2.5rem;
+  }
+  
+  .section-title {
+    font-size: 2rem;
+  }
+  
+  .explore-card-large {
+    min-height: auto;
+    margin-bottom: 1.5rem;
+    padding: 1.5rem;
+  }
+  
+  .explore-card-large h3 {
+    font-size: 1.5rem;
+  }
+  
+  .explore-card-large p {
+    font-size: 1rem;
+  }
+  
+  .explore-card-large .iframe-container iframe {
+    height: 300px !important;
+  }
+  
+  .gallery-item-hover:hover {
+    transform: scale(1.5) translateY(-5px);
+  }
+  
+  .gallery-img {
+    height: 200px;
+  }
+  
+  .carousel-container {
+    height: 350px;
+  }
+  
+  .carousel-info {
+    padding: 1.5rem;
+    transform: translateY(60%);
+  }
+  
+  .carousel-info h4 {
+    font-size: 1.3rem;
+  }
+  
+  .carousel-info p {
+    font-size: 0.95rem;
+  }
+  
+  .carousel-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+  
+  .carousel-btn-prev {
+    left: 10px;
+  }
+  
+  .carousel-btn-next {
+    right: 10px;
+  }
+}
+
+@media (max-width: 576px) {
+  .gallery-item-hover:hover {
+    transform: scale(1.3) translateY(-3px);
+  }
+  
+  .gallery-img {
+    height: 180px;
+  }
+}
+
+/* ========== FOOTER ========== */
+footer {
+  padding: 2rem 0;
+  margin-top: 5rem;
+  /* Sin fondo ni borde, fondo predeterminado */
+}
+
+/* Footer Unificado para todas las secciones */
+.footer-nasa {
+  background: linear-gradient(135deg, #0B3D91 60%, #FC3D21 100%);
+  color: #fff;
+  padding: 2.5rem 0 1.2rem 0;
+  margin-top: 4rem;
+  border-top: 3px solid #FC3D21;
+  font-size: 1.05rem;
+  box-shadow: 0 -4px 24px rgba(11,61,145,0.12);
+}
+.footer-nasa .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+.footer-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+}
+.footer-section {
+  flex: 1 1 220px;
+  min-width: 200px;
+}
+.footer-section h5 {
+  font-size: 1.2rem;
+  margin-bottom: 0.7rem;
+  color: #FFD700;
+  font-weight: 700;
+}
+.footer-section p, .footer-section a {
+  color: #fff;
+  margin-bottom: 0.3rem;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-section a:hover {
+  color: #FFD700;
+  text-decoration: underline;
+}
+.footer-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid rgba(255,255,255,0.15);
+  padding-top: 1rem;
+  font-size: 0.98rem;
+}
+.footer-bottom p {
+  margin: 0;
+}
+.social-links {
+  display: flex;
+  gap: 1.1rem;
+}
+.social-links a {
+  color: #fff;
+  font-size: 1.3rem;
+  transition: color 0.2s, transform 0.2s;
+}
+.social-links a:hover {
+  color: #FFD700;
+  transform: scale(1.2);
+}
+@media (max-width: 900px) {
+  .footer-content {
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: flex-start;
+  }
+  .footer-bottom {
+    flex-direction: column;
+    gap: 0.7rem;
+    align-items: flex-start;
+  }
+}
+
+/* ========== ACCESIBILIDAD ========== */
+.gallery-item-hover:focus-visible {
+  outline: 3px solid var(--nasa-red);
+  outline-offset: 5px;
+}
