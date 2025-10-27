@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <!-- ============================= -->
+  <!-- CABECERA DEL DOCUMENTO HTML  -->
+  <!-- ============================= -->
+  <!-- Aquí se define la información básica de la página y los estilos que se van a usar -->
+  <meta charset="UTF-8"> <!-- Permite usar acentos y caracteres especiales -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Hace que la web se vea bien en móvil -->
+  <title>Tierra al Centro - Animación jQuery</title> <!-- Título que aparece en la pestaña del navegador -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <!-- jQuery para animaciones y manipulación fácil -->
+  <!-- ============================= -->
+  <!-- ESTILOS DE LA ANIMACIÓN      -->
+  <!-- ============================= -->
+  <!-- Aquí se definen los estilos para el fondo, los objetos y las órbitas -->
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #000;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+    }
+
+    #earth-system-container {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      background: radial-gradient(ellipse at center, #0a0a1a 0%, #000000 100%);
+      overflow: hidden;
+    }
+
+    /* Estrellas de fondo */
+    .star {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      animation: twinkle 3s infinite;
+    }
+
+    @keyframes twinkle {
+
+      0%,
+      100% {
+        opacity: 0.2;
+      }
+
+      50% {
+        opacity: 0.9;
+      }
+    }
+
+    /* Contenedor central */
+    .earth-system {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 1000px;
+      height: 1000px;
+    }
+
+    /* Tierra central */
+    .earth-center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100px;
+      height: 100px;
+      background: linear-gradient(135deg, #1e90ff 0%, #228b22 30%, #1e90ff 60%, #87ceeb 100%);
+      border-radius: 50%;
+      box-shadow:
+        0 0 40px rgba(30, 144, 255, 0.6),
+        inset -10px -10px 20px rgba(0, 0, 0, 0.3);
+      animation: rotate-earth 20s linear infinite;
+      z-index: 10;
+    }
+
+    @keyframes rotate-earth {
+      from {
+        transform: translate(-50%, -50%) rotate(0deg);
+      }
+
+      to {
+        transform: translate(-50%, -50%) rotate(360deg);
+      }
+    }
+
+    /* Órbitas */
+    .orbit {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    /* Órbita del Sol */
+    .sun-orbit {
+      width: 400px;
+      height: 400px;
+      border-color: rgba(255, 215, 0, 0.2);
+    }
+
+    /* Sol */
+    .sun {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      background: radial-gradient(circle, #ffd700, #ff8c00);
+      border-radius: 50%;
+      box-shadow: 0 0 40px #ff8c00, 0 0 60px #ffa500;
+      animation: pulse-sun 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse-sun {
+
+      0%,
+      100% {
+        transform: scale(1);
+        box-shadow: 0 0 40px #ff8c00, 0 0 60px #ffa500;
+      }
+
+      50% {
+        transform: scale(1.1);
+        box-shadow: 0 0 50px #ff8c00, 0 0 80px #ffa500;
+      }
+    }
+
+    /* Órbita de la Luna */
+    .moon-orbit {
+      width: 180px;
+      height: 180px;
+      border-color: rgba(192, 192, 192, 0.3);
+    }
+
+    /* Luna */
+    .moon {
+      position: absolute;
+      width: 25px;
+      height: 25px;
+      background: linear-gradient(135deg, #c0c0c0, #808080);
+      border-radius: 50%;
+      box-shadow: 0 0 15px rgba(192, 192, 192, 0.5);
+    }
+
+    /* Órbita de satélites */
+    .satellite-orbit {
+      width: 240px;
+      height: 240px;
+      border-color: rgba(100, 149, 237, 0.2);
+      border-style: dashed;
+    }
+
+    /* Satélites */
+    .satellite {
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      background: linear-gradient(135deg, silver, #4169e1);
+      border-radius: 3px;
+      box-shadow: 0 0 10px rgba(65, 105, 225, 0.8);
+    }
+
+    .satellite::before {
+      content: '';
+      position: absolute;
+      width: 25px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #4169e1, transparent);
+      top: 50%;
+      left: -5px;
+      transform: translateY(-50%);
+    }
+
+    .satellite::after {
+      content: '';
+      position: absolute;
+      width: 25px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #4169e1, transparent);
+      top: 50%;
+      right: -5px;
+      transform: translateY(-50%);
+    }
+
+    /* Órbita de asteroides */
+    .asteroid-orbit {
+      width: 320px;
+      height: 320px;
+      border-color: rgba(139, 69, 19, 0.2);
+      border-style: dotted;
+    }
+
+    /* Asteroides */
+    .asteroid {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: #8b4513;
+      border-radius: 50%;
+      box-shadow: 0 0 5px rgba(139, 69, 19, 0.6);
+    }
+
+    /* Controles */
+    .controls {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.8);
+      padding: 15px 30px;
+      border-radius: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      z-index: 100;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .controls button {
+      background: linear-gradient(135deg, #0B3D91, #FC3D21);
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+
+    .controls button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(252, 61, 33, 0.4);
+    }
+
+    .controls label {
+      color: white;
+      font-size: 14px;
+      margin-left: 10px;
+    }
+
+    .controls input[type="range"] {
+      width: 150px;
+      margin-left: 10px;
+    }
+
+    /* Info panel */
+    .info-panel {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: rgba(0, 0, 0, 0.85);
+      padding: 20px;
+      border-radius: 10px;
+      border: 1px solid rgba(30, 144, 255, 0.4);
+      color: white;
+      max-width: 320px;
+      z-index: 100;
+    }
+
+    .info-panel h2 {
+      color: #1e90ff;
+      margin-bottom: 10px;
+      font-size: 1.5rem;
+    }
+
+    .info-panel p {
+      font-size: 0.9rem;
+      line-height: 1.5;
+      opacity: 0.9;
+      margin-bottom: 8px;
+    }
+
+    .info-panel .legend {
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .info-panel .legend-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 0.85rem;
+    }
+
+    .info-panel .legend-color {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="earth-system-container">
+    <!-- ============================= -->
+    <!-- PANEL DE INFORMACIÓN         -->
+    <!-- ============================= -->
+    <!-- Explica qué se ve en la animación y la leyenda de colores -->
+    <div class="info-panel">
+      <h2>🌍 Tierra al Centro</h2>
+      <p>Animación con jQuery mostrando la Tierra en el centro con objetos orbitando a su alrededor.</p>
+      <div class="legend">
+        <div class="legend-item">
+          <div class="legend-color" style="background: radial-gradient(circle, #ffd700, #ff8c00);"></div>
+          <span>Sol</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color" style="background: linear-gradient(135deg, #c0c0c0, #808080);"></div>
+          <span>Luna</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color" style="background: linear-gradient(135deg, silver, #4169e1);"></div>
+          <span>Satélites (3)</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color" style="background: #8b4513;"></div>
+          <span>Asteroides (6)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================= -->
+    <!-- SISTEMA TIERRA-CÉNTRICO      -->
+    <!-- ============================= -->
+    <!-- Aquí se dibuja la Tierra, el Sol, la Luna, satélites y asteroides con sus órbitas -->
+    <div class="earth-system">
+      <!-- Tierra central -->
+      <div class="earth-center"></div>
+
+      <!-- Órbita y Sol -->
+      <div class="orbit sun-orbit"></div>
+      <div class="sun" id="sun"></div>
+
+      <!-- Órbita y Luna -->
+      <div class="orbit moon-orbit"></div>
+      <div class="moon" id="moon"></div>
+
+      <!-- Órbita de satélites -->
+      <div class="orbit satellite-orbit"></div>
+      <div class="satellite" id="satellite1"></div>
+      <div class="satellite" id="satellite2"></div>
+      <div class="satellite" id="satellite3"></div>
+
+      <!-- Órbita de asteroides -->
+      <div class="orbit asteroid-orbit"></div>
+      <div class="asteroid" id="asteroid1"></div>
+      <div class="asteroid" id="asteroid2"></div>
+      <div class="asteroid" id="asteroid3"></div>
+      <div class="asteroid" id="asteroid4"></div>
+      <div class="asteroid" id="asteroid5"></div>
+      <div class="asteroid" id="asteroid6"></div>
+    </div>
+
+    <!-- ============================= -->
+    <!-- CONTROLES DE ANIMACIÓN       -->
+    <!-- ============================= -->
+    <!-- Permiten pausar, reanudar y cambiar la velocidad de la animación -->
+    <div class="controls">
+      <button id="pauseBtn">⏸ Pausar</button>
+      <button id="resumeBtn">▶ Reanudar</button>
+      <label for="speedControl">Velocidad:</label>
+      <input type="range" id="speedControl" min="0.5" max="3" step="0.5" value="1">
+      <span id="speedValue" style="color: white; font-size: 14px;">1x</span>
+    </div>
+  </div>
+
+  <!-- ============================= -->
+  <!-- LÓGICA DE LA ANIMACIÓN       -->
+  <!-- ============================= -->
+  <!-- Aquí va el código que genera las estrellas, mueve los objetos y gestiona los controles -->
+  <script>
+    $(document).ready(function () {
+      // Generar estrellas aleatorias con jQuery para el fondo
+      const $container = $('#earth-system-container');
+      for (let i = 0; i < 250; i++) {
+        const size = Math.random() * 2.5 + 0.5;
+        $('<div>')
+          .addClass('star')
+          .css({
+            width: size + 'px',
+            height: size + 'px',
+            left: Math.random() * 100 + '%',
+            top: Math.random() * 100 + '%',
+            animationDelay: Math.random() * 3 + 's'
+          })
+          .appendTo($container);
+      }
+
+      // Variables de animación
+      let animationSpeed = 1;
+      let isPaused = false;
+      let angles = {
+        sun: 0,
+        moon: 0,
+        satellites: [0, 120, 240],
+        asteroids: [0, 60, 120, 180, 240, 300]
+      };
+
+      // Función de animación con jQuery
+      // Mueve el Sol, la Luna, los satélites y los asteroides en sus órbitas
+      function animate() {
+        if (!isPaused) {
+          // Animar Sol
+          angles.sun += 0.3 * animationSpeed;
+          const sunRadius = 200;
+          const sunX = Math.cos(angles.sun * Math.PI / 180) * sunRadius;
+          const sunY = Math.sin(angles.sun * Math.PI / 180) * sunRadius;
+          $('#sun').css({
+            left: '50%',
+            top: '50%',
+            marginLeft: sunX + 'px',
+            marginTop: sunY + 'px',
+            transform: 'translate(-50%, -50%)'
+          });
+
+          // Animar Luna
+          angles.moon += 1.2 * animationSpeed;
+          const moonRadius = 90;
+          const moonX = Math.cos(angles.moon * Math.PI / 180) * moonRadius;
+          const moonY = Math.sin(angles.moon * Math.PI / 180) * moonRadius;
+          $('#moon').css({
+            left: '50%',
+            top: '50%',
+            marginLeft: moonX + 'px',
+            marginTop: moonY + 'px',
+            transform: 'translate(-50%, -50%)'
+          });
+
+          // Animar Satélites
+          angles.satellites = angles.satellites.map((angle, index) => {
+            const newAngle = angle + 0.8 * animationSpeed;
+            const satRadius = 120;
+            const satX = Math.cos(newAngle * Math.PI / 180) * satRadius;
+            const satY = Math.sin(newAngle * Math.PI / 180) * satRadius;
+            $(`#satellite${index + 1}`).css({
+              left: '50%',
+              top: '50%',
+              marginLeft: satX + 'px',
+              marginTop: satY + 'px',
+              transform: 'translate(-50%, -50%) rotate(' + newAngle + 'deg)'
+            });
+            return newAngle;
+          });
+
+          // Animar Asteroides
+          angles.asteroids = angles.asteroids.map((angle, index) => {
+            const newAngle = angle + 0.5 * animationSpeed;
+            const astRadius = 160;
+            const astX = Math.cos(newAngle * Math.PI / 180) * astRadius;
+            const astY = Math.sin(newAngle * Math.PI / 180) * astRadius;
+            $(`#asteroid${index + 1}`).css({
+              left: '50%',
+              top: '50%',
+              marginLeft: astX + 'px',
+              marginTop: astY + 'px',
+              transform: 'translate(-50%, -50%)'
+            });
+            return newAngle;
+          });
+        }
+
+        requestAnimationFrame(animate);
+      }
+
+      // Iniciar animación
+      animate();
+
+      // Controles de pausa/reanudar con jQuery
+      $('#pauseBtn').on('click', function () {
+        isPaused = true;
+        $(this).css('opacity', '0.6');
+        $('#resumeBtn').css('opacity', '1');
+      });
+
+      $('#resumeBtn').on('click', function () {
+        isPaused = false;
+        $(this).css('opacity', '0.6');
+        $('#pauseBtn').css('opacity', '1');
+      });
+
+      // Control de velocidad con jQuery
+      $('#speedControl').on('input', function () {
+        animationSpeed = parseFloat($(this).val());
+        $('#speedValue').text(animationSpeed + 'x');
+      });
+
+      // Inicializar opacidad de botones
+      $('#resumeBtn').css('opacity', '0.6');
+    });
+  </script>
+</body>
+
+</html>

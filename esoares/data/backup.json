@@ -1,0 +1,230 @@
+{
+  "apis": [
+    {
+      "id": "apod",
+      "name": "APOD",
+      "summary": "Astronomy Picture of the Day",
+      "endpoints": [
+        {
+          "method": "GET",
+          "url": "https://api.nasa.gov/planetary/apod",
+          "parameters": [
+            {"name": "date", "type": "YYYY-MM-DD", "required": false, "description": "Fecha específica para la imagen"},
+            {"name": "api_key", "type": "string", "required": true, "description": "Clave API de NASA"}
+          ]
+        }
+      ],
+      "documentation": "Una de las webs más populares de la NASA es la Astronomy Picture of the Day. Esta API proporciona la imagen astronómica del día con su metadata correspondiente.",
+      "example_images": [
+        "https://apod.nasa.gov/apod/image/2401/OrionNebula_SpitzerSchmidt_960.jpg",
+        "https://apod.nasa.gov/apod/image/2312/JupiterFamily_Zhou_1080.jpg"
+      ],
+      "backup_data": {
+        "title": "NASA APOD - Modo Respaldo",
+        "explanation": "Servicio Astronomy Picture of the Day. La imagen del día no está disponible temporalmente.",
+        "url": "https://apod.nasa.gov/apod/image/2401/OrionNebula_SpitzerSchmidt_960.jpg",
+        "copyright": "NASA/JPL-Caltech"
+      }
+    },
+    {
+      "id": "neows",
+      "name": "Asteroids NeoWs",
+      "summary": "Near Earth Object Web Service",
+      "endpoints": [
+        {
+          "method": "GET",
+          "url": "https://api.nasa.gov/neo/rest/v1/feed",
+          "parameters": [
+            {"name": "start_date", "type": "YYYY-MM-DD", "required": true, "description": "Fecha de inicio del rango"},
+            {"name": "end_date", "type": "YYYY-MM-DD", "required": false, "description": "Fecha final del rango"},
+            {"name": "api_key", "type": "string", "required": true, "description": "Clave API de NASA"}
+          ]
+        }
+      ],
+      "documentation": "Servicio web RESTful para información de asteroides cercanos a la Tierra. Permite buscar asteroides basados en su fecha de acercamiento más cercana.",
+      "example_data": {
+        "total_asteroids": 15,
+        "dangerous_count": 3,
+        "max_velocity": 45000,
+        "closest_distance": 2500000
+      },
+      "backup_data": {
+        "total": 12,
+        "dangerous": 2,
+        "message": "Datos de asteroides simulados - NASA NeoWs API",
+        "asteroids": [
+          {
+            "name": "2024 XY1 (Backup)",
+            "diameter": 250,
+            "distance": 2500000,
+            "velocity": 45000,
+            "dangerous": true,
+            "date": "2024-10-22"
+          },
+          {
+            "name": "2024 AB2 (Backup)",
+            "diameter": 150,
+            "distance": 5500000,
+            "velocity": 32000,
+            "dangerous": false,
+            "date": "2024-10-23"
+          },
+          {
+            "name": "2024 CD3 (Backup)",
+            "diameter": 180,
+            "distance": 3800000,
+            "velocity": 28000,
+            "dangerous": true,
+            "date": "2024-10-24"
+          },
+          {
+            "name": "2024 EF4 (Backup)",
+            "diameter": 90,
+            "distance": 7200000,
+            "velocity": 35000,
+            "dangerous": false,
+            "date": "2024-10-25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "mars-photos",
+      "name": "Mars Rover Photos",
+      "summary": "Image data from Curiosity, Opportunity, and Spirit rovers",
+      "endpoints": [
+        {
+          "method": "GET",
+          "url": "https://api.nasa.gov/mars-photos/api/v1/rovers/{rover}/photos",
+          "parameters": [
+            {"name": "rover", "type": "string", "required": true, "description": "Nombre del rover (curiosity, opportunity, spirit)"},
+            {"name": "earth_date", "type": "YYYY-MM-DD", "required": false, "description": "Fecha terrestre de las fotos"},
+            {"name": "sol", "type": "number", "required": false, "description": "Día marciano"},
+            {"name": "camera", "type": "string", "required": false, "description": "Cámara específica"},
+            {"name": "api_key", "type": "string", "required": true, "description": "Clave API de NASA"}
+          ]
+        },
+        {
+          "method": "GET",
+          "url": "https://api.nasa.gov/mars-photos/api/v1/rovers/{rover}/latest_photos",
+          "parameters": [
+            {"name": "rover", "type": "string", "required": true, "description": "Nombre del rover"},
+            {"name": "api_key", "type": "string", "required": true, "description": "Clave API de NASA"}
+          ]
+        }
+      ],
+      "rovers": [
+        {
+          "name": "curiosity",
+          "status": "active",
+          "launch_date": "2011-11-26",
+          "landing_date": "2012-08-06"
+        },
+        {
+          "name": "opportunity",
+          "status": "complete",
+          "launch_date": "2003-07-07",
+          "landing_date": "2004-01-25"
+        },
+        {
+          "name": "spirit",
+          "status": "complete",
+          "launch_date": "2003-06-10",
+          "landing_date": "2004-01-04"
+        }
+      ],
+      "cameras": [
+        "FHAZ", "RHAZ", "MAST", "CHEMCAM", "MAHLI", "MARDI", "NAVCAM", "PANCAM", "MINITES"
+      ],
+      "backup_data": {
+        "rover_name": "Curiosity",
+        "photos_count": 8,
+        "message": "Fotos de Marte - NASA Mars Rover API"
+      }
+    },
+    {
+      "id": "epic",
+      "name": "EPIC",
+      "summary": "Earth Polychromatic Imaging Camera",
+      "endpoints": [
+        {
+          "method": "GET",
+          "url": "https://api.nasa.gov/EPIC/api/natural",
+          "parameters": [
+            {"name": "api_key", "type": "string", "required": true, "description": "Clave API de NASA"}
+          ]
+        },
+        {
+          "method": "GET",
+          "url": "https://api.nasa.gov/EPIC/api/natural/date/{date}",
+          "parameters": [
+            {"name": "date", "type": "YYYY-MM-DD", "required": true, "description": "Fecha específica"},
+            {"name": "api_key", "type": "string", "required": true, "description": "Clave API de NASA"}
+          ]
+        }
+      ],
+      "documentation": "La cámara EPIC de DSCOVR proporciona imágenes de disco completo de la Tierra, capturando perspectivas únicas desde el punto Lagrange L1.",
+      "example_images": [
+        "https://epic.gsfc.nasa.gov/archive/natural/2024/01/22/png/epic_1b_20240122003623.png",
+        "https://epic.gsfc.nasa.gov/archive/natural/2024/01/21/png/epic_1b_20240121011358.png"
+      ],
+      "backup_data": {
+        "title": "Tierra desde el Espacio - EPIC",
+        "description": "Earth Polychromatic Imaging Camera desde DSCOVR",
+        "image_url": "https://epic.gsfc.nasa.gov/archive/natural/2024/01/22/png/epic_1b_20240122003623.png"
+      }
+    },
+    {
+      "id": "spacex",
+      "name": "SpaceX Launches",
+      "summary": "SpaceX Launch Data",
+      "endpoints": [
+        {
+          "method": "GET",
+          "url": "https://api.spacexdata.com/v4/launches/upcoming",
+          "parameters": []
+        },
+        {
+          "method": "GET",
+          "url": "https://api.spacexdata.com/v4/launches/latest",
+          "parameters": []
+        }
+      ],
+      "documentation": "Datos de lanzamientos de SpaceX. Esta es una API pública que no requiere autenticación.",
+      "backup_data": {
+        "launches_count": 3,
+        "message": "Próximos lanzamientos de SpaceX",
+        "next_launch": "Próximo lanzamiento programado"
+      }
+    },
+    {
+      "id": "insight",
+      "name": "InSight Weather",
+      "summary": "Mars Weather Service API",
+      "endpoints": [
+        {
+          "method": "GET",
+          "url": "https://api.nasa.gov/insight_weather/",
+          "parameters": [
+            {"name": "api_key", "type": "string", "required": true, "description": "Clave API de NASA"},
+            {"name": "feedtype", "type": "string", "required": false, "description": "Tipo de feed (json)"},
+            {"name": "ver", "type": "string", "required": false, "description": "Versión (1.0)"}
+          ]
+        }
+      ],
+      "documentation": "Datos meteorológicos del lander InSight en Marte. Proporciona temperatura, viento y presión en Elysium Planitia.",
+      "backup_data": {
+        "sol": 1450,
+        "temperature": -65,
+        "pressure": 720,
+        "message": "Datos meteorológicos de Marte - InSight Lander"
+      }
+    }
+  ],
+    "metadata": {
+      "version": "1.0",
+      "last_updated": "2024-10-21",
+      "total_apis": 6,
+      "description": "Backup data para APIs de NASA utilizadas en Portal Espacial 360°"
+    }
+}

@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <!-- ============================= -->
+  <!-- CABECERA DEL DOCUMENTO HTML  -->
+  <!-- ============================= -->
+  <!-- Aquí se define la información básica de la página y los estilos que se van a usar -->
+  <meta charset="UTF-8"> <!-- Permite usar acentos y caracteres especiales -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Hace que la web se vea bien en móvil -->
+  <title>Monitor de Asteroides NEO - NASA</title> <!-- Título que aparece en la pestaña del navegador -->
+
+  <!-- Bootstrap 5.3: estilos modernos y responsivos -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
+  <!-- Google Fonts: fuentes personalizadas para títulos y textos -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap"
+    rel="stylesheet">
+
+  <!-- ============================= -->
+  <!-- ESTILOS DE LA APP            -->
+  <!-- ============================= -->
+  <!-- Aquí se definen los estilos para el fondo, la navegación, los objetos y las secciones -->
+  <style>
+    :root {
+      --nasa-red: #FC3D21;
+      --nasa-blue: #0B3D91;
+      --dark-bg: #000000;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Rajdhani', sans-serif;
+      background: #000;
+      color: #ffffff;
+      overflow-x: hidden;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    /* Sistema Tierra-céntrico como fondo */
+    #earth-system-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background: radial-gradient(ellipse at center, #0a0a1a 0%, #000000 100%);
+      overflow: hidden;
+      z-index: -1;
+    }
+
+    /* Estrellas de fondo */
+    .star {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      animation: twinkle 3s infinite;
+    }
+
+    @keyframes twinkle {
+
+      0%,
+      100% {
+        opacity: 0.2;
+      }
+
+      50% {
+        opacity: 0.9;
+      }
+    }
+
+    /* Contenedor central */
+    .earth-system {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 1000px;
+      height: 1000px;
+    }
+
+    /* Tierra central */
+    .earth-center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100px;
+      height: 100px;
+      background: linear-gradient(135deg, #1e90ff 0%, #228b22 30%, #1e90ff 60%, #87ceeb 100%);
+      border-radius: 50%;
+      box-shadow:
+        0 0 40px rgba(30, 144, 255, 0.6),
+        inset -10px -10px 20px rgba(0, 0, 0, 0.3);
+      animation: rotate-earth 20s linear infinite;
+      z-index: 10;
+    }
+
+    @keyframes rotate-earth {
+      from {
+        transform: translate(-50%, -50%) rotate(0deg);
+      }
+
+      to {
+        transform: translate(-50%, -50%) rotate(360deg);
+      }
+    }
+
+    /* Órbitas */
+    .orbit {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    /* Órbita del Sol */
+    .sun-orbit {
+      width: 400px;
+      height: 400px;
+      border-color: rgba(255, 215, 0, 0.2);
+    }
+
+    /* Sol */
+    .sun {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      background: radial-gradient(circle, #ffd700, #ff8c00);
+      border-radius: 50%;
+      box-shadow: 0 0 40px #ff8c00, 0 0 60px #ffa500;
+      animation: pulse-sun 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse-sun {
+
+      0%,
+      100% {
+        transform: scale(1);
+        box-shadow: 0 0 40px #ff8c00, 0 0 60px #ffa500;
+      }
+
+      50% {
+        transform: scale(1.1);
+        box-shadow: 0 0 50px #ff8c00, 0 0 80px #ffa500;
+      }
+    }
+
+    /* Órbita de la Luna */
+    .moon-orbit {
+      width: 180px;
+      height: 180px;
+      border-color: rgba(192, 192, 192, 0.3);
+    }
+
+    /* Luna */
+    .moon {
+      position: absolute;
+      width: 25px;
+      height: 25px;
+      background: linear-gradient(135deg, #c0c0c0, #808080);
+      border-radius: 50%;
+      box-shadow: 0 0 15px rgba(192, 192, 192, 0.5);
+    }
+
+    /* Órbita de satélites */
+    .satellite-orbit {
+      width: 240px;
+      height: 240px;
+      border-color: rgba(100, 149, 237, 0.2);
+      border-style: dashed;
+    }
+
+    /* Satélites */
+    .satellite {
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      background: linear-gradient(135deg, silver, #4169e1);
+      border-radius: 3px;
+      box-shadow: 0 0 10px rgba(65, 105, 225, 0.8);
+    }
+
+    .satellite::before {
+      content: '';
+      position: absolute;
+      width: 25px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #4169e1, transparent);
+      top: 50%;
+      left: -5px;
+      transform: translateY(-50%);
+    }
+
+    .satellite::after {
+      content: '';
+      position: absolute;
+      width: 25px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #4169e1, transparent);
+      top: 50%;
+      right: -5px;
+      transform: translateY(-50%);
+    }
+
+    /* Órbita de asteroides */
+    .asteroid-orbit {
+      width: 320px;
+      height: 320px;
+      border-color: rgba(139, 69, 19, 0.2);
+      border-style: dotted;
+    }
+
+    /* Asteroides */
+    .asteroid {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: #8b4513;
+      border-radius: 50%;
+      box-shadow: 0 0 5px rgba(139, 69, 19, 0.6);
+    }
+
+    /* Navigation */
+    .navbar {
+      background: rgba(252, 61, 33, 0.95) !important;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 2px 20px rgba(252, 61, 33, 0.5);
+      position: relative;
+      z-index: 1000;
+    }
+
+    .navbar-brand {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: #ffffff !important;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+
+    .navbar-brand img {
+      width: 50px;
+      height: auto;
+      margin-right: 10px;
+    }
+
+    .nav-link {
+      color: rgba(255, 255, 255, 0.8) !important;
+      font-weight: 500;
+      margin: 0 0.5rem;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: #ffffff !important;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+    }
+
+    /* Hero Carousel */
+    #heroCarousel {
+      height: 100vh;
+      margin-top: 70px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .carousel-item {
+      height: 100vh;
+    }
+
+    .carousel-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      filter: brightness(0.4);
+    }
+
+    .carousel-caption {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      text-align: center;
+    }
+
+    .neon-text-red {
+      color: var(--nasa-red);
+      text-shadow: 0 0 20px var(--nasa-red), 0 0 40px var(--nasa-red);
+      animation: neon-pulse-red 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes neon-pulse-red {
+      from {
+        text-shadow: 0 0 20px var(--nasa-red);
+      }
+
+      to {
+        text-shadow: 0 0 40px var(--nasa-red), 0 0 60px var(--nasa-red);
+      }
+    }
+
+    /* Buttons */
+    .btn-danger-neon {
+      background: linear-gradient(135deg, var(--nasa-red), #ff6b4a);
+      color: #ffffff;
+      border: none;
+      padding: 0.75rem 2rem;
+      font-weight: 600;
+      border-radius: 50px;
+      transition: all 0.3s;
+      box-shadow: 0 0 20px rgba(252, 61, 33, 0.4);
+    }
+
+    .btn-danger-neon:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 30px rgba(252, 61, 33, 0.6);
+      color: #ffffff;
+    }
+
+    /* Sections */
+    .section-content {
+      display: none;
+      min-height: 100vh;
+      padding: 2rem 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-content.active {
+      display: block;
+      animation: fadeIn 0.5s;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: var(--nasa-red);
+      text-shadow: 0 0 20px var(--nasa-red);
+      margin-bottom: 2rem;
+    }
+
+    /* Stats Cards */
+    .stat-card {
+      background: rgba(252, 61, 33, 0.1);
+      border: 2px solid rgba(252, 61, 33, 0.3);
+      border-radius: 15px;
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.3s;
+      height: 100%;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(252, 61, 33, 0.3);
+      border-color: var(--nasa-red);
+    }
+
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      display: block;
+      margin: 0.5rem 0;
+    }
+
+    /* Asteroid List */
+    .asteroid-item {
+      background: rgba(255, 255, 255, 0.05);
+      border-left: 4px solid;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      transition: all 0.3s;
+    }
+
+    .asteroid-item:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateX(5px);
+    }
+
+    .asteroid-item.danger-high {
+      border-left-color: #dc3545;
+    }
+
+    .asteroid-item.danger-medium {
+      border-left-color: #ffc107;
+    }
+
+    .asteroid-item.danger-low {
+      border-left-color: #28a745;
+    }
+
+    /* Cards */
+    .card-custom {
+      background: rgba(26, 26, 46, 0.6);
+      border: 1px solid rgba(252, 61, 33, 0.2);
+      border-radius: 15px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    /* Loading */
+    .loading-spinner {
+      text-align: center;
+      padding: 3rem;
+    }
+
+    .spinner-border {
+      color: var(--nasa-red) !important;
+      width: 3rem;
+      height: 3rem;
+    }
+
+    /* Forms */
+    .form-control,
+    .form-select {
+      background: rgba(26, 26, 46, 0.6);
+      border: 1px solid rgba(252, 61, 33, 0.3);
+      color: #ffffff;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+      background: rgba(26, 26, 46, 0.8);
+      border-color: var(--nasa-red);
+      box-shadow: 0 0 15px rgba(252, 61, 33, 0.3);
+      color: #ffffff;
+    }
+
+    /* Footer */
+    .footer {
+      background: rgba(252, 61, 33, 0.2);
+      border-top: 1px solid rgba(252, 61, 33, 0.3);
+      padding: 3rem 0;
+      margin-top: 5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Scroll List */
+    .scroll-list {
+      max-height: 500px;
+      overflow-y: auto;
+    }
+
+    .scroll-list::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .scroll-list::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    .scroll-list::-webkit-scrollbar-thumb {
+      background: var(--nasa-red);
+      border-radius: 4px;
+    }
+
+    /* Eyes Tools Cards */
+    .eyes-card {
+      background: rgba(26, 26, 46, 0.6);
+      border: 1px solid rgba(252, 61, 33, 0.2);
+      border-radius: 15px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      transition: all 0.3s;
+      height: 100%;
+    }
+
+    .eyes-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(252, 61, 33, 0.3);
+      border-color: var(--nasa-red);
+    }
+
+    /* Comments Section */
+    .comment-item {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .star-rating {
+      color: gold;
+      font-size: 1.2rem;
+    }
+
+    /* NASA Eyes Integration Styles */
+    .nasa-eyes-embed {
+      transition: all 0.3s ease;
+    }
+
+    .nasa-eyes-embed:hover {
+      transform: translateY(-2px);
+    }
+
+    .embed-container {
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      transition: box-shadow 0.3s ease;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .embed-container:hover {
+      box-shadow: 0 8px 30px rgba(252, 61, 33, 0.2);
+    }
+
+    .eyes-info {
+      border-left: 4px solid var(--nasa-red);
+    }
+
+    .nasa-eyes-backup {
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    .backup-visual {
+      background: linear-gradient(135deg, rgba(11, 61, 145, 0.1), rgba(252, 61, 33, 0.05));
+      border-radius: 15px;
+      border: 2px solid rgba(252, 61, 33, 0.2);
+    }
+
+    .data-item {
+      padding: 0.5rem;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 5px;
+      border-left: 3px solid var(--nasa-blue);
+    }
+
+    /* Responsive para el embed */
+    @media (max-width: 768px) {
+      .embed-container {
+        height: 300px !important;
+      }
+
+      .eyes-info {
+        font-size: 0.9rem;
+      }
+    }
+
+    /* Animaciones */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .section-title {
+        font-size: 2rem;
+      }
+
+      .carousel-caption .display-1 {
+        font-size: 2.5rem;
+      }
+    }
+
+    /* Asteroid danger/safe highlight */
+    .asteroid-item.dangerous {
+      border-left: 4px solid #dc3545;
+      background-color: rgba(220, 53, 69, 0.1);
+    }
+
+    .asteroid-item.safe {
+      border-left: 4px solid #28a745;
+      background-color: rgba(40, 167, 69, 0.1);
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ============================= -->
+  <!-- FONDO ANIMADO Y SISTEMA      -->
+  <!-- ============================= -->
+  <!--
+    Este bloque crea un fondo animado con estrellas y un sistema Tierra-céntrico.
+    Es solo decorativo y no afecta la funcionalidad, pero da un aspecto espacial.
+    Dentro de #earth-system-container se dibujan:
+      - La Tierra (centro)
+      - El Sol, la Luna, satélites y asteroides girando en órbitas
+    Todo esto se mueve con JavaScript/jQuery para dar sensación de movimiento real.
+  -->
+  <div id="earth-system-container">
+    <!-- Sistema Tierra-céntrico -->
+    <div class="earth-system">
+      <!-- Tierra central -->
+      <div class="earth-center"></div>
+
+      <!-- Órbita y Sol -->
+      <div class="orbit sun-orbit"></div>
+      <div class="sun" id="sun"></div>
+
+      <!-- Órbita y Luna -->
+      <div class="orbit moon-orbit"></div>
+      <div class="moon" id="moon"></div>
+
+      <!-- Órbita de satélites -->
+      <div class="orbit satellite-orbit"></div>
+      <div class="satellite" id="satellite1"></div>
+      <div class="satellite" id="satellite2"></div>
+      <div class="satellite" id="satellite3"></div>
+
+      <!-- Órbita de asteroides -->
+      <div class="orbit asteroid-orbit"></div>
+      <div class="asteroid" id="asteroid1"></div>
+      <div class="asteroid" id="asteroid2"></div>
+      <div class="asteroid" id="asteroid3"></div>
+      <div class="asteroid" id="asteroid4"></div>
+      <div class="asteroid" id="asteroid5"></div>
+      <div class="asteroid" id="asteroid6"></div>
+    </div>
+  </div>
+
+  <!-- ============================= -->
+  <!-- BARRA DE NAVEGACIÓN          -->
+  <!-- ============================= -->
+  <!--
+    Barra de navegación principal (navbar):
+    Permite moverse entre las secciones de la app sin recargar la página.
+    Cada enlace tiene un data-section que se usa en el JS para mostrar la sección correspondiente.
+    El botón Login abre el modal de autenticación.
+    El logo de la NASA es solo decorativo.
+  -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#inicio">
+        <img src="https://www.nasa.gov/wp-content/themes/nasa/assets/images/nasa-logo.svg" alt="NASA"
+          onerror="this.style.display='none'">
+        <i class="bi bi-circle-fill"></i> Monitor de Asteroides NEO
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link active" href="#inicio" data-section="inicio">Inicio</a></li>
+          <li class="nav-item"><a class="nav-link" href="#asteroides" data-section="asteroides">Asteroides</a></li>
+          <li class="nav-item"><a class="nav-link" href="#tierra" data-section="tierra">Tierra</a></li>
+          <li class="nav-item"><a class="nav-link" href="#eyes" data-section="eyes">Eyes Tools</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" id="authLink"><i class="bi bi-person-circle"></i> Login</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ============================= -->
+  <!-- HERO CAROUSEL                -->
+  <!-- ============================= -->
+  <!--
+    Carrusel de imágenes (heroCarousel):
+    Muestra 3 slides con imágenes de fondo y mensajes destacados.
+    Cada slide tiene un botón que lleva a una sección específica (asteroides seguros, peligrosos, o la Tierra).
+    El carrusel se controla con los botones de flecha o los indicadores.
+    Las imágenes de fondo se cargan desde Unsplash.
+  -->
+  <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"></button>
+      <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
+      <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2"></button>
+    </div>
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <div class="carousel-bg"
+          style="background-image: url('https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?w=1920&q=80');">
+        </div>
+        <div class="carousel-caption">
+          <h1 class="display-1 fw-bold neon-text-red">Asteroides Seguros</h1>
+          <p class="lead">Objetos cercanos sin peligro para la Tierra</p>
+          <a href="#asteroides" class="btn btn-danger-neon btn-lg mt-3" data-section="asteroides" data-filter="safe">Ver
+            Asteroides Seguros</a>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <div class="carousel-bg"
+          style="background-image: url('https://images.unsplash.com/photo-1464802686167-b939a6910659?w=1920&q=80');">
+        </div>
+        <div class="carousel-caption">
+          <h1 class="display-1 fw-bold neon-text-red">Asteroides Peligrosos</h1>
+          <p class="lead">Objetos potencialmente peligrosos cerca de la Tierra</p>
+          <a href="#asteroides" class="btn btn-danger-neon btn-lg mt-3" data-section="asteroides"
+            data-filter="dangerous">Ver Asteroides Peligrosos</a>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <div class="carousel-bg"
+          style="background-image: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1920&q=80');">
+        </div>
+        <div class="carousel-caption">
+          <h1 class="display-1 fw-bold neon-text-red">La Tierra desde el Espacio</h1>
+          <p class="lead">Imágenes del satélite EPIC</p>
+          <a href="#tierra" class="btn btn-danger-neon btn-lg mt-3" data-section="tierra">Ver la Tierra</a>
+        </div>
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon"></span>
+    </button>
+  </div>
+
+  <!-- ============================= -->
+  <!-- CONTENIDO PRINCIPAL DE LA APP -->
+  <!-- ============================= -->
+  <!--
+    Aquí se muestran las diferentes secciones de la app.
+    Solo una sección está visible a la vez (la que tiene la clase 'active').
+    El cambio de sección se hace con JS al hacer clic en la navbar o los botones del carrusel.
+  -->
+  <main id="mainContent">
+    <!-- ============================= -->
+    <!-- SECCIÓN: INICIO             -->
+    <!-- ============================= -->
+    <!--
+      Sección de bienvenida.
+      Muestra el título y una breve descripción del sistema.
+      Abajo se muestran tarjetas con estadísticas principales:
+        - Total de asteroides detectados
+        - Cuántos son peligrosos
+        - Velocidad máxima registrada
+        - El asteroide más cercano (en distancias lunares)
+      Los valores se actualizan dinámicamente con JS.
+    -->
+    <section id="inicio" class="section-content active">
+      <div class="container py-5">
+        <h2 class="section-title text-center">Monitor de Asteroides NEO</h2>
+        <p class="lead text-center mb-5">Sistema de seguimiento de objetos cercanos a la Tierra</p>
+
+        <!--
+          Tarjetas de estadísticas:
+          Cada tarjeta muestra un dato clave sobre los asteroides.
+          Los valores se rellenan con JavaScript al cargar los datos desde la API.
+        -->
+        <div class="row g-4 mb-5" id="statsContainer">
+          <div class="col-md-3">
+            <div class="stat-card">
+              <i class="bi bi-circle text-primary" style="font-size: 2.5rem;"></i>
+              <span class="stat-number text-primary" id="totalAsteroids">0</span>
+              <span class="d-block">Total Asteroides</span>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="stat-card">
+              <i class="bi bi-exclamation-triangle text-danger" style="font-size: 2.5rem;"></i>
+              <span class="stat-number text-danger" id="dangerousCount">0</span>
+              <span class="d-block">Peligrosos</span>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="stat-card">
+              <i class="bi bi-speedometer2 text-warning" style="font-size: 2.5rem;"></i>
+              <span class="stat-number text-warning" id="maxSpeed">0</span>
+              <span class="d-block">Vel. Máx (km/h)</span>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="stat-card">
+              <i class="bi bi-moon text-info" style="font-size: 2.5rem;"></i>
+              <span class="stat-number text-info" id="closestMoons">∞</span>
+              <span class="d-block">Más Cercano (lunas)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================= -->
+    <!-- SECCIÓN: ASTEROIDES         -->
+    <!-- ============================= -->
+    <!--
+      Lista de asteroides detectados por la NASA.
+      Incluye filtros para ver todos, solo peligrosos o solo seguros.
+      Al hacer clic en un filtro, se actualiza la lista sin recargar la página.
+      La lista se llena dinámicamente con datos de la API o de respaldo.
+      Cada asteroide muestra nombre, distancia, velocidad y nivel de peligro.
+    -->
+    <section id="asteroides" class="section-content">
+      <div class="container py-5">
+        <h2 class="section-title text-center">Lista de Asteroides</h2>
+
+        <div class="card-custom">
+          <!--
+            Botones de filtro:
+            - Todos: muestra todos los asteroides
+            - Peligrosos: solo los que la NASA marca como potencialmente peligrosos
+            - Seguros: los que no representan peligro
+            El número entre paréntesis se actualiza con JS.
+          -->
+          <div class="mb-4">
+            <button class="btn btn-outline-light filter-btn active me-2" data-filter="all">
+              Todos (<span id="countAll">0</span>)
+            </button>
+            <button class="btn btn-outline-danger filter-btn me-2" data-filter="dangerous">
+              Peligrosos (<span id="countDangerous">0</span>)
+            </button>
+            <button class="btn btn-outline-success filter-btn" data-filter="safe">
+              Seguros (<span id="countSafe">0</span>)
+            </button>
+          </div>
+
+          <!--
+            Spinner de carga:
+            Se muestra mientras se obtienen los datos de la API.
+            Cuando termina la carga, se oculta y aparece la lista de asteroides.
+          -->
+          <div class="spinner-border"></div>
+          <p class="mt-3">Rastreando asteroides cercanos...</p>
+        </div>
+
+        <!--
+          Aquí se insertan los asteroides con JS.
+          Cada asteroide es una tarjeta con información relevante.
+        -->
+      </div>
+      </div>
+    </section>
+
+    <!-- ============================= -->
+    <!-- SECCIÓN: TIERRA              -->
+    <!-- ============================= -->
+    <!--
+      Sección para mostrar imágenes de la Tierra desde el espacio.
+      Utiliza la API EPIC de la NASA para obtener fotos recientes.
+      Si la API falla, se usan imágenes de respaldo.
+      El usuario puede navegar entre imágenes con botones.
+    -->
+    <section id="tierra" class="section-content">
+      <div class="container py-5">
+        <h2 class="section-title text-center">Tierra desde el Espacio</h2>
+
+        <div class="card-custom">
+          <!--
+            Spinner de carga:
+            Se muestra mientras se obtienen las imágenes de la Tierra.
+            Cuando termina la carga, se muestra la imagen y los controles de navegación.
+          -->
+          <div id="earthLoading" class="loading-spinner">
+            <div class="spinner-border"></div>
+            <p class="mt-3">Cargando vista de la Tierra...</p>
+          </div>
+
+          <div id="earthContent" style="display: none;">
+            <!--
+              Aquí se inserta la imagen de la Tierra y los controles para navegar entre fotos.
+              Si la API falla, se muestra una imagen de respaldo.
+            -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================= -->
+    <!-- SECCIÓN: NASA EYES TOOLS      -->
+    <!-- ============================= -->
+    <!--
+      Herramientas interactivas de NASA Eyes:
+      - Eyes on the Earth: muestra datos en tiempo real del satélite SWOT (nivel del agua, topografía oceánica)
+      - Eyes on Asteroids: visualización 3D de asteroides cercanos a la Tierra
+      Cada tarjeta tiene un botón para cargar la vista y otro para actualizarla.
+      El contenido se inserta dinámicamente con JS.
+    -->
+    <section id="eyes" class="section-content">
+      <div class="container py-5">
+        <h2 class="section-title text-center">👁️ NASA Eyes Tools</h2>
+
+        <div class="row g-4">
+          <!--
+            Dos tarjetas principales:
+            - Eyes on the Earth: integra un visor interactivo de la NASA para ver datos de la Tierra
+            - Eyes on Asteroids: visor 3D de asteroides y sus órbitas
+            Los visores se cargan solo cuando el usuario lo solicita (para ahorrar recursos).
+          -->
+          <!-- Card de Eyes on the Earth con integración directa -->
+          <div class="col-md-6">
+            <div class="eyes-card">
+              <h3 style="color: var(--nasa-blue); margin-bottom: 1rem;">
+                🌍 Eyes on the Earth - SWOT
+              </h3>
+              <p style="line-height: 1.6;">
+                Monitorea los datos ambientales de la Tierra en tiempo real con el satélite SWOT.
+                Visualiza topografía oceánica y datos hidrológicos directamente en esta ventana.
+              </p>
+
+              <!--
+                Aquí se inserta el visor interactivo de NASA Eyes para la Tierra.
+                Si la carga falla, se muestra información de respaldo.
+              -->
+              <div id="nasaEyesContainer" class="mt-3">
+                <div class="loading-spinner" id="eyesLoading">
+                  <div class="spinner-border"></div>
+                  <p class="mt-2">Cargando NASA Eyes...</p>
+                </div>
+                <div id="eyesContent" style="display: none;">
+                  <!-- Aquí se cargará el contenido dinámicamente -->
+                </div>
+              </div>
+
+              <div class="mt-3">
+                <!--
+                  Botones:
+                  - Cargar Vista: inserta el visor de NASA Eyes
+                  - Actualizar: recarga el visor por si hay cambios o errores
+                -->
+                <!-- Botones para cargar o actualizar la vista de NASA Eyes -->
+                <button class="btn btn-danger-neon me-2" onclick="loadNASAEyes('swot')">
+                  <i class="bi bi-play-circle"></i> Cargar Vista
+                </button>
+                <button class="btn btn-outline-light" onclick="refreshNASAEyes('swot')">
+                  <i class="bi bi-arrow-clockwise"></i> Actualizar
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card de Eyes on Asteroids con integración directa -->
+          <div class="col-md-6">
+            <div class="eyes-card">
+              <h3 style="color: var(--nasa-blue); margin-bottom: 1rem;">
+                ☄️ Eyes on Asteroids
+              </h3>
+              <p style="line-height: 1.6;">
+                Explora en 3D los asteroides cercanos a la Tierra. Visualiza sus órbitas,
+                tamaños y trayectorias en tiempo real con datos actualizados de la NASA.
+              </p>
+
+              <!--
+                Aquí se inserta el visor interactivo de NASA Eyes para asteroides.
+                Si la carga falla, se muestra información de respaldo.
+              -->
+              <div id="nasaAsteroidsContainer" class="mt-3">
+                <div class="loading-spinner" id="asteroidsEyesLoading">
+                  <div class="spinner-border"></div>
+                  <p class="mt-2">Cargando vista de asteroides...</p>
+                </div>
+                <div id="asteroidsEyesContent" style="display: none;">
+                  <!-- Aquí se cargará el contenido dinámicamente -->
+                </div>
+              </div>
+
+              <div class="mt-3">
+                <!--
+                  Botones:
+                  - Cargar Vista: inserta el visor de NASA Eyes Asteroids
+                  - Actualizar: recarga el visor por si hay cambios o errores
+                -->
+                <!-- Botones para cargar o actualizar la vista de NASA Eyes Asteroids -->
+                <button class="btn btn-danger-neon me-2" onclick="loadNASAEyes('asteroids')">
+                  <i class="bi bi-play-circle"></i> Cargar Vista
+                </button>
+                <button class="btn btn-outline-light" onclick="refreshNASAEyes('asteroids')">
+                  <i class="bi bi-arrow-clockwise"></i> Actualizar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================= -->
+        <!-- SECCIÓN: COMENTARIOS Y VALORACIÓN -->
+        <!-- ============================= -->
+        <!--
+          Aquí los usuarios autenticados pueden dejar comentarios y valoraciones sobre la app.
+          El formulario solo aparece si el usuario ha iniciado sesión.
+          Los comentarios se guardan en localStorage y se muestran en la misma sección.
+        -->
+        <div class="card-custom mt-4">
+          <h4 style="color: var(--nasa-blue);">Comentarios y Valoración</h4>
+          <div id="commentsSection"></div>
+          <div id="commentFormContainer"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============================= -->
+  <!-- MODAL DE AUTENTICACIÓN        -->
+  <!-- ============================= -->
+  <!--
+    Ventana emergente (modal) para iniciar sesión o registrarse.
+    Incluye dos formularios:
+      - Login: para usuarios existentes
+      - Registro: para nuevos usuarios
+    El cambio entre formularios se hace con enlaces dentro del modal.
+    Los datos se validan antes de enviarse.
+  -->
+  <div class="modal fade" id="authModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="background: rgba(26, 26, 46, 0.95); color: #ffffff;">
+        <div class="modal-header" style="border-bottom: 1px solid rgba(252, 61, 33, 0.3);">
+          <h5 class="modal-title" id="authModalTitle">Iniciar Sesión</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Login -->
+          <form id="loginForm" class="auth-form">
+            <div class="mb-3">
+              <input type="email" class="form-control" id="loginEmail" placeholder="Email" required>
+              <div class="invalid-feedback">Ingresa un email válido</div>
+            </div>
+            <div class="mb-3">
+              <input type="password" class="form-control" id="loginPassword" placeholder="Contraseña" required>
+              <div class="invalid-feedback">La contraseña es requerida</div>
+            </div>
+            <button type="submit" class="btn btn-danger-neon w-100 mb-3">Iniciar Sesión</button>
+            <p class="text-center mb-0">¿No tienes cuenta? <a href="#" id="showRegister"
+                style="color: var(--nasa-red);">Regístrate</a></p>
+          </form>
+
+          <!-- Register -->
+          <form id="registerForm" class="auth-form d-none">
+            <div class="mb-3">
+              <input type="text" class="form-control" id="registerName" placeholder="Nombre completo" required>
+              <div class="invalid-feedback">El nombre es requerido</div>
+            </div>
+            <div class="mb-3">
+              <input type="email" class="form-control" id="registerEmail" placeholder="Email" required>
+              <div class="invalid-feedback">Ingresa un email válido</div>
+            </div>
+            <div class="mb-3">
+              <input type="password" class="form-control" id="registerPassword"
+                placeholder="Contraseña (mínimo 6 caracteres)" required minlength="6">
+              <div class="invalid-feedback">La contraseña debe tener al menos 6 caracteres</div>
+            </div>
+            <div class="mb-3">
+              <input type="password" class="form-control" id="registerPasswordConfirm"
+                placeholder="Confirmar contraseña" required>
+              <div class="invalid-feedback">Las contraseñas no coinciden</div>
+            </div>
+            <button type="submit" class="btn btn-danger-neon w-100 mb-3">Registrarse</button>
+            <p class="text-center mb-0">¿Ya tienes cuenta? <a href="#" id="showLogin"
+                style="color: var(--nasa-red);">Inicia sesión</a></p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================= -->
+  <!-- PIE DE PÁGINA                 -->
+  <!-- ============================= -->
+  <!--
+    Pie de página con información del proyecto y créditos.
+    Aquí puedes poner tu nombre, tecnologías usadas y cualquier aviso legal.
+  -->
+  <footer class="footer">
+    <div class="container text-center">
+      <h5>Monitor de Asteroides NEO</h5>
+      <p>Proyecto jQuery - Pollyanna Soares (jsoares)</p>
+      <p><small>Desarrollado con jQuery, AJAX, Callbacks, DOM Manipulation</small></p>
+    </div>
+  </footer>
+
+  <!--
+    jQuery 3.7.1:
+    Librería que facilita la manipulación del DOM, eventos y peticiones AJAX.
+    Esencial para que funcione toda la lógica de la app.
+  -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <!--
+    Bootstrap 5.3 JS:
+    Scripts para el menú, el carrusel y otros componentes interactivos.
+    Permite que la app sea responsiva y moderna.
+  -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!--
+    Configuración y lógica principal de la app:
+    - config.js: contiene las claves y URLs de la NASA, y parámetros globales
+    - api.js: toda la lógica de la app (navegación, carga de datos, autenticación, comentarios)
+    Ambos archivos son esenciales para el funcionamiento.
+  -->
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+</body>
+
+</html>

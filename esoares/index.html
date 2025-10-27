@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  <!-- ============================= -->
+  <!-- CABECERA DEL DOCUMENTO HTML  -->
+  <!-- ============================= -->
+  <!-- Aquí se define la información básica de la página y los estilos que se van a usar -->
+  <meta charset="utf-8" /> <!-- Permite usar acentos y caracteres especiales -->
+  <meta name="viewport" content="width=device-width,initial-scale=1" /> <!-- Hace que la web se vea bien en móvil -->
+  <title>NASA Explorer - ESOARES</title> <!-- Título que aparece en la pestaña del navegador -->
+  <link rel="icon" href="assets/images/nasa.svg" /> <!-- Icono pequeño en la pestaña -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap: estilos rápidos y modernos -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <!-- Iconos bonitos -->
+  <link rel="stylesheet" href="css/style.css" /> <!-- Tus propios estilos -->
+</head>
+
+<body>
+  <!-- ============================= -->
+  <!-- FONDO ANIMADO DE ESTRELLAS   -->
+  <!-- ============================= -->
+  <!-- Este canvas es solo para el efecto visual de estrellas moviéndose de fondo -->
+  <canvas id="starfield" aria-hidden="true"></canvas>
+
+  <!-- ============================= -->
+  <!-- BARRA DE NAVEGACIÓN          -->
+  <!-- ============================= -->
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <div class="container">
+      <!-- Logo de la NASA y nombre de la app -->
+      <a class="navbar-brand d-flex align-items-center" href="#" onclick="return false;">
+        <img src="assets/images/nasa.svg" alt="NASA" height="42">
+        <span class="ms-2">NASA Explorer <small class="badge bg-primary ms-2">ES6</small></span>
+      </a>
+      <!-- Botón que aparece en pantallas pequeñas para mostrar el menú -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <!-- Menú con enlaces a las diferentes secciones de la app -->
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto align-items-center">
+          <!-- Cada enlace lleva a una sección diferente de la app -->
+          <li class="nav-item"><a class="nav-link active" href="#" data-section="inicio">Inicio</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" data-section="explorar">Explorar</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" data-section="innovacion">Innovación</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" data-section="galeria">Galería</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" data-section="valoraciones">Valoraciones</a></li>
+          <!-- Botón para iniciar sesión o cerrar sesión -->
+          <li class="nav-item ms-3">
+            <button class="btn btn-nasa" id="authBtn"><i class="bi bi-person-circle"></i> <span
+                id="authBtnText">Login</span></button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ============================= -->
+  <!-- CONTENIDO PRINCIPAL DE LA APP -->
+  <!-- ============================= -->
+  <main class="container my-5">
+    <!-- ============================= -->
+    <!-- SECCIÓN: INICIO             -->
+    <!-- ============================= -->
+    <section id="section-inicio" class="section-content active">
+      <div class="hero text-center">
+        <h1>🚀 Explora el Cosmos</h1>
+        <p>Descubre las maravillas del universo .</p>
+        <!-- Botón grande para empezar a explorar la app -->
+        <button class="btn btn-nasa btn-lg mt-3" id="startExploreBtn">Comenzar Exploración <i
+            class="bi bi-arrow-right"></i></button>
+      </div>
+
+      <!-- Aquí aparecerán estadísticas interesantes sobre el espacio, cargadas con JavaScript -->
+      <div class="row g-4 mt-4" id="statsRow">
+        <!-- Las estadísticas se cargan mediante JavaScript -->
+      </div>
+    </section>
+
+    <!-- ============================= -->
+    <!-- SECCIÓN: EXPLORAR           -->
+    <!-- ============================= -->
+    <section id="section-explorar" class="section-content" aria-hidden="true">
+      <h2 class="section-title">Explorar el Universo</h2>
+
+      <!-- Dos tarjetas: una para ver el sistema solar en 3D y otra para ver la Estación Espacial Internacional en tiempo real -->
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <!-- Tarjeta con información y visor interactivo del sistema solar -->
+          <div class="explore-card expanded" tabindex="0">
+            <h3>🌌 Eyes on the Solar System</h3>
+            <p>Nueva versión web interactiva en 3D</p>
+            <div class="description" style="display:block">
+              <p>La NASA ha lanzado una nueva versión web interactiva en 3D de su aplicación "Ojos en el Sistema Solar".
+                Eyes te permite ver numerosos cuerpos celestes del sistema solar y más de 120 naves espaciales, ¡del
+                pasado, presente y futuro!</p>
+              <!-- Aquí se muestra la app 3D de la NASA embebida -->
+              <div class="iframe-container mt-3">
+                <iframe src="https://eyes.nasa.gov/apps/solar-system/#/sc_imap"
+                  style="width:100%;height:400px;border-radius:10px;border:2px solid rgba(252,61,33,0.3)"
+                  frameborder="0" allowfullscreen></iframe>
+              </div>
+              <!-- Botón para abrir la app de la NASA en otra pestaña -->
+              <a class="btn btn-nasa mt-2" target="_blank" rel="noopener"
+                href="https://eyes.nasa.gov/apps/solar-system/#/sc_imap">
+                <i class="bi bi-box-arrow-up-right"></i> Visitar NASA
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <!-- Tarjeta con información y visor de la ISS en tiempo real -->
+          <div class="explore-card expanded" tabindex="0">
+            <h3>🛰️ Estación Espacial Internacional (EEI)</h3>
+            <p>Vista en tiempo real de la ISS</p>
+            <div class="description" style="display:block">
+              <p>La Estación Espacial Internacional (EEI) es un laboratorio científico y hogar en órbita construido por
+                una colaboración de cinco agencias espaciales de diferentes países. Explora la ISS en tiempo real y
+                descubre quién está a bordo.</p>
+              <!-- Aquí se muestra la ISS en vivo usando la app de la NASA -->
+              <div class="iframe-container mt-3">
+                <iframe src="https://eyes.nasa.gov/apps/solar-system/#/sc_iss"
+                  style="width:100%;height:400px;border-radius:10px;border:2px solid rgba(252,61,33,0.3)"
+                  frameborder="0" allowfullscreen></iframe>
+              </div>
+              <!-- Botón para abrir la ISS en la web de la NASA -->
+              <a class="btn btn-nasa mt-2" target="_blank" rel="noopener"
+                href="https://eyes.nasa.gov/apps/solar-system/#/sc_iss">
+                <i class="bi bi-box-arrow-up-right"></i> Visitar NASA
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Aquí se mostrará la Imagen Astronómica del Día (APOD) usando la API de la NASA -->
+      <div class="card-nasa mb-4" id="apodCard" aria-live="polite">
+        <h3><i class="bi bi-star-fill"></i> Imagen Astronómica del Día</h3>
+        <div id="apodContent" class="mt-3"></div>
+      </div>
+
+      <!-- Aquí se mostrarán imágenes reales de la Tierra tomadas desde el espacio (EPIC) -->
+      <div class="card-nasa mb-4" id="epicCard" aria-live="polite">
+        <h3><i class="bi bi-globe"></i> Tierra desde el Espacio - EPIC</h3>
+        <div id="epicContent" class="mt-3"></div>
+      </div>
+    </section>
+
+    <!-- ============================= -->
+    <!-- SECCIÓN: INNOVACIÓN          -->
+    <!-- ============================= -->
+    <section id="section-innovacion" class="section-content" aria-hidden="true">
+      <h2 class="section-title">Innovación y Descubrimientos</h2>
+
+      <!-- Animación interactiva local del sistema solar (hecha por ti, no de la NASA) -->
+      <div class="card-nasa mb-4">
+        <h3><i class="bi bi-stars"></i> Animación del Sistema Solar</h3>
+        <p class="mb-3">Explora nuestro sistema solar con esta animación interactiva que muestra los 8 planetas
+          orbitando alrededor del Sol.</p>
+        <!-- Aquí se muestra la animación local del sistema solar en un iframe -->
+        <div class="iframe-container">
+          <iframe src="solar-system.html"
+            style="width:100%;height:600px;border-radius:10px;border:2px solid rgba(252,61,33,0.3);background:#000"
+            frameborder="0"></iframe>
+        </div>
+        <div class="mt-3">
+          <!-- Botón para ver la animación en pantalla completa -->
+          <a href="solar-system.html" target="_blank" class="btn btn-nasa">
+            <i class="bi bi-arrows-fullscreen"></i> Ver en pantalla completa
+          </a>
+        </div>
+      </div>
+
+      <!-- Animación interactiva usando jQuery: la Tierra en el centro y objetos orbitando -->
+      <div class="card-nasa mb-4">
+        <h3><i class="bi bi-globe-americas"></i> Tierra al Centro (jQuery)</h3>
+        <p class="mb-3">Animación interactiva con jQuery mostrando la Tierra en el centro con el Sol, la Luna, satélites
+          y asteroides orbitando a su alrededor.</p>
+        <!-- Aquí se muestra la animación de la Tierra al centro en un iframe -->
+        <div class="iframe-container">
+          <iframe src="earth-center.html"
+            style="width:100%;height:600px;border-radius:10px;border:2px solid rgba(30,144,255,0.3);background:#000"
+            frameborder="0"></iframe>
+        </div>
+        <div class="mt-3">
+          <!-- Botón para ver la animación en pantalla completa -->
+          <a href="earth-center.html" target="_blank" class="btn btn-nasa">
+            <i class="bi bi-arrows-fullscreen"></i> Ver en pantalla completa
+          </a>
+        </div>
+      </div>
+
+      <!-- Aquí se mostrarán tarjetas con avances tecnológicos recientes (cargados con JavaScript) -->
+      <div class="row" id="advancesContainer"></div>
+    </section>
+
+    <!-- ============================= -->
+    <!-- SECCIÓN: GALERÍA             -->
+    <!-- ============================= -->
+    <section id="section-galeria" class="section-content" aria-hidden="true">
+      <h2 class="section-title">Galería Espacial</h2>
+      <p class="text-center mb-4">Haz clic en una imagen para expandirla al doble de tamaño</p>
+      <!-- Aquí aparecerán imágenes espaciales para explorar y ampliar -->
+      <div class="row g-4" id="galleryContainer"></div>
+    </section>
+
+    <!-- ============================= -->
+    <!-- SECCIÓN: VALORACIONES        -->
+    <!-- ============================= -->
+    <section id="section-valoraciones" class="section-content" aria-hidden="true">
+      <h2 class="section-title">Valoraciones y Comentarios</h2>
+
+      <div class="row">
+        <!-- Formulario para que los usuarios dejen su opinión y valoración sobre la app -->
+        <div class="col-lg-6 mb-4">
+          <div class="card-nasa p-4">
+            <h4 class="mb-3" style="color:var(--nasa-blue)">Agregar Comentario</h4>
+            <form id="commentForm">
+              <!-- Campo donde el usuario escribe su nombre -->
+              <div class="mb-3">
+                <label for="commentName" class="form-label">Nombre</label>
+                <input type="text" class="form-control" id="commentName" required pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+"
+                  title="Solo letras y espacios">
+              </div>
+              <!-- Menú para elegir cuántas estrellas darle a la app -->
+              <div class="mb-3">
+                <label for="commentRating" class="form-label">Valoración</label>
+                <select class="form-select" id="commentRating" required>
+                  <option value="">Selecciona...</option>
+                  <option value="5">⭐⭐⭐⭐⭐ Excelente</option>
+                  <option value="4">⭐⭐⭐⭐ Muy bueno</option>
+                  <option value="3">⭐⭐⭐ Bueno</option>
+                  <option value="2">⭐⭐ Regular</option>
+                  <option value="1">⭐ Malo</option>
+                </select>
+              </div>
+              <!-- Espacio para escribir el comentario -->
+              <div class="mb-3">
+                <label for="commentText" class="form-label">Comentario</label>
+                <textarea class="form-control" id="commentText" rows="3" required minlength="10"></textarea>
+              </div>
+              <!-- Botón para enviar el comentario -->
+              <button type="submit" class="btn btn-nasa w-100">Enviar Comentario</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Aquí se muestran los comentarios y valoraciones de otros usuarios -->
+        <div class="col-lg-6">
+          <div class="card-nasa p-4">
+            <h4 class="mb-3" style="color:var(--nasa-red)">Comentarios Recientes</h4>
+            <!-- Aquí se muestra el promedio de estrellas que ha recibido la app -->
+            <p id="avgRating" class="text-muted mb-3"></p>
+            <!-- Aquí se listan los comentarios recientes -->
+            <div id="commentsContainer" style="max-height:400px;overflow-y:auto"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============================= -->
+  <!-- PIE DE PÁGINA                 -->
+  <!-- ============================= -->
+  <footer class="text-center">
+    <div class="container">
+      <p class="mb-2"><strong>NASA Explorer</strong> - Proyecto NASA Pollyanna</p>
+      <p class="small mb-2">Desarrollado con ES6 | APIs: NASA APOD, EPIC (fallback local)</p>
+      <p class="small text-muted"><i class="bi bi-info-circle"></i> Logo y recursos NASA solo para uso escolar</p>
+    </div>
+  </footer>
+
+  <!-- ============================= -->
+  <!-- MODAL DE AUTENTICACIÓN        -->
+  <!-- ============================= -->
+  <div class="modal fade" id="authModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <!-- Título del modal (cambia según si es login o registro) -->
+        <div class="modal-header">
+          <h5 class="modal-title" id="authModalTitle">Iniciar Sesión</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <!-- Aquí van los formularios de login y registro -->
+        <div class="modal-body">
+          <!-- Formulario para que el usuario inicie sesión -->
+          <form id="loginForm" class="needs-validation" novalidate>
+            <div class="mb-3">
+              <label for="loginEmail" class="form-label visually-hidden">Email</label>
+              <input type="email" id="loginEmail" class="form-control" placeholder="Email (obligatorio)" required>
+              <div class="invalid-feedback">Introduce un email válido.</div>
+            </div>
+            <div class="mb-3">
+              <label for="loginPassword" class="form-label visually-hidden">Contraseña</label>
+              <input type="password" id="loginPassword" class="form-control" placeholder="Contraseña (obligatoria)"
+                required minlength="6">
+              <div class="invalid-feedback">Contraseña requerida (mínimo 6 caracteres).</div>
+            </div>
+            <button class="btn btn-nasa w-100" id="loginSubmit" type="submit">Iniciar Sesión</button>
+            <!-- Enlace para cambiar al formulario de registro -->
+            <p class="text-center mt-2">¿No tienes cuenta? <a href="#" id="toRegisterLink"
+                style="color: var(--nasa-red);">Regístrate</a></p>
+          </form>
+
+          <!-- Formulario para que el usuario cree una cuenta nueva -->
+          <form id="registerForm" style="display:none;" class="needs-validation" novalidate>
+            <div class="mb-3">
+              <label for="registerName" class="form-label visually-hidden">Nombre completo</label>
+              <input type="text" id="registerName" class="form-control" placeholder="Nombre completo (obligatorio)"
+                required>
+              <div class="invalid-feedback">Introduce tu nombre completo.</div>
+            </div>
+            <div class="mb-3">
+              <label for="registerEmail" class="form-label visually-hidden">Email</label>
+              <input type="email" id="registerEmail" class="form-control" placeholder="Email (obligatorio)" required>
+              <div class="invalid-feedback">Introduce un email válido.</div>
+            </div>
+            <div class="mb-3">
+              <label for="registerPassword" class="form-label visually-hidden">Contraseña</label>
+              <input type="password" id="registerPassword" class="form-control"
+                placeholder="Contraseña (mín. 6 caracteres)" required minlength="6">
+              <div class="invalid-feedback">La contraseña debe tener al menos 6 caracteres.</div>
+            </div>
+            <div class="mb-3">
+              <label for="registerConfirm" class="form-label visually-hidden">Confirmar contraseña</label>
+              <input type="password" id="registerConfirm" class="form-control" placeholder="Confirmar contraseña"
+                required minlength="6">
+              <div class="invalid-feedback">Las contraseñas deben coincidir.</div>
+            </div>
+            <button class="btn btn-nasa w-100" id="registerSubmit" type="submit">Registrarse</button>
+            <!-- Enlace para volver al formulario de login -->
+            <p class="text-center mt-2">¿Ya tienes cuenta? <a href="#" id="toLoginLink"
+                style="color: var(--nasa-blue);">Inicia sesión</a></p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================= -->
+  <!-- SCRIPTS Y LÓGICA DE LA APP    -->
+  <!-- ============================= -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Script que dibuja el fondo animado de estrellas -->
+  <script src="js/background.js"></script>
+  <!-- Script que gestiona el login y registro de usuarios -->
+  <script src="js/auth.js"></script>
+  <!-- Script principal que controla la navegación y la lógica de la app -->
+  <script src="js/main.js"></script>
+  <script src="js/particles.js"></script> <!-- Script para animaciones de partículas -->
+</body>
+
+</html>
