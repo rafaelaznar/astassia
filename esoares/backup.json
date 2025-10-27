@@ -1,0 +1,14 @@
+{
+  "apod": {
+    "date": "2024-10-01",
+    "explanation": "Backup: Nebulosa de Ori\u00f3n. Texto de ejemplo de respaldo para la APOD.",
+    "media_type": "image",
+    "service_version": "v1",
+    "title": "Nebulosa de Ori\u00f3n (respaldo)",
+    "url": "https://apod.nasa.gov/apod/image/2310/OrionNebula_SpitzerSchmidt_960.jpg"
+  },
+  "epic": {
+    "date": "2024-01-22",
+    "image": "https://epic.gsfc.nasa.gov/archive/natural/2024/01/22/png/epic_1b_20240122003623.png"
+  }
+}
